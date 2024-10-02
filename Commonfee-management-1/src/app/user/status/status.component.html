@@ -1,0 +1,25 @@
+<div class="container">
+    <h3>สถานะการชำระค่าส่วนกลาง</h3>
+  
+    <table class="status-table">
+      <thead>
+        <tr>
+          <th>บ้านเลขที่</th>
+          <th>เจ้าของ</th>
+          <th>สถานะการชำระเงิน</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ house.houseNumber }}</td>
+          <td>{{ house.ownerName }}</td>
+          <td>
+            <span [class.paid]="house.isPaid" [class.unpaid]="!house.isPaid">
+              {{ house.isPaid ? 'ชำระแล้ว' : 'ค้างชำระ' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

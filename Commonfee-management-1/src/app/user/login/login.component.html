@@ -1,0 +1,51 @@
+<div class="form-container">
+    <form (ngSubmit)="onLogin()">
+      <h3 style="text-align: center; color:#fff">เข้าสู่ระบบลูกบ้าน</h3>
+      <hr style="border-width: 3px; border-color: white">
+      <div class="input-field">
+        <span class="bi bi-person-fill fs-4">&nbsp;</span>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="ชื่อผู้ใช้"
+          [(ngModel)]="username"
+          maxlength="50"
+          required
+          class="box"
+        />
+      </div>
+      
+  
+      <div class="input-field">
+        <span class="bi bi-shield-lock-fill fs-4" >&nbsp;</span>
+        <input
+           [type]="type"
+          id="password"
+          name="password"
+          placeholder="รหัสผ่าน"
+          maxlength="50"
+          [(ngModel)]="password"
+          required
+          class="box"
+        />
+        <span (click)="hideShowPass()" class=" {{eyeIcon}}"></span>
+      </div> 
+  
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+  
+      <button
+        type="submit"
+        class="btn"
+    
+      >
+        Login
+      </button>
+      <div class="text-center pt-4 ">Don't have account? <a id="forget" routerLink="/register">sign up</a></div>
+  
+
+    </form>
+  </div>
+  

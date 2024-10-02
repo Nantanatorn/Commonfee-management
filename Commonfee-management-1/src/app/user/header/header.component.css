@@ -1,0 +1,28 @@
+.nav{
+    background-color: #9a8fff;
+    position: fixed;
+    overflow-y: auto;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+.navbar-brand{
+    margin-left: 20px;
+}
+.nav-link{
+    color: #fff;
+    margin-top: 10px;
+}
+ul{
+    list-style: none;
+}
+.profile{
+    margin-left: 355px;
+    font-size: 23px;
+    position: absolute;
+}
+.logout{
+    margin-left: 360px;
+    font-size: 23px;
+    position: absolute;
+}

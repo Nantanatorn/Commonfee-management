@@ -1,0 +1,129 @@
+<app-sidebar></app-sidebar>
+<div class="container mt-4"></div>
+<br>
+<div class="report-form">
+  <h3 style="text-align:center ;font-weight: 600;">แจ้งคำร้องเรียน</h3>
+  <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+    <div class="form-group">
+      <label for="firstName">ชื่อ</label>
+      <input 
+        id="name"
+        type="text"
+        formControlName="name"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            reportForm.get('name').invalid &&
+            reportForm.get('name').touched
+        }"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="
+          reportForm.get('name').invalid &&
+          reportForm.get('name').touched
+        "
+      >
+        กรุณากรอกชื่อของคุณ
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">นามสกุล</label>
+      <input
+        id="surname"
+        type="text"
+        formControlName="surname"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            reportForm.get('surname').invalid &&
+            reportForm.get('surname').touched
+        }"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="
+          reportForm.get('surname').invalid &&
+          reportForm.get('surname').touched
+        "
+      >
+        กรุณากรอกนามสกุล
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="houseNumber">บ้านเลขที่</label>
+      <input
+        id="houseID"
+        type="text"
+        formControlName="houseID"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            reportForm.get('houseID').invalid &&
+            reportForm.get('houseID').touched
+        }"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="
+          reportForm.get('houseID').invalid &&
+          reportForm.get('houseID').touched
+        "
+      >
+        กรุณากรอกข้อมูลบ้านเลขที่
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="complaintDate">วันที่ร้องเรียน</label>
+      <input
+        id="reportDate"
+        type="date"
+        formControlName="reportDate"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            reportForm.get('reportDate').invalid &&
+            reportForm.get('reportDate').touched
+        }"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="
+          reportForm.get('reportDate').invalid &&
+          reportForm.get('reportDate').touched
+        "
+      >
+        กรุณากรอกวันที่ร้องเรียน
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="detail">รายละเอียดคำร้องเรียน</label>
+      <textarea
+        id="detail"
+        formControlName="detail"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            reportForm.get('detail').invalid &&
+            reportForm.get('detail').touched
+        }"
+      ></textarea>
+      <div
+        class="invalid-feedback"
+        *ngIf="
+          reportForm.get('detail').invalid &&
+          reportForm.get('detail').touched
+        "
+      >
+        กรุณากรอกรายละเอียดคำร้องเรียน
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-light" routerLink="/home">ยกเลิก</button>&nbsp;&nbsp;
+    <button type="submit" class="btn btn-light">ยืนยัน</button>
+  </form>
+</div>

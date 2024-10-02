@@ -1,0 +1,36 @@
+
+.table-container {
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  .payment-table {
+    width: 65%;
+    margin: 0 auto;
+    border-collapse: collapse;
+  }
+  
+  .payment-table th, .payment-table td {
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .payment-table thead th {
+    background-color: #d3d3d3;
+    color: #000;
+  }
+  
+  .payment-table tbody td {
+    background-color: #9a8fff;
+    color: white;
+  }
+  
+  .payment-table th, .payment-table td {
+    border: 1px solid #ddd;
+  }
+  

@@ -1,0 +1,40 @@
+.report-form {
+    width: 100%;
+    max-width: 900px; /* Adjust to fit in the screen */
+    margin: 0 auto;
+    background-color: #9a8fff;
+    padding: 50px;
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: "Noto Sans Thai", sans-serif;
+    margin-bottom: 50px;
+}
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    margin-bottom: 5px;
+    font-size: 1.1em;
+  }
+  
+  .form-control {
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #e0e0e0;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  textarea.form-control {
+    resize: none; /* Disable resizing of textarea */
+  }
+  

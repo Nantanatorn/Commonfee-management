@@ -1,0 +1,5 @@
+<app-header *ngIf="showHeader"></app-header>
+
+<div [ngClass]="{'login-content': isLoginPage, 'content': !isLoginPage}">
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,29 @@
+<div class="container">
+    <h2>ระบบติดตามสถานะค่าส่วนกลาง</h2>
+  
+    <table class="status-table">
+      <thead>
+        <tr>
+          <th>บ้านเลขที่</th>
+          <th>เจ้าของ</th>
+          <th>สถานะการชำระเงิน</th>
+          <th>การกระทำ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let house of houses">
+          <td>{{ house.houseNumber }}</td>
+          <td>{{ house.ownerName }}</td>
+          <td>
+            <span [class.paid]="house.isPaid" [class.unpaid]="!house.isPaid">
+              {{ house.isPaid ? 'ชำระแล้ว' : 'ค้างชำระ' }}
+            </span>
+          </td>
+          <td>
+            <button (click)="togglePaymentStatus(house)">เปลี่ยนสถานะ</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
