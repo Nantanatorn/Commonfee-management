@@ -1,91 +1,45 @@
-
-.registration-form {
-    position: relative;
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 40px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 20px;
-    color: white;
-    font-family: Arial, sans-serif;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Ensure the overlay doesn't go outside the form */
-  }
+.form-container {
   
-  .registration-form::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-    z-index: 1; /* Ensure the overlay stays behind the text */
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 4% 0;
+  position: relative;
+  background-size: cover;
+}
+.form-container form {
+  background-color: rgba(167, 173, 174, 0.911);
+  border: 2px solid gray;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+}
+.form-container form .box {
+  background-color: #D9D9D9;
+  border-radius: 5px;
+  border-color: rgba(255, 255, 255, 0.185);
+  width: 250px;
+  height: 30px;
+  align-items: center;
+  margin-top: 25px;
+}
+.form-container .login-register {
+  text-align: center;
+}
+.form-container form .btn {
+  width: 100%;
+  font-size: 1.3rem;
+  text-align: center;
+}
+.form-container button {
+  margin-top: 20px;
+  width: 250px;
+  height: 40px;
+  border: 0;
+}
+.form-container button:hover {
+  background-color: rgb(111, 185, 250);
   
-  .registration-form h2,
-  .registration-form form {
-    position: relative;
-    z-index: 2; /* Bring the text and form elements above the overlay */
-  }
-  
-  .form-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-  
-  .form-group {
-    width: 48%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-group label {
-    margin-bottom: 5px;
-    font-size: 1.1em;
-  }
-  
-  .form-control {
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent input background */
-    font-size: 1em;
-  }
-  
-  .form-control:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .submit-btn {
-    width: 100%;
-    padding: 15px;
-    background-color: #fff;
-    color: #675afc;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 40px;
-  }
-  
-  .submit-btn:hover {
-    background-color: #e0e0e0;
-  }
-  
-  @media (max-width: 768px) {
-    .form-row {
-      flex-direction: column;
-    }
-  
-    .form-group {
-      width: 100%;
-      margin-bottom: 15px;
-    }
-  }
-  
+}
