@@ -8,10 +8,10 @@ const jwt = require('jsonwebtoken');
 
 
 module.exports.enrollment = async (req, res) => {
-    const { firstname, lastname, username,  email, houseID, IDcard, phone,password,confirmPassword} = req.body;
+    const { User_Firstname, User_Lastname, username,  email, houseID, IDcard, phone,password,confirmPassword} = req.body;
     const defaultRole = 'customer';
     // Simple validation
-    if (!firstname || !lastname || !username || !email || !houseID ||  !IDcard || !phone || !password || !confirmPassword) {
+    if (!User_Firstname || !User_Lastname || !username || !email || !houseID ||  !IDcard || !phone || !password || !confirmPassword) {
         return res.status(400).json({ message: 'Please provide all required fields.' });
     }
 
@@ -39,7 +39,7 @@ module.exports.enrollment = async (req, res) => {
         await transaction.begin();
         try {
             const insertCustomer = await transaction.request()
-                .input('User_ID', sql.VarChar, User_ID)
+                
                 .input('User_Firstname', sql.VarChar, User_Firstname)
                 .input('User_Lastname', sql.VarChar, User_Lastname)
                 .input('username', sql.VarChar, username)
@@ -47,9 +47,9 @@ module.exports.enrollment = async (req, res) => {
                 .input('password', sql.VarChar, hashedPassword) // Store hashed password
                 .input('phone', sql.VarChar, phone)
                 .input('role', sql.VarChar, defaultRole)
-                .input('Card_ID',sql.VarChar,Card_ID)
+                .input('IDcard',sql.VarChar,IDcard)
                 .input('houseID',sql.Int,houseID)
-                .query('INSERT INTO UserAccount (User_ID, User_Firstname, User_Lastname, username,email, password, phone,role,Card_ID,houseID) OUTPUT INSERTED.User_ID VALUES (@User_ID,@User_Firstname, @User_Lastname, @username, @email, @password, @phone,@role,@Card_ID,@houseID)');
+                .query('INSERT INTO UserAccount ( User_Firstname, User_Lastname, username,email, password, phone,role,IDcard,houseID) OUTPUT INSERTED.User_ID VALUES (@User_Firstname, @User_Lastname, @username, @email, @password, @phone,@role,@IDcard,@houseID)');
 
             const User_ID = insertCustomer.recordset[0].User_ID;
             await transaction.request()

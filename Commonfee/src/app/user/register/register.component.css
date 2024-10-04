@@ -1,16 +1,16 @@
+
 .form-container {
-  
+  background: linear-gradient(45deg,#f4e7fb,#f3dcdc,#f5bcba,#e3aadd);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   min-height: 100vh;
-  padding: 4% 0;
   position: relative;
   background-size: cover;
 }
 .form-container form {
-  background-color: rgba(167, 173, 174, 0.911);
+  background:linear-gradient(90deg, #c972bc,rgb(255, 209, 168));
   border: 2px solid gray;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
@@ -23,7 +23,7 @@
   width: 250px;
   height: 30px;
   align-items: center;
-  margin-top: 25px;
+  margin-top: 20px;
 }
 .form-container .login-register {
   text-align: center;
@@ -42,4 +42,43 @@
 .form-container button:hover {
   background-color: rgb(111, 185, 250);
   
+}
+a{
+  text-decoration: none;
+  color: black;
+}
+
+.input-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.input-field:last-child {
+  margin-right: 0;
+}
+
+.box {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.invalid-feedback {
+  color: red;
+  font-size: 12px;
+}
+
+.btn {
+  color: #fff;
+  background-color: #6fb9fa;
+  border-radius: 50px;
+  width: 100%;
 }

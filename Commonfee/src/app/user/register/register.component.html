@@ -1,0 +1,188 @@
+<div class="form-container">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+    <h3 style="text-align: center;color: #fff">ลงทะเบียน</h3>
+    <hr style="border-width: 3px; border-color: white">
+
+    <div class="input-row">
+      <div class="input-field">
+        <input 
+        formControlName="User_Firstname" 
+        placeholder="ชื่อจริง" 
+        maxlength="50" 
+        required class="box" 
+        [ngClass]="{
+          'is-invalid':
+          registerForm.get('User_Firstname').invalid && registerForm.get('User_Firstname').touched
+        }"
+        />
+        <div class="invalid-feedback" *ngIf="registerForm.get('User_Firstname').invalid && registerForm.get('User_Firstname').touched">
+          กรุณากรอกชื่อจริงของคุณ
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input 
+        formControlName="User_Lastname" 
+        placeholder="นามสกุล" 
+        maxlength="50" 
+        required class="box" 
+        [ngClass]="{
+          'is-invalid':
+          registerForm.get('User_Lastname').invalid && registerForm.get('User_Lastname').touched
+        }"
+        />
+        <div class="invalid-feedback" *ngIf="registerForm.get('User_Lastname').invalid && registerForm.get('User_Lastname').touched">
+          กรุณากรอกนามสกุลของคุณ
+        </div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-field">
+        <input 
+        type="text" 
+        formControlName="username" 
+        placeholder="ชื่อผู้ใช้" 
+        maxlength="50" required 
+        class="box" 
+        [ngClass]="{
+          'is-invalid':
+          registerForm.get('username').invalid && registerForm.get('username').touched
+        }"
+        />
+        <div class="invalid-feedback" *ngIf="registerForm.get('username').invalid && registerForm.get('username').touched">
+          กรุณากรอกชื่อผู้ใช้ของคุณ
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input 
+        type="email" 
+        formControlName="email" 
+        placeholder="อีเมลล์" 
+        maxlength="50" 
+        required class="box"
+        [ngClass]="{
+          'is-invalid':
+          registerForm.get('email').invalid && registerForm.get('email').touched
+        }"
+        />
+        <div class="invalid-feedback" *ngIf="registerForm.get('email').invalid && registerForm.get('email').touched">
+          กรุณากรอกอีเมลของคุณ
+        </div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-field">
+        <input 
+        type="text" 
+        formControlName="houseID" 
+        placeholder="บ้านเลขที่" 
+        maxlength="10" 
+        required class="box" 
+        [ngClass]="{
+          'is-invalid':
+          registerForm.get('houseID').invalid && registerForm.get('houseID').touched
+        }"
+        />
+        <div class="invalid-feedback" *ngIf="registerForm.get('houseID').invalid && registerForm.get('houseID').touched">
+          กรุณากรอกบ้านเลขที่ของคุณ
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input 
+        type="text" 
+        formControlName="IDcard" 
+        placeholder="เลขบัตรประชาชนของคุณ" 
+        maxlength="13" 
+        required class="box" 
+        [ngClass]="{
+          'is-invalid':
+          registerForm.get('IDcard').invalid && registerForm.get('IDcard').touched
+        }"
+        />
+        <div class="invalid-feedback" *ngIf="registerForm.get('IDcard').invalid && registerForm.get('IDcard').touched">
+          กรุณากรอกเลขบัตรประชาชนของคุณ
+        </div>
+      </div>
+    </div>
+
+    <div class="input-field">
+      <input 
+      formControlName="phone" 
+      placeholder="เบอร์โทรศัพท์" 
+      maxlength="10" 
+      required class="box" 
+      style="width: 508px;"
+      [ngClass]="{
+        'is-invalid':
+        registerForm.get('phone').invalid &&
+        registerForm.get('phone').touched
+      }"
+      />
+      <div
+      class="invalid-feedback"
+      *ngIf="
+        registerForm.get('phone').invalid &&
+        registerForm.get('phone').touched
+      "
+    >
+      กรุณากรอกเบอร์โทรศัพท์ของคุณ
+    </div>
+    </div>
+
+    <div class="input-field">
+      <input 
+      type="password" 
+      formControlName="password" 
+      placeholder="รหัสผ่าน" 
+      maxlength="50" 
+      required class="box"
+        style="width: 508px;" 
+        [ngClass]="{
+          'is-invalid':
+          registerForm.get('password').invalid &&
+          registerForm.get('password').touched
+        }"
+        />
+        <div
+        class="invalid-feedback"
+        *ngIf="
+          registerForm.get('password').invalid &&
+          registerForm.get('password').touched
+        "
+      >
+        กรุณากรอกรหัสของคุณ
+      </div>
+    </div>
+
+    <div class="input-field">
+      <input type="password" 
+      formControlName="confirmPassword" 
+      placeholder="ยืนยันรหัสผ่าน" 
+      maxlength="50" required
+      class="box" 
+      style="width: 508px;" 
+      [ngClass]="{
+        'is-invalid':
+        registerForm.get('confirmPassword').invalid &&
+        registerForm.get('confirmPassword').touched
+      }"
+      />
+      <div
+      class="invalid-feedback"
+      *ngIf="
+        registerForm.get('confirmPassword').invalid &&
+        registerForm.get('confirmPassword').touched
+      "
+    >
+      กรุณายืนยันรหัสของคุณ
+    </div>
+    </div>
+
+    <button type="submit" class="btn">ลงทะเบียน</button>
+    <div class="text-center pt-4 text-muted">คุณลงทะเบียนแล้วแล้วใช่ไหม? <a id="forget" routerLink="/login">เข้าสู่ระบบลูกบ้าน</a></div>
+  </form>
+</div>
