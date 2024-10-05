@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import{QRCodeModule} from 'angularx-qrcode';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +18,7 @@ import { SidebarComponent } from './user/sidebar/sidebar.component';
 import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
+import { homeAdminComponent } from './admin/home-admin/home-admin.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import { statusAdminComponent } from './admin/admin-status/admin-status.componen
     SidebarComponent,
     HistoryPurchaseComponent,
     PurchaseComponent,
-    statusAdminComponent
+    statusAdminComponent,
+    homeAdminComponent
   ],
 
   imports: [
@@ -38,7 +42,9 @@ import { statusAdminComponent } from './admin/admin-status/admin-status.componen
     AppRoutingModule,
     FormsModule,  
     ReactiveFormsModule,  
-    HttpClientModule  
+    HttpClientModule,
+    QRCodeModule,
+    CommonModule
   ],
   providers: [
     provideClientHydration()

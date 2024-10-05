@@ -7,26 +7,40 @@ import { NavigationEnd, Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-[x: string]: any;
+  [x: string]: any;
   showHeader = true;
   isLoginPage: boolean;
-  isregisterPage:boolean;
+  isregisterPage: boolean;
+  isAdminPage: boolean;
 
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        // ตรวจสอบ URL เพื่อตั้งค่า isLoginPage สำหรับหน้า login
+        // ตรวจสอบ URL เพื่อตั้งค่า isLoginPage, isRegisterPage และ isAdminPage
         this.isLoginPage = this.router.url.includes('/login');
-        this.isregisterPage =this.router.url.includes('/register');
+        this.isregisterPage = this.router.url.includes('/register');
+        this.isAdminPage = this.router.url.includes('/adminhome') || 
+                           this.router.url.includes('/adminlogin') || 
+                           this.router.url.includes('/adminstatus');
+        this.checkHeaderVisibility();
       }
     });
   }
 
   ngOnInit(): void {
     this.router.events.subscribe(() => {
-      const currentRoute = this.router.url;
-      
-      this.showHeader = !(currentRoute.includes('login') || currentRoute.includes('register'));
+      this.checkHeaderVisibility();
     });
+  }
+
+  checkHeaderVisibility(): void {
+    const currentRoute = this.router.url;
+    this.showHeader = !(
+      currentRoute.includes('adminhome') || 
+      currentRoute.includes('adminlogin') || 
+      currentRoute.includes('adminstatus') || 
+      currentRoute.includes('login') || 
+      currentRoute.includes('register')
+    );
   }
 }

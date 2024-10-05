@@ -21,9 +21,7 @@
     </table>
   
     <p>ชำระเงินวันที่ 2024-09-01 หากชำระเงินวันนี้ทำตามขั้นตอนและสแกนคิวอาร์โค้ดด้านล่าง</p>
-    <div class="qr-code">
-      <img src="qr-code-placeholder.png" alt="QR Code" />
-    </div>
+    <qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
     <p class="help-text">หากพบปัญหา ติดต่อ 090-XXX-XXXX</p>
   </div>
   
