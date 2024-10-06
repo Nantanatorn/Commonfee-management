@@ -7,9 +7,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrls: ['./header.component.css'] // แก้ไขจาก styleUrl เป็น styleUrls เพื่อให้ถูกต้อง
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private renderer: Renderer2,
@@ -17,7 +17,10 @@ export class HeaderComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    // Logic ที่คุณต้องการใส่ใน ngOnInit (ถ้าไม่มีอะไรต้องการทำ ก็เว้นว่างได้)
+    if (isPlatformBrowser(this.platformId)) {
+      console.log('Running on the browser');
+    }
   }
   
   logout(): void {

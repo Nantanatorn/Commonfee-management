@@ -1,8 +1,8 @@
-<app-sidebar></app-sidebar>
+
 <div class="container mt-4"></div>
 <br>
 <div class="report-form">
-  <h3 style="text-align:center ;font-weight: 600;">แจ้งคำร้องเรียน</h3>
+  <h3 style="text-align:center ;font-weight: 600;">แจ้งคำร้องเรียน / คำร้องซ่อม</h3>
   <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
     <div class="form-group">
       <label for="firstName">ชื่อ</label>
@@ -83,6 +83,7 @@
         type="date"
         formControlName="reportDate"
         class="form-control"
+        [max]="currentDate"
         [ngClass]="{
           'is-invalid':
             reportForm.get('reportDate').invalid &&
@@ -98,6 +99,16 @@
       >
         กรุณากรอกวันที่ร้องเรียน
       </div>
+    </div>
+
+    <div class="form-group">
+      <label for="type">เลือกประเถทคำร้อง</label>
+      <select id="type" formControlName="type" class="form-select"  aria-label="Default select example">
+        <option value="">เลือกประเภทคำร้อง</option>
+        <option value="1">ร้องเรียนทั่วไป</option>
+        <option value="2">คำร้องขอซ่อม</option>
+ 
+      </select>
     </div>
 
     <div class="form-group">

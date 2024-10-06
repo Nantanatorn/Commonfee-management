@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrl: './purchase.component.css'
 })
 export class PurchaseComponent {
-
+  myAngularxQrCode:any;
+  constructor(){
+    this.myAngularxQrCode = 'จ่ายมา 2500 บาท';
+  }
 }

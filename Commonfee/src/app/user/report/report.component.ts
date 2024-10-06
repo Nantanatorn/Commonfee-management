@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 export class ReportComponent implements OnInit {
 
   reportForm!: FormGroup;
+  currentDate: string;
+
 
   constructor(
     private fb: FormBuilder,
@@ -24,8 +26,11 @@ export class ReportComponent implements OnInit {
       surname: ['', Validators.required],
       houseID: ['', Validators.required],
       reportDate: ['', Validators.required],
+      type:['',Validators.required],
       detail: ['', Validators.required]
     });
+    const today = new Date();
+    this.currentDate = today.toISOString().substring(0, 10);
   }
 
   onSubmit(): void {
@@ -53,4 +58,5 @@ export class ReportComponent implements OnInit {
       });
     }
   }
+  
 }

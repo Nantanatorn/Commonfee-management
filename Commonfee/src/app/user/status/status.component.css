@@ -31,12 +31,12 @@
     font-weight: bold;
   }
   
-  .paid {
+  .finish {
     color: green;
     font-weight: bold;
   }
   
-  .unpaid {
+  .unfinish {
     color: red;
     font-weight: bold;
   }

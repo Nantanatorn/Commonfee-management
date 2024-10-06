@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit{
 
   onLogin(): void {
     if (!this.username || !this.password) {
-      this.errorMessage = 'Username and password are required';
+      this.errorMessage = 'กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ถูกต้อง';
       return;
     }
 

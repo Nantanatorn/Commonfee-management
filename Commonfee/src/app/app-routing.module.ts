@@ -33,9 +33,9 @@ const routes: Routes = [
   {path:'purchase',component:PurchaseComponent},
 
   // admin routes
-  { path: 'admin-home', component: homeAdminComponent },
-  { path: 'admin-login', component: loginAdminComponent },
-  {path:'admin-status',component:statusAdminComponent}
+  { path: 'adminhome', component: homeAdminComponent },
+  { path: 'adminlogin', component: loginAdminComponent },
+  {path:'adminstatus',component:statusAdminComponent}
 ];
 
 @NgModule({
