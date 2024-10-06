@@ -1,18 +1,5 @@
 <div class="main">
-    <nav class="sidebar" [ngClass]="{ 'closed': !isSidebarOpen }">
-      <header>
-        <div class="image-text">
-          <span class="image">
-            <img src="logoblack.png" alt="logo" style="width:100px; margin-top: 20px;margin-left: 20px;">&nbsp;
-          </span>
-          <div class="text header-text">
-            <span class="name">BanDee</span>
-          </div>
-        </div>
-        <button class="toggle-button" (click)="toggleSidebar()">
-          <i class="bi" [ngClass]="isSidebarOpen ? 'bi-chevron-left' : 'bi-chevron-right'"></i>
-        </button>
-      </header>
+    <nav class="sidebar" >
       <div class="menu-bar">
         <div class="menu">
           <ul class="menu-links">
@@ -41,34 +28,10 @@
                 <span class="text nav-text">ดูประวัติคำร้องเรียน</span>
               </a>
             </li>
-            <li class="nav-link">
-              <a href="#">
-                <i class="bi bi-graph-up icon"></i>
-                <span class="text nav-text">....</span>
-              </a>
-            </li>
-            <li class="nav-link">
-              <a href="#">
-                <i class="bi bi-bell icon"></i>
-                <span class="text nav-text">....</span>
-              </a>
-            </li>
-            <li class="nav-link">
-              <a href="#">
-                <i class="bi bi-pie-chart icon"></i>
-                <span class="text nav-text">....</span>
-              </a>
-            </li>
+            
           </ul>
         </div>
-        <div class="bottom-content">
-          <li class="nav-link">
-            <a (click)="logout()" aria-label="Logout">
-              <i class="bi bi-box-arrow-left icon" style="margin-left: 30px;"></i>
-              <span class="text nav-text">Logout</span>
-            </a>
-          </li>
-        </div>        
+       
       </div>
     </nav>
   </div>

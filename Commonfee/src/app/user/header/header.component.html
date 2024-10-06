@@ -30,13 +30,20 @@
       <a class="nav-link " routerLink="/about-us">เกี่ยวกับเรา</a>
     </li>
 </ul> 
-<ul>
   <ul>
     <li class="nav-item profile">
       <a class="nav-link " routerLink="/profile"><i class="bi bi-person-circle"></i></a>
     </li>
   </ul>
-</ul>
+
+  <div class="toggle">
+    <div class="moon-sun">
+      <i class="bi" [ngClass]="isDarkMode ? 'bi bi-sun' : 'bi bi-moon'" (click)="toggleDarkMode()"></i>
+    </div>
+    <span class="mode-text">{{ isDarkMode ? '' : '' }}</span>
+   
+  </div>
+
 <ul>
   <li class="nav-item logout">
     <a class="nav-link " (click)="logout()">

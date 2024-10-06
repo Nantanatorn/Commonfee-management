@@ -18,17 +18,7 @@
     text-align: center;
     border: 1px solid #ddd;
   }
-  
-  .payment-table thead th {
-    background-color: #d3d3d3;
-    color: #000;
-  }
-  
-  .payment-table tbody td {
-    background-color: #9a8fff;
-    color: white;
-  }
-  
+
   .qr-code img {
     margin: 20px 0;
     width: 150px;

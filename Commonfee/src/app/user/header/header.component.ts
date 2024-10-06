@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css'] // แก้ไขจาก styleUrl เป็น styleUrls เพื่อให้ถูกต้อง
 })
 export class HeaderComponent implements OnInit {
+  isDarkMode: boolean = false;
+
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private renderer: Renderer2,
@@ -42,5 +45,30 @@ export class HeaderComponent implements OnInit {
         console.log('User logged out');
       }
     });
+  }
+  toggleDarkMode(): void {
+    // ตรวจสอบว่ากำลังทำงานในเบราว์เซอร์
+    if (isPlatformBrowser(this.platformId)) {
+      this.isDarkMode = !this.isDarkMode;
+      if (this.isDarkMode) {
+        this.renderer.addClass(document.body, 'dark-mode');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        this.renderer.removeClass(document.body, 'dark-mode');
+        localStorage.setItem('theme', 'light');
+      }
+      // อัปเดตสีพื้นหลังของ navbar และ profile popup
+      this.updateNavbarColor();
+    }
+  }
+  updateNavbarColor(): void {
+    const navbar = document.querySelector('.nav') as HTMLElement;
+    if (navbar) {
+      if (this.isDarkMode) {
+        navbar.style.background = 'linear-gradient(120deg, #5b2c6f, #000)';
+      } else {
+        navbar.style.background = 'linear-gradient(145deg, #9a8fff, #c68ef8, #fb90cd)';
+      }
+    }
   }
 }

@@ -1,18 +1,6 @@
 <div class="main">
-    <nav class="sidebar" [ngClass]="{ 'closed': !isSidebarOpen }">
-      <header>
-        <div class="image-text">
-          <span class="image">
-            <img src="logoblack.png" alt="logo" style="width:100px; margin-top: 20px;margin-left: 20px;">&nbsp;
-          </span>
-          <div class="text header-text">
-            <span class="name">BanDee</span>
-          </div>
-        </div>
-        <button class="toggle-button" (click)="toggleSidebar()">
-          <i class="bi" [ngClass]="isSidebarOpen ? 'bi-chevron-left' : 'bi-chevron-right'"></i>
-        </button>
-      </header>
+    <nav class="sidebar" >
+          
       <div class="menu-bar">
         <div class="menu">
           <ul class="menu-links">
@@ -23,42 +11,37 @@
               </a>
             </li>
             <li class="nav-link">
-              <a routerLink="/historyPurchase">
-                <i class="bi bi-clock-history icon"></i>
-                <span class="text nav-text">ดูประวัติชำระเงิน</span>
+              <a routerLink="/statusCommonfee">
+                <i class="bi bi-clipboard2-check icon"></i>
+                <span class="text nav-text">สถานะที่ส่วนกลาง</span>
               </a>
             </li>
             
             <li class="nav-link">
               <a routerLink="/receipt">
                 <i class="bi bi-receipt icon"></i>
-                <span class="text nav-text">ใบเสร็จรับเงิน</span>
+                <span class="text nav-text">จองห้องจัดเลี้ยง</span>
               </a>
             </li>
             <li class="nav-link">
               <a routerLink="/historyReport">
-                <i class="bi bi-flag icon"></i>
-                <span class="text nav-text">ดูประวัติคำร้องเรียน</span>
+                <i class="bi bi-universal-access icon"></i>
+                <span class="text nav-text">จองคิวฟิตเนส</span>
               </a>
             </li>
             <li class="nav-link">
               <a href="#">
-                <i class="bi bi-graph-up icon"></i>
-                <span class="text nav-text">....</span>
+                <i class="bi bi-taxi-front icon"></i>
+                <span class="text nav-text">ลงทะเบียนรถ</span>
               </a>
             </li>
             <li class="nav-link">
               <a href="#">
-                <i class="bi bi-bell icon"></i>
-                <span class="text nav-text">....</span>
+                <i class="bi bi-balloon-heart icon"></i>
+                <span class="text nav-text">ลงทะเบียนสัตว์</span>
               </a>
             </li>
-            <li class="nav-link">
-              <a href="#">
-                <i class="bi bi-pie-chart icon"></i>
-                <span class="text nav-text">....</span>
-              </a>
-            </li>
+           
           </ul>
         </div>
  

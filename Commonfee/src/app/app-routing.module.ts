@@ -9,6 +9,7 @@ import { StatusComponent } from './user/status/status.component';
 import { ServiceComponent } from './user/service/service.component';
 import { AboutUsComponent } from './user/about-us/about-us.component';
 import { HomeComponent } from './user/home/home.component';
+import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';
 
 //admin components
 import { homeAdminComponent } from './admin/home-admin/home-admin.component';
@@ -31,6 +32,7 @@ const routes: Routes = [
   {path:'sidebar',component:SidebarComponent},
   {path:'historyPurchase',component:HistoryPurchaseComponent},
   {path:'purchase',component:PurchaseComponent},
+  {path:'statusCommonfee',component:StatusCommonfeeComponent},
 
   // admin routes
   { path: 'adminhome', component: homeAdminComponent },

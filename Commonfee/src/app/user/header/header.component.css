@@ -1,5 +1,5 @@
 .nav{
-    background-color: #9a8fff;
+    background: linear-gradient(145deg, #9a8fff, #c68ef8, #fb90cd);
     position: fixed;
     overflow-y: auto;
     width: 100%;
@@ -17,12 +17,25 @@ ul{
     list-style: none;
 }
 .profile{
-    margin-left: 300px;
+    margin-left: 590px;
     font-size: 23px;
     position: absolute;
 }
 .logout{
-    margin-left: 290px;
+    margin-left: 10px;
     font-size: 23px;
     position: absolute;
 }
+.toggle {
+    margin-left:530px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .moon-sun i {
+    font-size: 20px;
+    margin-right: 10px;
+  }

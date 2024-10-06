@@ -9,42 +9,10 @@
     overflow: hidden;
   }
 
-  .sidebar.closed {
-    width: 60px; /* ขนาดเล็กสุดเมื่อปิด */
-    transition: width 0.3s ease;
-    
-  }
-  .sidebar.close .text{
-    opacity: 0;
-  }
-  
- /* ปุ่มสลับ Sidebar */
-.toggle-button {
-  position: fixed;
-  top: 20px; /* ย้ายปุ่มไปใกล้ด้านบน */
-  left: 250px; /* เริ่มต้นวางปุ่มข้างๆ Sidebar ที่เปิดอยู่ */
-  height: 40px;
-  width: 40px;
-  background-color: #695CFE; /* สีปุ่ม */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.3s ease, left 0.3s ease;
-  z-index: 1000; /* ให้อยู่ด้านหน้าสุด */
-}
-
 .toggle-button:hover {
   transform: scale(1.1); /* ขยายปุ่มเมื่อ hover */
 }
 
-/* เมื่อ Sidebar ถูกปิด ปรับตำแหน่งปุ่มให้เลื่อนไปทางซ้าย */
-.sidebar.closed + .toggle-button {
-  left: 60px; /* ตำแหน่งใหม่เมื่อ Sidebar ปิด */
-}
   .sidebar .text{
     font-size: 16px;
     font-weight: 500;
@@ -55,7 +23,7 @@
     align-items: center;
   }
   .sidebar li{
-    height: 50px;
+    height: 60px;
     margin-top: 10px;
     list-style: none;
     display: flex;
@@ -71,7 +39,6 @@
   }
   .sidebar li .icon,
   .sidebar li .text{
-     color: #000000;
      transition: all 0.2s ease;
     }
   
@@ -100,7 +67,6 @@
   .sidebar header .toggle{
     position: absolute;
     top: 50%;
-    right: -25px;
     transform: translateY(-50%);
     height: 25px;
     width: 25px;
@@ -113,14 +79,7 @@
     font-size:12px;
   }
   
-  .search-box input{
-    height: 100%;
-    outline: none;
-    border: none;
-    border-radius: 6px;
-     background: none;
-    margin-left: 30px;
-  }
+ 
   .sidebar li a{
     height: 100%;
     width: 100%;
@@ -138,7 +97,6 @@
     color:#fff ;
   }
   .sidebar .menu-bar{
-    height: calc(100% - 120px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
