@@ -6,7 +6,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class RegisterService {
-  private baseUrl = 'http://localhost:3000/register'; // URL ของ API ที่จะเรียกใช้
+  private baseUrl = 'http://localhost:3500/register'; // URL ของ API ที่จะเรียกใช้
 
   constructor(private http: HttpClient) { }
 

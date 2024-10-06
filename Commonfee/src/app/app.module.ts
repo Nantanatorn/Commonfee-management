@@ -21,6 +21,7 @@ import { statusAdminComponent } from './admin/admin-status/admin-status.componen
 import { homeAdminComponent } from './admin/home-admin/home-admin.component';
 import { SideServiceComponent } from './side-service/side-service.component';
 import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';
+import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonf
     statusAdminComponent,
     homeAdminComponent,
     SideServiceComponent,
-    StatusCommonfeeComponent
+    StatusCommonfeeComponent,
+    AdminSidebarComponent
   ],
 
   imports: [

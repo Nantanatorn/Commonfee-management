@@ -1,15 +1,14 @@
-import { Component, OnInit, Inject, Renderer2 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { PLATFORM_ID } from '@angular/core';
-import { Route, Router } from '@angular/router';
-import Swal from 'sweetalert2'; 
+import { Component, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-home-admin',
-  templateUrl: './home-admin.component.html',
-  styleUrl: './home-admin.component.css'
+  selector: 'app-admin-sidebar',
+  templateUrl: './admin-sidebar.component.html',
+  styleUrl: './admin-sidebar.component.css'
 })
-export class homeAdminComponent implements OnInit{
+export class AdminSidebarComponent implements OnInit{
   isDarkMode: boolean = false;
 
   constructor(
@@ -76,3 +75,5 @@ export class homeAdminComponent implements OnInit{
   }
 
 }
+
+

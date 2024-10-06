@@ -4,6 +4,8 @@ interface House {
   houseNumber: string;
   ownerName: string;
   isPaid: boolean;
+  size : string;
+  feetotal: string
 }
 
 @Component({
@@ -13,11 +15,11 @@ interface House {
 })
 export class statusAdminComponent {
   houses: House[] = [
-    { houseNumber: 'A1', ownerName: 'นายสมชาย', isPaid: true },
-    { houseNumber: 'A2', ownerName: 'นางสมศรี', isPaid: false },
-    { houseNumber: 'A3', ownerName: 'นายสมบัติ', isPaid: true },
-    { houseNumber: 'B1', ownerName: 'นางสมฤดี', isPaid: false },
-    { houseNumber: 'B2', ownerName: 'นายสมหมาย', isPaid: true },
+    { houseNumber: 'A1', ownerName: 'นายสมชาย', size: '500 ตร.ว', feetotal: '10000 บาท', isPaid: true },
+    { houseNumber: 'A2', ownerName: 'นางสมศรี',  size: '500 ตร.ว', feetotal: '10000 บาท',isPaid: false },
+    { houseNumber: 'A3', ownerName: 'นายสมบัติ',  size: '500 ตร.ว', feetotal: '10000 บาท',isPaid: true },
+    { houseNumber: 'B1', ownerName: 'นางสมฤดี',  size: '500 ตร.ว', feetotal: '10000 บาท',isPaid: false },
+    { houseNumber: 'B2', ownerName: 'นายสมหมาย',  size: '500 ตร.ว', feetotal: '10000 บาท',isPaid: true },
   ];
 
   togglePaymentStatus(house: House) {
