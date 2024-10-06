@@ -20,6 +20,8 @@
       padding: 2rem;
       width: 450px;
       height: auto;
+      box-shadow: 5px 5px 10px rgba(255, 0, 0, 0.312);
+
   .bi-eye-slash-fill.btn{
         border: none;
         position: absolute;
@@ -48,17 +50,17 @@
     text-align: center;
   }
   .form-container button {
-    background-color: #D9D9D9;
+    background-color: #fdabbf;
+    color: #fff;
     margin-top: 40px;
     width: 200px;
     height: 40px;
     margin-left: 30px;
     border: 0cap;
-    
   }
   .form-container button:hover{
-    background-color: #D9D9D9;
-    color: black;
+    background-color: #ffffff;
+    color: #686868;
   }
   .text-center{
     color: #D9D9D9;
@@ -67,4 +69,4 @@
     text-decoration: none;
     color: black;
   }
- 
+  

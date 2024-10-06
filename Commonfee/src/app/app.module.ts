@@ -19,6 +19,7 @@ import { HistoryPurchaseComponent } from './user/history-purchase/history-purcha
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
 import { homeAdminComponent } from './admin/home-admin/home-admin.component';
+import { SideServiceComponent } from './side-service/side-service.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { homeAdminComponent } from './admin/home-admin/home-admin.component';
     HistoryPurchaseComponent,
     PurchaseComponent,
     statusAdminComponent,
-    homeAdminComponent
+    homeAdminComponent,
+    SideServiceComponent
   ],
 
   imports: [
