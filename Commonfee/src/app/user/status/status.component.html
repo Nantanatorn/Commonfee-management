@@ -1,21 +1,27 @@
-<div class="container">
-    <h3>สถานะการชำระค่าส่วนกลาง</h3>
+<div class="container mt-5">
+    <h3>สถานะคำร้องเรียน / ซ่อม</h3>
   
     <table class="status-table">
       <thead>
         <tr>
+          <th>วันที่</th>
           <th>บ้านเลขที่</th>
           <th>เจ้าของ</th>
-          <th>สถานะการชำระเงิน</th>
+          <th>หัวข้อคำร้อง</th>
+          <th>ประเภทคำร้อง</th>
+          <th>สถานะคำร้อง</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td>{{ house.date }}</td>
           <td>{{ house.houseNumber }}</td>
           <td>{{ house.ownerName }}</td>
+          <td>{{ house.title}}</td>
+          <td>{{ house.type }}</td>
           <td>
-            <span [class.paid]="house.isPaid" [class.unpaid]="!house.isPaid">
-              {{ house.isPaid ? 'ชำระแล้ว' : 'ค้างชำระ' }}
+            <span [class.finish]="house.isFinish" [class.unfinish]="!house.isFinish">
+              {{ house.isFinish ? 'ดำเนินการเสร็จสิ้น' : 'กำลังดำเนินการ' }}
             </span>
           </td>
         </tr>

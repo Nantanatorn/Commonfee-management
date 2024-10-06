@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports.enrollment = async (req, res) => {
     const { User_Firstname, User_Lastname, username,  email, houseID, IDcard, phone,password,confirmPassword} = req.body;
-    const defaultRole = 'customer';
+    const defaultRole = 'Resident';
     // Simple validation
     if (!User_Firstname || !User_Lastname || !username || !email || !houseID ||  !IDcard || !phone || !password || !confirmPassword) {
         return res.status(400).json({ message: 'Please provide all required fields.' });
