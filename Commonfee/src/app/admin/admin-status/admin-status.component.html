@@ -1,19 +1,24 @@
+<app-admin-sidebar></app-admin-sidebar>
 <div class="container">
-    <h2>ระบบติดตามสถานะค่าส่วนกลาง</h2>
+    <h2>ระบบติดตามลูกหนี้</h2>
   
     <table class="status-table">
       <thead>
         <tr>
           <th>บ้านเลขที่</th>
           <th>เจ้าของ</th>
+          <th>ขนาดบ้าน</th>
+          <th>จำนวนเงิน</th>
           <th>สถานะการชำระเงิน</th>
-          <th>การกระทำ</th>
+          <th>ปรับสถานะ</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let house of houses">
-          <td>{{ house.houseNumber }}</td>
-          <td>{{ house.ownerName }}</td>
+          <td class="text-dark">{{ house.houseNumber }}</td>
+          <td class="text-dark">{{ house.ownerName }}</td>
+          <td class="text-dark">{{ house.size }}</td>
+          <td class="text-dark">{{ house.feetotal }}</td>
           <td>
             <span [class.paid]="house.isPaid" [class.unpaid]="!house.isPaid">
               {{ house.isPaid ? 'ชำระแล้ว' : 'ค้างชำระ' }}

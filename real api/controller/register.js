@@ -54,7 +54,9 @@ module.exports.enrollment = async (req, res) => {
             const User_ID = insertCustomer.recordset[0].User_ID;
             await transaction.request()
                 .input('User_ID', sql.Int, User_ID)
-                .query('insert into UserAccount (User_ID) values (@User_ID)');
+                .query('insert into Resident (User_ID) values (@User_ID)');
+            
+        
 
             await transaction.commit();
             res.status(201).json({ message: 'User registered successfully.' });

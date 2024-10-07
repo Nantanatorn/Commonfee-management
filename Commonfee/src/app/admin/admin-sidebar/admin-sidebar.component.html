@@ -17,13 +17,13 @@
             <li class="nav-link">
               <a routerLink="/historyPurchase">
                 <i class="bi bi-clock-history icon"></i>
-                <span class="text nav-text">ดูประวัติชำระเงิน</span>
+                <span class="text nav-text">คำร้องเรียน</span>
               </a>
             </li>
             <li class="nav-link">
               <a routerLink="/purchase">
                 <i class="bi bi-wallet2 icon"></i>
-                <span class="text nav-text">ชำระเงิน</span>
+                <span class="text nav-text">การชำระเงิน</span>
               </a>
             </li>
             <li class="nav-link">
@@ -33,15 +33,9 @@
               </a>
             </li>
             <li class="nav-link">
-              <a routerLink="/historyReport">
-                <i class="bi bi-flag icon"></i>
-                <span class="text nav-text">ดูประวัติคำร้องเรียน</span>
-              </a>
-            </li>
-            <li class="nav-link">
               <a href="#">
                 <i class="bi bi-graph-up icon"></i>
-                <span class="text nav-text">....</span>
+                <span class="text nav-text">จองของใช้ส่วนกลาง</span>
               </a>
             </li>
             <li class="nav-link">
@@ -67,10 +61,13 @@
           </li>
           <div class="toggle-container">
             <div class="moon-sun">
-              <i class="bi" [ngClass]="{'bi-sun': isDarkMode, 'bi-moon': !isDarkMode}" (click)="toggleDarkMode()"></i>
+              <i class="bi" [ngClass]="{'bi-sun': isDarkMode, 'bi-moon': !isDarkMode}"></i>
             </div>
             <span class="mode-text">{{ isDarkMode ? 'Light mode' : 'Dark mode' }}</span>
-            
+            <label class="switch">
+              <input type="checkbox" (click)="toggleDarkMode()" [checked]="isDarkMode">
+              <span class="slider round"></span>
+            </label>
           </div>
         </div>
       </div>
