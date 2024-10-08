@@ -12,12 +12,12 @@ import { HomeComponent } from './user/home/home.component';
 import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';
 
 //admin components
-import { homeAdminComponent } from './admin/home-admin/home-admin.component';
 import { loginAdminComponent } from './admin/login-admin/login-admin.component';
 import { SidebarComponent } from './user/sidebar/sidebar.component';
 import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
+import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 
 const routes: Routes = [
   // user routes
@@ -35,9 +35,10 @@ const routes: Routes = [
   {path:'statusCommonfee',component:StatusCommonfeeComponent},
 
   // admin routes
-  { path: 'adminhome', component: homeAdminComponent },
+  
   { path: 'adminlogin', component: loginAdminComponent },
-  {path:'adminstatus',component:statusAdminComponent}
+  {path:'adminstatus',component:statusAdminComponent},
+  {path:'adminsidebar',component:AdminSidebarComponent}
 ];
 
 @NgModule({

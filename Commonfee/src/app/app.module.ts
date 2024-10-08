@@ -18,7 +18,6 @@ import { SidebarComponent } from './user/sidebar/sidebar.component';
 import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
-import { homeAdminComponent } from './admin/home-admin/home-admin.component';
 import { SideServiceComponent } from './side-service/side-service.component';
 import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
@@ -38,7 +37,6 @@ import { EditProfileComponent } from './user/edit-profile/edit-profile.component
     HistoryPurchaseComponent,
     PurchaseComponent,
     statusAdminComponent,
-    homeAdminComponent,
     SideServiceComponent,
     StatusCommonfeeComponent,
     AdminSidebarComponent,

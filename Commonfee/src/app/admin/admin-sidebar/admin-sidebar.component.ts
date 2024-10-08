@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, input, OnInit, output, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -73,38 +73,5 @@ export class AdminSidebarComponent implements OnInit{
       }
     });
   }
-  isLeftSidebarCollapsed = input.required<boolean>();
-  changeIsLeftSidebarCollapsed = output<boolean>();
-  items = [
-    {
-      routeLink: 'dashboard',
-      icon: 'fal fa-home',
-      label: 'Dashboard',
-    },
-    {
-      routeLink: 'products',
-      icon: 'fal fa-box-open',
-      label: 'Products',
-    },
-    {
-      routeLink: 'pages',
-      icon: 'fal fa-file',
-      label: 'Pages',
-    },
-    {
-      routeLink: 'settings',
-      icon: 'fal fa-cog',
-      label: 'Settings',
-    },
-  ];
 
-  toggleCollapse(): void {
-    this.changeIsLeftSidebarCollapsed.emit(!this.isLeftSidebarCollapsed());
-  }
-
-  closeSidenav(): void {
-    this.changeIsLeftSidebarCollapsed.emit(true);
-  }
 }
-
-

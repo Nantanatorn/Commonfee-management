@@ -1,3 +1,4 @@
+import { jsPDF } from 'jspdf';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit {
         // ตรวจสอบ URL เพื่อตั้งค่า isLoginPage, isRegisterPage และ isAdminPage
         this.isLoginPage = this.router.url.includes('/login');
         this.isregisterPage = this.router.url.includes('/register');
-        this.isAdminPage = this.router.url.includes('/adminhome') || 
+        this.isAdminPage = this.router.url.includes('/adminsidebar') || 
                            this.router.url.includes('/adminlogin') || 
                            this.router.url.includes('/adminstatus');
         this.checkHeaderVisibility();
@@ -36,7 +37,7 @@ export class AppComponent implements OnInit {
   checkHeaderVisibility(): void {
     const currentRoute = this.router.url;
     this.showHeader = !(
-      currentRoute.includes('adminhome') || 
+      currentRoute.includes('adminsidebar') || 
       currentRoute.includes('adminlogin') || 
       currentRoute.includes('adminstatus') || 
       currentRoute.includes('login') || 
