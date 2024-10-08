@@ -14,7 +14,6 @@ import { StatusComponent } from './user/status/status.component';
 import { ReportComponent } from './user/report/report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { SidebarComponent } from './user/sidebar/sidebar.component';
 import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
@@ -22,6 +21,7 @@ import { SideServiceComponent } from './side-service/side-service.component';
 import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
+import { HistoryReportComponent } from './user/history-report/history-report.component';
 
 @NgModule({
   declarations: [
@@ -33,14 +33,14 @@ import { EditProfileComponent } from './user/edit-profile/edit-profile.component
     ServiceComponent,
     StatusComponent,
     ReportComponent,
-    SidebarComponent,
     HistoryPurchaseComponent,
     PurchaseComponent,
     statusAdminComponent,
     SideServiceComponent,
     StatusCommonfeeComponent,
     AdminSidebarComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    HistoryReportComponent
   ],
 
   imports: [

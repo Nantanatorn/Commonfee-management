@@ -1,3 +1,4 @@
+import { HistoryReportComponent } from './user/history-report/history-report.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -13,7 +14,6 @@ import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonf
 
 //admin components
 import { loginAdminComponent } from './admin/login-admin/login-admin.component';
-import { SidebarComponent } from './user/sidebar/sidebar.component';
 import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
@@ -29,8 +29,8 @@ const routes: Routes = [
   { path: 'status', component: StatusComponent },
   { path: 'service', component: ServiceComponent },
   { path: 'about-us', component: AboutUsComponent },
-  {path:'sidebar',component:SidebarComponent},
   {path:'historyPurchase',component:HistoryPurchaseComponent},
+  {path:'historyReport',component:HistoryReportComponent},
   {path:'purchase',component:PurchaseComponent},
   {path:'statusCommonfee',component:StatusCommonfeeComponent},
 

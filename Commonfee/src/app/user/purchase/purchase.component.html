@@ -1,4 +1,3 @@
-<app-sidebar></app-sidebar>
 <div class="payment-section">
     <h2>ชำระเงิน</h2>
     <table class="payment-table">
@@ -9,6 +8,8 @@
           <th>ราคา</th>
           <th>รวม</th>
           <th>สถานะการชำระ</th>
+          <th>ประวัติชำระเงิน</th>
+          <th>ประวัติคำร้องเรียน</th>
           <th>ใบเสร็จชำระเงิน</th>
         </tr>
       </thead>
@@ -19,6 +20,8 @@
           <td>500</td>
           <td>500</td>
           <td>N</td>
+          <td><a routerLink="/historyPurchase">ดูประวัติชำระเงิน</a></td>
+          <td><a>ดูประวัติคำร้องเรียน</a></td>
           <td><button (click)="generatePDF()">Print</button></td>
         </tr>
       </tbody>
