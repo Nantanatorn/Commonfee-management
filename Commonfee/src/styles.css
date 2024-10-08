@@ -12,10 +12,10 @@
   body { 
     font-family: "Noto Sans Thai", sans-serif; 
   }
-  .content{
+  /* .content{
     padding-top: 60px;
     justify-content: center;
-  }
+  } */
   
   .login-content {
     padding-top: 0;  /* ไม่มี padding-top ในหน้า login */
