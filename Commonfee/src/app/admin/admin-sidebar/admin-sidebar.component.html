@@ -1,33 +1,75 @@
-<div
-  class="sidenav"
-  [ngClass]="isLeftSidebarCollapsed() ? 'sidenav-collapsed' : ''"
->
-  <div class="logo-container">
-    <button class="logo" (click)="toggleCollapse()">
-      <i class="fal fa-bars"></i>
-    </button>
-    @if (!isLeftSidebarCollapsed()) {
-      <div class="logo-text">App</div>
-      <button class="btn-close" (click)="closeSidenav()">
-        <i class="fal fa-times close-icon"></i>
-      </button>
-    }
-  </div>
-  <div class="sidenav-nav">
-    @for (item of items; track $index) {
-      <li class="sidenav-nav-item">
-        <a
-          class="sidenav-nav-link"
-          [routerLink]="item.routeLink"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <i class="sidenav-link-icon" [class]="item.icon"></i>
-          @if (!isLeftSidebarCollapsed()) {
-            <span class="sidenav-link-text">{{ item.label }}</span>
-          }
-        </a>
-      </li>
-    }
-  </div>
+
+<div class="main">
+  <nav class="sidebar">
+    <header>
+      <div class="image-text">
+        <span class="image">
+          <img src="logoblack.png" alt="logo" style="width:100px; margin-top: 20px;margin-left: 20px;">&nbsp;
+        </span>
+        <div class="text header-text">
+          <span class="name">BanDee</span>
+        </div>
+      </div>
+    </header>
+    <div class="menu-bar">
+      <div class="menu">
+        <ul class="menu-links">
+          <li class="nav-link">
+            <a routerLink="/historyPurchase">
+              <i class="bi bi-clock-history icon"></i>
+              <span class="text nav-text">คำร้องเรียน</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a routerLink="/purchase">
+              <i class="bi bi-wallet2 icon"></i>
+              <span class="text nav-text">การชำระเงิน</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a routerLink="/receipt">
+              <i class="bi bi-receipt icon"></i>
+              <span class="text nav-text">ใบเสร็จรับเงิน</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="#">
+              <i class="bi bi-graph-up icon"></i>
+              <span class="text nav-text">จองของใช้ส่วนกลาง</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="#">
+              <i class="bi bi-bell icon"></i>
+              <span class="text nav-text">....</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="#">
+              <i class="bi bi-pie-chart icon"></i>
+              <span class="text nav-text">....</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="bottom-content">
+        <li class="nav-link">
+          <a (click)="logout()" aria-label="Logout">
+            <i class="bi bi-box-arrow-left icon" style="margin-left: 30px;"></i>
+            <span class="text nav-text">Logout</span>
+          </a>
+        </li>
+        <div class="toggle-container">
+          <div class="moon-sun">
+            <i class="bi" [ngClass]="{'bi-sun': isDarkMode, 'bi-moon': !isDarkMode}"></i>
+          </div>
+          <span class="mode-text">{{ isDarkMode ? 'Light mode' : 'Dark mode' }}</span>
+          <label class="switch">
+            <input type="checkbox" (click)="toggleDarkMode()" [checked]="isDarkMode">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </nav>
 </div>
