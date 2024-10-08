@@ -67,13 +67,10 @@
           </li>
           <div class="toggle-container">
             <div class="moon-sun">
-              <i class="bi" [ngClass]="{'bi-sun': isDarkMode, 'bi-moon': !isDarkMode}"></i>
+              <i class="bi" [ngClass]="{'bi-sun': isDarkMode, 'bi-moon': !isDarkMode}" (click)="toggleDarkMode()"></i>
             </div>
             <span class="mode-text">{{ isDarkMode ? 'Light mode' : 'Dark mode' }}</span>
-            <label class="switch">
-              <input type="checkbox" (click)="toggleDarkMode()" [checked]="isDarkMode">
-              <span class="slider round"></span>
-            </label>
+            
           </div>
         </div>
       </div>

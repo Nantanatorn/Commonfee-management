@@ -7,6 +7,7 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const registerroute =require('./routes/register');
+const loginroute = require('./routes/login');
 
 app.use(cors());
 app.use(express.json());
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 const port = 3500;
 
 app.use('/',registerroute);
+app.use('/',loginroute);
 
 async function connectToDatabase() {
     try{
