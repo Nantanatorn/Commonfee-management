@@ -53,9 +53,11 @@ module.exports.enrollment = async (req, res) => {
 
             const User_ID = insertCustomer.recordset[0].User_ID;
             await transaction.request()
-                .input('User_ID', sql.Int, User_ID)
-                .query('insert into Resident (User_ID) values (@User_ID)');
-            
+            .input('User_ID', sql.Int, User_ID)
+            .input('R_Firstname', sql.VarChar, User_Firstname) // Use User_Firstname as R_Firstname
+            .input('R_Lastname', sql.VarChar, User_Lastname)   // Use User_Lastname as R_Lastname
+            .query('INSERT INTO Resident (User_ID, R_Firstname, R_Lastname) VALUES (@User_ID, @R_Firstname, @R_Lastname)');
+    
         
 
             await transaction.commit();

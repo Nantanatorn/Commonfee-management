@@ -51,4 +51,14 @@
     </a>
   </li>
 </ul>
+
+
 </nav>
+
+<div id="profilePopup" class="profile-popup" [ngStyle]="{ 'visibility': isProfilePopupVisible ? 'visible' : 'hidden' }">
+  <div class="profile-popup-content">
+    <img src="{{picture}}" alt="Profile image" class="profile-image">
+    <p>Hello {{ username }}</p>
+    <button class="edit-profile-btn" routerLink="/edit-profile" >Edit Profile</button>
+  </div>
+</div>
