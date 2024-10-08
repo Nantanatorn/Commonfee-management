@@ -25,8 +25,7 @@ module.exports.enrollment = async (req, res) => {
         // Check if email already exists
         const checkUser = await pool.request()
             .input('email', sql.VarChar, email)
-            .input('houseID',sql.Int,houseID)
-            .query('SELECT * FROM UserAccount WHERE email = @email AND houseID = @houseID');
+            .query('SELECT * FROM UserAccount WHERE email = @email');
 
         if (checkUser.recordset.length > 0) {
             return res.status(400).json({ message: 'Email already exists.' });
@@ -71,6 +70,29 @@ module.exports.enrollment = async (req, res) => {
 
     } catch (error) {
         console.error('Error during registration:', error);
+        res.status(500).json({ message: 'Server error, please try again later.' });
+    }
+};
+module.exports.forgotPass = async (req, res ,next) => {
+    const { username, email } = req.query;
+    const { password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    try {
+        const conn = await sql.connect(config);
+        const result = await conn.request()
+            .input('username', sql.VarChar, username || null)
+            .input('email', sql.VarChar, email || null)
+            .input('password', sql.VarChar, hashedPassword)
+            .query(`UPDATE UserAccount SET password = @password WHERE username = @username OR email = @email`);
+
+        if (result.rowsAffected[0] > 0) {
+            res.status(200).json({ message: 'Password updated successfully.' });
+        } else {
+            res.status(404).json({ message: 'User not found or email does not match.' });
+        }
+    } catch (error) {
+        console.error('Error during password update:', error);
         res.status(500).json({ message: 'Server error, please try again later.' });
     }
 };

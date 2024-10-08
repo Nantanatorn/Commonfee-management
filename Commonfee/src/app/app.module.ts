@@ -22,6 +22,7 @@ import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonf
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
 import { HistoryReportComponent } from './user/history-report/history-report.component';
+import { ForgotpassComponent } from './user/forgotpass/forgotpass.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { HistoryReportComponent } from './user/history-report/history-report.com
     StatusCommonfeeComponent,
     AdminSidebarComponent,
     EditProfileComponent,
-    HistoryReportComponent
+    HistoryReportComponent,
+    ForgotpassComponent
   ],
 
   imports: [
