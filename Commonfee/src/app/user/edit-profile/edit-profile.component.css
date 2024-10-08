@@ -1,0 +1,82 @@
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Noto Sans Thai", sans-serif;
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #333;
+    font-family: "Noto Sans Thai", sans-serif;
+    background: linear-gradient(120deg, #AFD5F0, rgb(167, 167, 255), rgb(107, 107, 253));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background-color: #f5f5f5;
+  }
+  
+  .form-control:focus {
+    border-color: rgb(107, 107, 253);
+    outline: none;
+    background-color: #E0F2FF;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background-color: rgb(107, 107, 253);
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  

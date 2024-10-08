@@ -1,6 +1,6 @@
 .sidebar {
     position: fixed; /* ทำให้ Sidebar คงที่ */
-    top: 65px;
+    top: 75px;
     left: 0;
     width: 250px;
     height: 100vh;

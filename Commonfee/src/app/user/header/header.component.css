@@ -1,33 +1,18 @@
-.nav{
-    background: linear-gradient(145deg, #9a8fff, #c68ef8, #fb90cd);
-    position: fixed;
-    overflow-y: auto;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-}
-.navbar-brand{
-    margin-left: 20px;
-}
-.nav-link{
-    color: #fff;
-    margin-top: 10px;
-}
-ul{
-    list-style: none;
-}
-.profile{
-    margin-left: 590px;
-    font-size: 23px;
-    position: absolute;
-}
-.logout{
-    margin-left: 10px;
-    font-size: 23px;
-    position: absolute;
-}
-.toggle {
-    margin-left:530px;
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  
+  /* ปรับแต่งปุ่ม navbar */
+  .navbar-nav .nav-link:hover {
+    color: white;
+    border-radius: 5px;
+    font-family: "Noto Sans Thai", sans-serif;
+  }
+  
+  /* โหมด toggle สำหรับเปลี่ยนโหมด */
+  .toggle {
+    margin-left: 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -39,3 +24,101 @@ ul{
     font-size: 20px;
     margin-right: 10px;
   }
+  
+  .active-nav-link {
+    padding-bottom: 3px;
+    border-bottom: 2px solid #ffffff;
+  }
+  
+  .nav-link.router-link-active {
+    color: #ffffff;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #ffffff;
+    background-color: transparent;
+  }
+  .profile .nav-link{
+    color: #ffffff;
+    background-color: transparent;
+  
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .profile-popup {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 220px;
+    border-radius: 8px;
+    padding: 15px;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgb(196, 2, 240); /* กรอบเงาสำหรับ profile popup */
+  }
+  
+  
+  .profile-popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-image {
+    background-size: cover;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .edit-profile-btn {
+    background-color: #6691ed;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .edit-profile-btn:hover {
+    background-color: rgb(107, 107, 253);
+  }
+  

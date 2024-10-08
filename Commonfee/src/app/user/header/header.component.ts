@@ -27,9 +27,21 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     // Logic ที่คุณต้องการใส่ใน ngOnInit (ถ้าไม่มีอะไรต้องการทำ ก็เว้นว่างได้)
     if (isPlatformBrowser(this.platformId)) {
-      console.log('Running on the browser');
-    }
+      
+
+      // ตรวจสอบว่ามีการเรียกใช้งาน localStorage ได้หรือไม่
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'dark') {
+        this.isDarkMode = true;
+        this.renderer.addClass(document.body, 'dark-mode');
+      } else {
+        this.isDarkMode = false;
+        this.renderer.removeClass(document.body, 'dark-mode');
+      }
+      this.updateNavbarColor();
+      this.updateProfilePopupBackground();
   }
+}
   
   logout(): void {
     Swal.fire({
@@ -62,12 +74,12 @@ export class HeaderComponent implements OnInit {
         this.renderer.removeClass(document.body, 'dark-mode');
         localStorage.setItem('theme', 'light');
       }
-      // อัปเดตสีพื้นหลังของ navbar และ profile popup
       this.updateNavbarColor();
+      this.updateProfilePopupBackground(); 
     }
   }
   updateNavbarColor(): void {
-    const navbar = document.querySelector('.nav') as HTMLElement;
+    const navbar = document.querySelector('.navbar') as HTMLElement;
     if (navbar) {
       if (this.isDarkMode) {
         navbar.style.background = 'linear-gradient(120deg, #5b2c6f, #000)';
@@ -101,13 +113,19 @@ export class HeaderComponent implements OnInit {
     if (profilePopup) {
       if (this.isDarkMode) {
         // เปลี่ยนเป็นสีโหมดมืด
-        profilePopup.style.background = 'linear-gradient(120deg, #001f3f, #5b2c6f, #000)';
+        profilePopup.style.background = 'linear-gradient(120deg, #5b2c6f, #000)';
       } else {
         // เปลี่ยนเป็นสีโหมดสว่าง
-        profilePopup.style.background = 'linear-gradient(120deg, #AFD5F0, #0074D9, #6b6bfd)';
+        profilePopup.style.background = 'linear-gradient(145deg, #9a8fff, #c68ef8, #fb90cd)';
       }
     } else {
       console.error("Element 'profilePopup' not found in DOM when updating background");
     }
+  }
+  editProfile(): void {
+    this.router.navigate(['/edit-profile']);
+  }
+  refresh(): void {
+    window.location.reload();
   }
 }
