@@ -25,7 +25,8 @@ module.exports.enrollment = async (req, res) => {
         // Check if email already exists
         const checkUser = await pool.request()
             .input('email', sql.VarChar, email)
-            .query('SELECT * FROM UserAccount WHERE email = @email');
+            .input('houseID',sql.Int,houseID)
+            .query('SELECT * FROM UserAccount WHERE email = @email AND houseID = @houseID');
 
         if (checkUser.recordset.length > 0) {
             return res.status(400).json({ message: 'Email already exists.' });

@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit{
 
     const loginData = { username: this.username, password: this.password };
 
-    this.http.post<{ token: string, payload: any }>('http://localhost:3000/login', loginData)
+    this.http.post<{ token: string, payload: any }>('http://localhost:3500/login', loginData)
       .subscribe({
         next: (response) => {
           console.log('API Response:', response);
