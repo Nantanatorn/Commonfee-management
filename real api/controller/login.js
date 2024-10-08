@@ -13,7 +13,7 @@ module.exports.loginUser = async(req,res)=>{
         const result = await pool.request()
 
         .input('username', sql.VarChar, username)//bind username
-        .query('SELECT * FROM Users WHERE username = @username'); //query
+        .query('SELECT * FROM UserAccount WHERE username = @username'); //query
 
         if (result.recordset.length === 0) {
             // Username not found
