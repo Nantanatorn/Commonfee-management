@@ -23,6 +23,7 @@ import { SideServiceComponent } from './side-service/side-service.component';
 import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
+import { ForgotpassComponent } from './user/forgotpass/forgotpass.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { EditProfileComponent } from './user/edit-profile/edit-profile.component
     SideServiceComponent,
     StatusCommonfeeComponent,
     AdminSidebarComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    ForgotpassComponent
   ],
 
   imports: [
