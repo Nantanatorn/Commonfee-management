@@ -1,0 +1,54 @@
+.fitness-booking-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.281);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button.btn-submit {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #9a8fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button.btn-submit:hover {
+    background-color: #6859f7;
+  }
+  
+  .status-message {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+    color: #3b337c;
+  }
+  

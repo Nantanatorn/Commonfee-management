@@ -1,0 +1,42 @@
+<app-side-service></app-side-service>
+<div class="status-container">
+    <div class="status-header">
+      <h1>สถานะค่าส่วนกลาง</h1>
+      <div class="filter-container">
+        <label for="monthFilter">เลือกเดือน:</label>
+        <select id="monthFilter" [(ngModel)]="selectedMonth" (change)="filterByMonth()">
+          <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+        </select>
+      </div>
+    </div>
+  
+    <table class="status-table">
+      <thead>
+        <tr>
+          <th>บ้านเลขที่</th>
+          <th>เจ้าของบ้าน</th>
+          <th>สถานะ</th>
+          <th>ค้างชำระ</th>
+          <th>ชำระแล้ว</th>
+          <th>วันที่ชำระ</th>
+          <th>การดำเนินการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let status of filteredStatus">
+          <td>{{ status.houseNumber }}</td>
+          <td>{{ status.owner }}</td>
+          <td [ngClass]="{'paid': status.isPaid, 'unpaid': !status.isPaid}">
+            {{ status.isPaid ? 'ชำระแล้ว' : 'ค้างชำระ' }}
+          </td>
+          <td>{{ status.dueAmount | currency:'THB' }}</td>
+          <td>{{ status.paidAmount | currency:'THB' }}</td>
+          <td>{{ status.paymentDate || '-' }}</td>
+          <td>
+            <button class="pay-button" *ngIf="!status.isPaid" (click)="payFee(status)">ชำระเงิน</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

@@ -1,0 +1,25 @@
+<app-side-service></app-side-service>
+<div class="fitness-booking-container">
+    <h1>จองคิวฟิตเนส</h1>
+  
+    <div class="form-group">
+      <label for="date">เลือกวันที่:</label>
+      <input type="date" id="date" [(ngModel)]="selectedDate" />
+    </div>
+  
+    <div class="form-group">
+      <label for="timeSlot">เลือกช่วงเวลา:</label>
+      <select id="timeSlot" [(ngModel)]="selectedTimeSlot">
+        <option *ngFor="let slot of timeSlots" [value]="slot">{{ slot }}</option>
+      </select>
+    </div>
+  
+    <div class="form-group">
+      <button class="btn-submit" (click)="bookFitness()">ยืนยันการจอง</button>
+    </div>
+  
+    <div *ngIf="bookingStatus" class="status-message">
+      {{ bookingStatus }}
+    </div>
+  </div>
+  

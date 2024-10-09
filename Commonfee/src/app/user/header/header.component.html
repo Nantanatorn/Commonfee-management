@@ -3,7 +3,8 @@
     <a class="navbar-brand" routerLink="/home" style="font-size: 14px; margin-right: 1rem;">
       <img src="logo.png" alt=" logo error" style="width: 150px;">
     </a>
-    <ul class="navbar-nav">
+  </div>
+    <ul class="nav navbar-nav mx-auto">
       <li class="nav-item" routerLinkActive="active-nav-link">
         <a class="nav-link " routerLink="/service" style="font-size: 14px; padding: 0.5rem 1rem; font-weight:bold;">บริการ</a>
       </li>
@@ -20,29 +21,27 @@
         <a class="nav-link" routerLink="/about-us" style="font-size: 14px; padding: 0.5rem 1rem; font-weight:bold;">เกี่ยวกับเรา</a>
       </li>
     </ul>
-  </div>
+  
  
-  <div class="mr-auto d-flex align-items-center profile" style="margin-left: 1100px;">
+  <div class="navbar-end d-flex me-2 ms-auto profile" style="margin-left: 1100px;">
     <div class="toggle">
       <div class="moon-sun">
         <i class="bi" [ngClass]="isDarkMode ? 'bi bi-sun' : 'bi bi-moon'"  (click)="toggleDarkMode()"></i>
       </div>
       <span class="mode-text">{{ isDarkMode ? '' : '' }}</span>
     </div>
-    <span (click)="toggleProfilePopup()" class="bi bi-person-circle icon" style="font-size: 16px; margin-right: 1rem; cursor: pointer;">
+    <span (click)="toggleProfilePopup()" class="bi bi-person-circle icon" style="font-size: 16px; margin-right: 1rem; cursor: pointer;padding: 0.5rem 1rem; font-weight:bold;font-size:20px">
     </span>
     <div id="profilePopup" class="profile-popup" [ngStyle]="{ 'visibility': isProfilePopupVisible ? 'visible' : 'hidden' }">
       <div class="profile-popup-content">
-        <img src="{{picture}}" alt="Profile image" class="profile-image">
+        <img src="profile.jpg" alt="Profile image" class="profile-image">
         <p>Hello {{ username }}</p>
         <button class="edit-profile-btn" routerLink="/edit-profile" >Edit Profile</button>
         </div>
       </div>
   
     
-    
-    
 
-    <a class="nav-link bi bi-box-arrow-right" (click)="logout()" href="/" style="font-size: 20px; text-decoration: none;">&nbsp;</a>
+    <a class="nav-link bi bi-box-arrow-right" (click)="logout()" href="/" style="font-size: 20px; text-decoration: none;padding: 0.5rem 1rem; font-weight:bold;font-size:20px">&nbsp;</a>
   </div>
 </nav>

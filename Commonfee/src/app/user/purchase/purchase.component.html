@@ -1,5 +1,42 @@
 <div class="payment-section">
     <h2>ชำระเงิน</h2>
+    <div class="filter">
+      <div class="headfilter"><h5>ประวัติการชำระเงิน</h5></div>
+      <div class="filtercontrol">
+          <div class="form">
+          <label for="month">เดือน </label>
+          <select name="month" id="month" class="formmonth">
+              <option value="1">มกราคม</option>
+              <option value="2">กุมภาพันธ์</option>
+              <option value="3">มีนาคม</option>
+              <option value="4">เมษายน</option>
+              <option value="5">พฤษภาคม</option>
+              <option value="6">มิถุนายน</option>
+              <option value="7">กรกฎาคม</option>
+              <option value="8">สิงหาคม</option>
+              <option value="9">กันยายน</option>
+              <option value="10">ตุลาคม</option>
+              <option value="11">พฤศจิกายน</option>
+              <option value="12">ธันวาคม</option>
+          </select>
+      </div>
+
+      <div class="form">
+          <div class="form-group"> 
+              <label for="year">ปี</label>
+              <select name="year" id="year" class="formyear">
+                <option value="1">2024</option>
+                <option value="2">2023</option>
+                <option value="3">2022</option>
+              </select>
+            </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">กรอง</button>
+      </div>
+      
+
+  </div>
     <table class="payment-table">
       <thead>
         <tr>
@@ -8,8 +45,6 @@
           <th>ราคา</th>
           <th>รวม</th>
           <th>สถานะการชำระ</th>
-          <th>ประวัติชำระเงิน</th>
-          <th>ประวัติคำร้องเรียน</th>
           <th>ใบเสร็จชำระเงิน</th>
         </tr>
       </thead>
@@ -20,8 +55,6 @@
           <td>500</td>
           <td>500</td>
           <td>N</td>
-          <td><a routerLink="/historyPurchase">ดูประวัติชำระเงิน</a></td>
-          <td><a>ดูประวัติคำร้องเรียน</a></td>
           <td><button (click)="generatePDF()">Print</button></td>
         </tr>
       </tbody>

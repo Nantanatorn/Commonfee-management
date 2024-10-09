@@ -1,0 +1,30 @@
+<app-side-service></app-side-service>
+<div class="booking-history">
+    <h1>ประวัติการจองฟิตเนส</h1>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>วันที่จอง</th>
+          <th>ช่วงเวลา</th>
+          <th>สถานะ</th>
+          <th>การจัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let booking of bookingHistory">
+          <td>{{ booking.date }}</td>
+          <td>{{ booking.timeSlot }}</td>
+          <td>{{ booking.status }}</td>
+          <td>
+            <button (click)="cancelBooking(booking)" class="btn-cancel">ยกเลิก</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="bookingHistory.length === 0" class="no-booking">
+      <p>ไม่มีประวัติการจอง</p>
+    </div>
+  </div>
+  

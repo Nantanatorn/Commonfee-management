@@ -1,6 +1,6 @@
 
-<div class="main">
-  <nav class="sidebar">
+
+  <div class="sidebar" [ngClass]="{'open': isOpen}">
     <header>
       <div class="image-text">
         <span class="image">
@@ -13,44 +13,33 @@
     </header>
     <div class="menu-bar">
       <div class="menu">
-        <ul class="menu-links">
+        <div class="menu-links">
           <li class="nav-link">
-            <a routerLink="/historyPurchase">
-              <i class="bi bi-clock-history icon"></i>
-              <span class="text nav-text">คำร้องเรียน</span>
+            <a routerLink="/dashboard">
+              <i class="bi bi-house-heart-fill icon"></i>
+              <span class="text nav-text">dashboard</span>
             </a>
           </li>
           <li class="nav-link">
-            <a routerLink="/purchase">
-              <i class="bi bi-wallet2 icon"></i>
-              <span class="text nav-text">การชำระเงิน</span>
+            <a routerLink="/residentList">
+              <i class="bi bi-person-vcard icon"></i>
+              <span class="text nav-text">resident-list</span>
             </a>
           </li>
           <li class="nav-link">
-            <a routerLink="/receipt">
-              <i class="bi bi-receipt icon"></i>
-              <span class="text nav-text">ใบเสร็จรับเงิน</span>
+            <a routerLink="/payment">
+              <i class="bi bi-credit-card icon"></i>
+              <span class="text nav-text">payment</span>
             </a>
           </li>
           <li class="nav-link">
-            <a href="#">
-              <i class="bi bi-graph-up icon"></i>
-              <span class="text nav-text">จองของใช้ส่วนกลาง</span>
+            <a routerLink="/complainRepair">
+              <i class="bi bi-tools icon"></i>
+              <span class="text nav-text">complain/repair</span>
             </a>
           </li>
-          <li class="nav-link">
-            <a href="#">
-              <i class="bi bi-bell icon"></i>
-              <span class="text nav-text">....</span>
-            </a>
-          </li>
-          <li class="nav-link">
-            <a href="#">
-              <i class="bi bi-pie-chart icon"></i>
-              <span class="text nav-text">....</span>
-            </a>
-          </li>
-        </ul>
+          
+        </div>
       </div>
       <div class="bottom-content">
         <li class="nav-link">
@@ -71,5 +60,7 @@
         </div>
       </div>
     </div>
-  </nav>
+  </div>
+  <div class="main-content" [ngClass]="{'slide': isOpen}">
+    <button class="main-content" (click)="toggleSidebar()">{{ isOpen ? '× ' : '☰ ' }}</button>
 </div>

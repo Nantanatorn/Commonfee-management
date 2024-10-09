@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-admin-sidebar',
@@ -10,26 +11,29 @@ import Swal from 'sweetalert2';
 })
 export class AdminSidebarComponent implements OnInit{
   isDarkMode: boolean = false;
+  isOpen = false;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: object,private router:Router,
+    @Inject(PLATFORM_ID) private platformId: object,private router:Router,private authService: AuthService,
     private renderer: Renderer2
   ) {}
-  
-  isSidebarOpen: boolean = true; // ค่าเริ่มต้นให้ Sidebar เปิดอยู่
 
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen; 
-  }
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      const savedState = localStorage.getItem('sidebarOpen');
+      this.isOpen = savedState === 'true'; // โหลดค่าเปิด/ปิดจาก localStorage
+  
       const savedTheme = localStorage.getItem('isDarkMode');
-      this.isDarkMode = savedTheme === 'true';
+      this.isDarkMode = savedTheme === 'true'; // โหลดสถานะ dark mode
       this.applyTheme();
     }
   }
-
+  toggleSidebar(): void {
+    this.isOpen = !this.isOpen;
+    console.log('Sidebar isOpen:', this.isOpen); // ดูว่าค่าถูกเปลี่ยนจริงหรือไม่
+    localStorage.setItem('sidebarOpen', this.isOpen.toString());
+  }
   toggleDarkMode(): void {
     this.isDarkMode = !this.isDarkMode;
     this.applyTheme();

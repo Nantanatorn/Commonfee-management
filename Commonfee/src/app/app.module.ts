@@ -17,12 +17,20 @@ import { HttpClientModule } from '@angular/common/http';
 import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
-import { SideServiceComponent } from './side-service/side-service.component';
-import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';
+import { SideServiceComponent } from './user/side-service/side-service.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
 import { HistoryReportComponent } from './user/history-report/history-report.component';
 import { ForgotpassComponent } from './user/forgotpass/forgotpass.component';
+import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
+import { ResidentListComponent } from './admin/resident-list/resident-list.component';
+import { PaymentComponent } from './admin/payment/payment.component';
+import { ComplainRepairComponent } from './admin/complain-repair/complain-repair.component';
+import { CommonfeeStatusComponent } from './user/commonfee-status/commonfee-status.component';
+import { BookRoomComponent } from './user/book-room/book-room.component';
+import { FitnessComponent } from './user/fitness/fitness.component';
+import { HistoryBookingComponent } from './user/history-booking/history-booking.component';
 
 @NgModule({
   declarations: [
@@ -38,11 +46,19 @@ import { ForgotpassComponent } from './user/forgotpass/forgotpass.component';
     PurchaseComponent,
     statusAdminComponent,
     SideServiceComponent,
-    StatusCommonfeeComponent,
     AdminSidebarComponent,
     EditProfileComponent,
     HistoryReportComponent,
-    ForgotpassComponent
+    ForgotpassComponent,
+    AdminHomeComponent,
+    DashboardComponent,
+    ResidentListComponent,
+    PaymentComponent,
+    ComplainRepairComponent,
+    CommonfeeStatusComponent,
+    BookRoomComponent,
+    FitnessComponent,
+    HistoryBookingComponent
   ],
 
   imports: [

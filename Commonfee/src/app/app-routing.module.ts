@@ -10,14 +10,23 @@ import { StatusComponent } from './user/status/status.component';
 import { ServiceComponent } from './user/Residentservice/service.component';
 import { AboutUsComponent } from './user/about-us/about-us.component';
 import { HomeComponent } from './user/home/home.component';
-import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';
+import { PurchaseComponent } from './user/purchase/purchase.component';
+import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
+import { CommonfeeStatusComponent } from './user/commonfee-status/commonfee-status.component';
+import { BookRoomComponent } from './user/book-room/book-room.component';
+import { FitnessComponent } from './user/fitness/fitness.component';
+import { HistoryBookingComponent } from './user/history-booking/history-booking.component';
+
 
 //admin components
 import { loginAdminComponent } from './admin/login-admin/login-admin.component';
-import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
-import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
+import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
+import { ResidentListComponent } from './admin/resident-list/resident-list.component';
+import { PaymentComponent } from './admin/payment/payment.component';
+import { ComplainRepairComponent } from './admin/complain-repair/complain-repair.component';
 
 const routes: Routes = [
   // user routes
@@ -32,13 +41,20 @@ const routes: Routes = [
   {path:'historyPurchase',component:HistoryPurchaseComponent},
   {path:'historyReport',component:HistoryReportComponent},
   {path:'purchase',component:PurchaseComponent},
-  {path:'statusCommonfee',component:StatusCommonfeeComponent},
-
+  {path:'commonfeeStatus',component:CommonfeeStatusComponent},
+  {path:'bookRoom',component:BookRoomComponent},
+  {path:'fitness',component:FitnessComponent},
+  {path:'historyBooking',component:HistoryBookingComponent},
   // admin routes
   
   { path: 'adminlogin', component: loginAdminComponent },
   {path:'adminstatus',component:statusAdminComponent},
-  {path:'adminsidebar',component:AdminSidebarComponent}
+  {path:'adminsidebar',component:AdminSidebarComponent},
+  {path:'adminhome',component:AdminHomeComponent},
+  {path:'dashboard',component:DashboardComponent},
+  {path:'residentList',component:ResidentListComponent},
+  {path:'payment',component:PaymentComponent},
+  {path:'complainRepair',component:ComplainRepairComponent}
 ];
 
 @NgModule({

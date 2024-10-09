@@ -1,51 +1,50 @@
-.sidebar {
-  z-index: 1000;
-  position: fixed; /* ทำให้ Sidebar คงที่ */
+.main-content {
+  padding: 20px;
+  transition: margin-left 0.3s; 
+}
+
+
+
+.main-content.slide button{
+  left: 16rem;
+}
+
+
+.main-content button{
+  position: sticky;
   left: 0;
+  margin-top: -1rem;
+  padding: 20px 25px; /* ขยายขนาดปุ่ม */
+  font-size: 18px; 
+  background-color: #0e010e; 
+  color: white; 
+  border: none;
+  height: 75px;
+  /*border-radius: 5px; */
+  cursor: pointer; 
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  transition: left 0.3s; 
+  font-size: 22px;
+  z-index: 2000;
+}
+
+.main-content button:hover {
+  background-color: #1c0027; 
+  
+}
+.sidebar.open {
+  left: 0; /* แสดง sidebar เมื่อเปิด */
+}
+
+.sidebar {
+  position: fixed;
+  height: 100%;
   width: 250px;
-  height: 100vh;
-  background-color: #706ed34a;
-  transition: width 0.3s ease;
-  overflow: hidden;
-  
+  top: 0;
+  left: -250px; /* ซ่อน sidebar เริ่มต้น */
+  transition: left 0.3s ease; /* การเลื่อนเมื่อเปิด/ปิด */
 }
 
-.sidebar.closed {
-  width: 60px; /* ขนาดเล็กสุดเมื่อปิด */
-  transition: width 0.3s ease;
-  
-}
-.sidebar.close .text{
-  opacity: 0;
-}
-
-/* ปุ่มสลับ Sidebar */
-.toggle-button {
-position: fixed;
-top: 20px; /* ย้ายปุ่มไปใกล้ด้านบน */
-left: 250px; /* เริ่มต้นวางปุ่มข้างๆ Sidebar ที่เปิดอยู่ */
-height: 40px;
-width: 40px;
-background-color: #695CFE; /* สีปุ่ม */
-display: flex;
-align-items: center;
-justify-content: center;
-border-radius: 50%;
-color: #ffffff;
-border: none;
-cursor: pointer;
-transition: transform 0.3s ease, left 0.3s ease;
-z-index: 1000; /* ให้อยู่ด้านหน้าสุด */
-}
-
-.toggle-button:hover {
-transform: scale(1.1); /* ขยายปุ่มเมื่อ hover */
-}
-
-/* เมื่อ Sidebar ถูกปิด ปรับตำแหน่งปุ่มให้เลื่อนไปทางซ้าย */
-.sidebar.closed + .toggle-button {
-left: 60px; /* ตำแหน่งใหม่เมื่อ Sidebar ปิด */
-}
 .sidebar .text{
   font-size: 16px;
   font-weight: 500;
@@ -68,7 +67,7 @@ left: 60px; /* ตำแหน่งใหม่เมื่อ Sidebar ปิ�
   justify-content: center;
   min-width: 30px;
   font-size: 20px;
-  margin-left: 0px;
+  margin-left: 45px;
 }
 .sidebar li .icon,
 .sidebar li .text{
@@ -114,19 +113,11 @@ header .image-text .header-text{
   font-size:12px;
 }
 
-.search-box input{
-  height: 100%;
-  outline: none;
-  border: none;
-  border-radius: 6px;
-   background: none;
-  margin-left: 30px;
-}
 .sidebar li a{
   height: 100%;
   width: 100%;
   display: flex;
-  align-items: center;
+  
   text-decoration: none;
   border-radius: 6px;
   transition: all 0.4s ease;
@@ -139,7 +130,7 @@ header .image-text .header-text{
   color:#fff ;
 }
 .sidebar .menu-bar{
-  height: calc(100% - 120px);
+  height: calc(100% - 100px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
