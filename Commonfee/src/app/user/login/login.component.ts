@@ -1,6 +1,7 @@
 import { Component , OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthService } from '../../service/auth.service'; 
 
 @Component({
   selector: 'app-user-login',
@@ -18,9 +19,18 @@ export class LoginComponent implements OnInit{
   eyeIcon : string="bi bi-eye-slash-fill";
   
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router ,private authService: AuthService) { }
   ngOnInit(): void {
-
+     // ตรวจสอบว่า login ไว้หรือยัง
+     const token = localStorage.getItem('token');
+     if (token) {
+       this.userRole = this.authService.getRole();
+       if (this.userRole === 'admin') {
+         this.router.navigate(['/AdminHome']);
+       } else if (this.userRole === 'customer') {
+         this.router.navigate(['/home']);
+       }
+     }
   }
 
   onLogin(): void {
@@ -31,38 +41,27 @@ export class LoginComponent implements OnInit{
 
     const loginData = { username: this.username, password: this.password };
 
-    this.http.post<{ token: string, payload: any }>('http://localhost:3500/login', loginData)
+    this.http.post<{ token: string }>('http://localhost:3500/login', loginData)
       .subscribe({
         next: (response) => {
           console.log('API Response:', response);
           if (response.token) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('payload', JSON.stringify(response.payload));
+            // ใช้ AuthService ในการจัดการ token
+            this.authService.login(response.token);
 
-            // ดึง payload จาก localStorage และเข้าถึง role
-            const payloadString = localStorage.getItem('payload');
-            if (payloadString) {
-              const payload = JSON.parse(payloadString);
-              this.userRole = payload.user.role; // Access the user's role
-              console.log('User Role:', this.userRole);
+            // ดึง role จาก token ที่ถอดรหัสแล้ว
+            this.userRole = this.authService.getRole();
+            console.log('User Role:', this.userRole);
 
-              // Navigate based on the user's role
-              if (this.userRole === 'admin') {
-                this.router.navigate(['/AdminHome']).then(() => {
-                  // Do additional actions after navigation if needed
-                });
-              } else if (this.userRole === 'customer') {
-                this.router.navigate(['/home']).then(() => {
-                  // Do additional actions after navigation if needed
-                });
-              }
-
-              return; // End function execution after navigation
+            // Navigate based on the user's role
+            if (this.userRole === 'admin') {
+              this.router.navigate(['/adminhome']);
+            } else if (this.userRole === 'Resident') {
+              this.router.navigate(['/home']);
             }
+          } else {
+            this.errorMessage = 'Login failed. No token received.';
           }
-
-          // จัดการกรณีที่ไม่มี token ใน response
-          this.router.navigate(['/login']);
         },
         error: (error) => {
           if (error.status === 401) {

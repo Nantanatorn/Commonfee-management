@@ -5,9 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 //user components
 import { RegisterComponent } from './user/register/register.component';
 import { LoginComponent } from './user/login/login.component';
-import { ReportComponent } from './user/report/report.component';
+import { ReportComponent } from './user/Residentreport/report.component';
 import { StatusComponent } from './user/status/status.component';
-import { ServiceComponent } from './user/service/service.component';
+import { ServiceComponent } from './user/Residentservice/service.component';
 import { AboutUsComponent } from './user/about-us/about-us.component';
 import { HomeComponent } from './user/home/home.component';
 import { StatusCommonfeeComponent } from './user/status-commonfee/status-commonfee.component';

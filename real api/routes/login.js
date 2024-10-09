@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const loginCon =require('../Controller/login')
+const loginCon =require('../controller/login')
 require('dotenv').config();
 
 //http://localhost:3000/api/login
