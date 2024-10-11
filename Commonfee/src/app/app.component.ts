@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
       this.router.url.includes('/adminhome') || 
       currentRoute.includes('adminlogin') || 
       this.router.url.includes('/dashboard')  ||
-      this.router.url.includes('/payment') || 
+      this.router.url.includes('/payment') ||  
       this.router.url.includes('/residentList') || 
       this.router.url.includes('/complainRepair') || 
       currentRoute.includes('adminstatus') || 

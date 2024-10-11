@@ -54,7 +54,8 @@ const routes: Routes = [
   {path:'dashboard',component:DashboardComponent},
   {path:'residentList',component:ResidentListComponent},
   {path:'payment',component:PaymentComponent},
-  {path:'complainRepair',component:ComplainRepairComponent}
+  {path:'complainRepair',component:ComplainRepairComponent},
+
 ];
 
 @NgModule({
