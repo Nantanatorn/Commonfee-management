@@ -30,6 +30,7 @@
       </div>
       <span class="mode-text">{{ isDarkMode ? '' : '' }}</span>
     </div>
+   
     <span (click)="toggleProfilePopup()" class="bi bi-person-circle icon" style="font-size: 16px; margin-right: 1rem; cursor: pointer;padding: 0.5rem 1rem; font-weight:bold;font-size:20px">
     </span>
     <div id="profilePopup" class="profile-popup" [ngStyle]="{ 'visibility': isProfilePopupVisible ? 'visible' : 'hidden' }">
