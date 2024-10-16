@@ -3,7 +3,7 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import{QRCodeModule} from 'angularx-qrcode';
 import { CommonModule } from '@angular/common';
 import { GoogleMapsModule } from '@angular/google-maps';
-
+import { ChartModule } from 'angular-highcharts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -72,7 +72,7 @@ import { HistoryBookingComponent } from './user/history-booking/history-booking.
     QRCodeModule,
     CommonModule,
     GoogleMapsModule,
-    
+    ChartModule    
   ],
   providers: [
     provideClientHydration()
