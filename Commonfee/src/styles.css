@@ -19,7 +19,9 @@
     padding-top: 60px;
     justify-content: center;
   }
-  
+  .adminContent{
+    margin-left: 250px;
+  }
   .login-content {
     padding-top: 0;  /* ไม่มี padding-top ในหน้า login */
   }
@@ -211,3 +213,16 @@
     background-color: #ffffff;
     color: #000000;
   }
+/* สีของข้อความในตารางเมื่อเป็นโหมดสว่าง */
+body.light-mode table, 
+body.light-mode th, 
+body.light-mode td {
+  color: #000000; /* สีตัวอักษรสีดำสำหรับโหมดสว่าง */
+}
+
+/* สีของข้อความในตารางเมื่อเป็นโหมดมืด */
+body.dark-mode table, 
+body.dark-mode th, 
+body.dark-mode td {
+  color: #ffffff; /* สีตัวอักษรสีขาวสำหรับโหมดมืด */
+}

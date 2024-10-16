@@ -1,10 +1,43 @@
 <app-admin-sidebar></app-admin-sidebar>
-<div class="layout">
 <div class="container">
-    <div class="header">
-        <h1>dashboard</h1>
-    </div>
+  <div class="header">
+      <h1>dashboard</h1>
+  </div>
 </div>
+<!-- แสดงเงินเข้า -->
+<div class="showvalue">
+  <div class="col">
+      <div class="showdetail">
+          <h5>เงินเข้า</h5>
+          <h6>100.-</h6>
+      </div>
+  </div>
+  <div class="col">
+      <div class="showdetail">
+          <h5>จ่ายแล้ว</h5>
+          <h6>80%</h6>
+      </div>
+  </div>
+  <div class="col">
+      <div class="showdetail">
+          <h5>ค้างชำระ</h5>
+          <h6>20%</h6>
+      </div>
+  </div>
+  <div class="col">
+      <div class="showdetail">
+          <h5>แจ้งข่าวสาร</h5>
+          <button type="button" class="btn btn-primary" (click)="openModal()">ประกาศข่าวสาร</button>
+        </div>
+  </div>
+</div>
+
+
+
+ <!-- แสดงแผนผังหมู่บ้าน -->
+<div class="layout">
+  <div class="row">
+ <div class="col-8">
 <div class="bg">
     <div class="village-layout">
         <img src="logo.png" alt="logo error" [width]="100">
@@ -71,5 +104,61 @@
       </div>
     </div>
   </div>
+</div>
+    <div class="col-4">
+      <div class="reviewdetail">
+      <h5>แสดงการจองของลูกบ้าน</h5>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ชื่อ</th>
+            <th>รายการจอง</th>
+            <th>เวลา</th>
+            <th>วันที่</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>อิง</td>
+            <td>ฟิตเนต</td>
+            <td>12.00-15.00</td>
+            <td>16/10/2024</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+</div>
+
+<div class="charts"> 
+  <div class="pie" [chart]="pieChart"></div>
   
+ <div class="line" [chart]="lineCharts"></div>
+
+</div>
+<!-- ทำ modal สำหรับประกาศข่าวสาร -->
+<div class="modal" *ngIf="isModalOpen">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">เพิ่มข่าวสาร</h5>
+        <button type="button" class="close" (click)="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="newsTitle">หัวข้อข่าวสาร</label>
+          <input type="text" id="newsTitle" [(ngModel)]="newsTitle" class="form-control" placeholder="กรอกหัวข้อข่าวสาร">
+        </div>
+        <div class="form-group">
+          <label for="newsContent">รายละเอียดข่าวสาร</label>
+          <textarea id="newsContent" [(ngModel)]="newsContent" class="form-control" placeholder="กรอกรายละเอียดข่าวสาร"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">ยกเลิก</button>
+        <button type="button" class="btn btn-primary" (click)="saveNews()">บันทึก</button>
+      </div>
+    </div>
+  </div>
 </div>

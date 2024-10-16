@@ -1,4 +1,5 @@
 <app-header *ngIf="showHeader"></app-header>
-<div [ngClass]="{'login-content': isLoginPage || isregisterPage, 'content': !isLoginPage && !isAdminPage && !isHomeUserPage}">
+<div [ngClass]="{'login-content': isLoginPage || isregisterPage, 'content': !isLoginPage && !isAdminPage && !isHomeUserPage,
+'adminContent': adminSide}">
   <router-outlet></router-outlet>
 </div>

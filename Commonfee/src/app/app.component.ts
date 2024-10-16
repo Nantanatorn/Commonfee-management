@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   isregisterPage: boolean;
   isAdminPage: boolean;
   isHomeUserPage:boolean;
+  adminSide:boolean;
 
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
@@ -29,6 +30,11 @@ export class AppComponent implements OnInit {
                            this.router.url.includes('/residentList') || 
                            this.router.url.includes('/complainRepair') || 
                            this.router.url.includes('/adminstatus');
+        this.adminSide = this.router.url.includes('/dashboard') || 
+                          this.router.url.includes('/payment') || 
+                          this.router.url.includes('/residentList') || 
+                          this.router.url.includes('/complainRepair') || 
+                          this.router.url.includes('/adminstatus');
         this.checkHeaderVisibility();
       }
     });

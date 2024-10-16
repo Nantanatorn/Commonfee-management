@@ -41,8 +41,6 @@
   height: 100%;
   width: 250px;
   top: 0;
-  left: -250px; /* ซ่อน sidebar เริ่มต้น */
-  transition: left 0.3s ease; /* การเลื่อนเมื่อเปิด/ปิด */
 }
 
 .sidebar .text{
