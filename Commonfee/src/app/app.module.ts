@@ -33,6 +33,10 @@ import { CommonfeeStatusComponent } from './user/commonfee-status/commonfee-stat
 import { BookRoomComponent } from './user/book-room/book-room.component';
 import { FitnessComponent } from './user/fitness/fitness.component';
 import { HistoryBookingComponent } from './user/history-booking/history-booking.component';
+import { ChartsComponent } from './admin/charts/charts.component';
+import { ChartModule } from 'angular-highcharts';
+
+
 
 @NgModule({
   declarations: [
@@ -61,6 +65,7 @@ import { HistoryBookingComponent } from './user/history-booking/history-booking.
     BookRoomComponent,
     FitnessComponent,
     HistoryBookingComponent,
+    ChartsComponent
   ],
 
   imports: [
@@ -72,6 +77,7 @@ import { HistoryBookingComponent } from './user/history-booking/history-booking.
     QRCodeModule,
     CommonModule,
     GoogleMapsModule,
+    ChartModule
     
   ],
   providers: [

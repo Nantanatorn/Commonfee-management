@@ -27,6 +27,7 @@ import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { ResidentListComponent } from './admin/resident-list/resident-list.component';
 import { PaymentComponent } from './admin/payment/payment.component';
 import { ComplainRepairComponent } from './admin/complain-repair/complain-repair.component';
+import { ChartsComponent } from './admin/charts/charts.component';
 
 const routes: Routes = [
   // user routes
@@ -55,6 +56,7 @@ const routes: Routes = [
   {path:'residentList',component:ResidentListComponent},
   {path:'payment',component:PaymentComponent},
   {path:'complainRepair',component:ComplainRepairComponent},
+  {path:'chart',component:ChartsComponent}
 
 ];
 
