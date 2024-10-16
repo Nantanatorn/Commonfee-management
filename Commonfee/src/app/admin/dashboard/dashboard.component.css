@@ -7,16 +7,22 @@
     /* display: flex; */
     flex-direction: column;
     gap: 20px;
-    padding: 20px;
-    border: 50px solid #68964a;
+    padding: 10px;
     
-
   }
-  
+  /* .layout{
+    width: 500px;
+    height: 100px;
+  } */
+  .container{
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .road {
     color: white;
     text-align: center;
-    padding: 10px;
+    padding: 5px;
     font-weight: bold;
   }
    
@@ -30,7 +36,7 @@
   .house {
     background-color: #ffcc80;
     border: 2px solid #ff7043;
-    padding: 20px;
+    padding: 10px;
     flex: 1;
     text-align: center;
     font-size: 14px;
@@ -41,22 +47,21 @@
   .bg{
     background: #999998;
     border-radius: 20px;
-    width: 1200px;
-    margin-left: 300px;
-    margin-bottom: 5rem;
+    width: 800px;
+    margin-left: 20px;
   }
   .new-row {
     flex-basis: 100%; /* บังคับให้เริ่มต้นที่บรรทัดใหม่ */
   }
   
   .six{
-    margin-right: 100px;
+    margin-right: 20px;
   }
   .eighteen{
-    margin-right: 100px;
+    margin-right: 20px;
   }
   .thirty{
-    margin-right: 100px;
+    margin-right: 20px;
   }
   /* .thirty-nine{
     margin-right: 100px;
