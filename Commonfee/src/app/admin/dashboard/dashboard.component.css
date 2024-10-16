@@ -1,13 +1,15 @@
+
 .container .header{
     font-family: "Dekko", cursive;
     text-align: center;
 }
 .village-layout {
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     gap: 20px;
     padding: 20px;
     border: 50px solid #68964a;
+    
 
   }
   
@@ -40,7 +42,8 @@
     background: #999998;
     border-radius: 20px;
     width: 1200px;
-    margin-left: 370px;
+    margin-left: 300px;
+    margin-bottom: 5rem;
   }
   .new-row {
     flex-basis: 100%; /* บังคับให้เริ่มต้นที่บรรทัดใหม่ */
