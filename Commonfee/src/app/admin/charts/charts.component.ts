@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
+<<<<<<< HEAD
 import { Chart } from 'angular-highcharts';
+=======
+import {Chart} from 'angular-highcharts';
+>>>>>>> 3f20e3de56774690b1bf5aa4c078aaf55d468fc7
 
 @Component({
   selector: 'app-charts',

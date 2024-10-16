@@ -1,70 +1,69 @@
 
 .container .header{
-    font-family: "Dekko", cursive;
-    text-align: center;
+  font-family: "Dekko", cursive;
+  text-align: center;
 }
 .village-layout {
-    /* display: flex; */
-    flex-direction: column;
-    gap: 20px;
-    padding: 10px;
-    
-  }
-  /* .layout{
-    width: 500px;
-    height: 100px;
-  } */
-  .container{
-    align-items: center;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .road {
-    color: white;
-    text-align: center;
-    padding: 5px;
-    font-weight: bold;
-  }
-   
-  .house-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap; /* ทำให้กล่องสามารถขึ้นบรรทัดใหม่ได้ */
-
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
   
-  .house {
-    background-color: #ffcc80;
-    border: 2px solid #ff7043;
-    padding: 10px;
-    flex: 1;
-    text-align: center;
-    font-size: 14px;
-    border-radius: 5px;
-    cursor: pointer;
-    color: black;
-  }
-  .bg{
-    background: #999998;
-    border-radius: 20px;
-    width: 800px;
-    margin-left: 20px;
-  }
-  .new-row {
-    flex-basis: 100%; /* บังคับให้เริ่มต้นที่บรรทัดใหม่ */
-  }
-  
-  .six{
-    margin-right: 20px;
-  }
-  .eighteen{
-    margin-right: 20px;
-  }
-  .thirty{
-    margin-right: 20px;
-  }
-  /* .thirty-nine{
-    margin-right: 100px;
-  } */
-
+}
+/* .layout{
+  width: 500px;
+  height: 100px;
+} */
+.container{
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.road {
+  color: white;
+  text-align: center;
+  padding: 5px;
+  font-weight: bold;
+}
  
+.house-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* ทำให้กล่องสามารถขึ้นบรรทัดใหม่ได้ */
+
+}
+
+.house {
+  background-color: #ffcc80;
+  border: 2px solid #ff7043;
+  padding: 10px;
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: black;
+}
+.bg{
+  background: #999998;
+  border-radius: 20px;
+  width: 800px;
+  margin-left: 20px;
+}
+.new-row {
+  flex-basis: 100%; /* บังคับให้เริ่มต้นที่บรรทัดใหม่ */
+}
+
+.six{
+  margin-right: 20px;
+}
+.eighteen{
+  margin-right: 20px;
+}
+.thirty{
+  margin-right: 20px;
+}
+/* .thirty-nine{
+  margin-right: 100px;
+} */
+
