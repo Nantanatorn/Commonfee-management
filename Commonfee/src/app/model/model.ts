@@ -13,4 +13,5 @@ export interface Announcement{
   Announce_Date : string,
   Announce_Title : string,
   Announce_Detail : string,
+  Announce_image : string,
 }

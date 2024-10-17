@@ -5,6 +5,8 @@ const config = require('./config');
 require('dotenv').config();
 const app = express();
 const bodyParser = require('body-parser');
+const path = require('path');
+
 
 const registerroute =require('./routes/register');
 const loginroute = require('./routes/login');
@@ -20,6 +22,7 @@ const port = 3500;
 app.use('/',registerroute);
 app.use('/',loginroute);
 app.use('/',newsroute);
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 async function connectToDatabase() {
     try{

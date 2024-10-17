@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2'; 
 
 
@@ -9,7 +10,7 @@ import Swal from 'sweetalert2';
 })
 export class ResidentListComponent {
   isModalOpen: boolean = false;
-
+  registerForm!: FormGroup;
   user = {
     idCard: '',
     firstName: '',
@@ -29,7 +30,7 @@ export class ResidentListComponent {
   }
 
   // ฟังก์ชันสำหรับบันทึกข้อมูล พร้อมตรวจสอบว่าข้อมูลครบถ้วนหรือไม่
-  onSubmit(registerForm: any) {
+  onSubmi1t(registerForm: any) {
     if (this.user.idCard.trim() && this.user.firstName.trim() && this.user.lastName.trim() && this.user.houseNo.trim() && this.user.phone.trim()) {
       console.log('ข้อมูลผู้สมัคร:', this.user);
       // คุณสามารถทำการบันทึกข้อมูลหรือส่งข้อมูลไปยัง backend ได้ที่นี่
@@ -60,5 +61,9 @@ export class ResidentListComponent {
       houseNo: '',
       phone: '',
     };
+  }
+
+  onSubmit(){
+
   }
 }

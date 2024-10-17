@@ -47,71 +47,78 @@
     <div class="modal" [class.show]="isModalOpen">
         <div class="modal-content">
           <span class="close" (click)="closeModal()">&times;</span>
-          <h2>ลงทะเบียนผู้สมัคร</h2>
+          <h2>ลงทะเบียนผู้อยู่อาศัย/นิติบุคคล</h2>
       
-          <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <div class="form-grid">
               <div class="form-group">
-                <label for="idCard">เลขบัตรประชาชน:</label>
+                <label for="IDcard">เลขบัตรประชาชน:</label>
                 <input
                   type="text"
-                  id="idCard"
-                  name="idCard"
-                  [(ngModel)]="user.idCard"
-                  pattern="[0-9]{13}"
-                  required
-                 
+                  id="IDcard"
+                  formControlName="IDcard"
+                  class="form-control"
+                  placeholder="กรอกเลขบัตรประชาชน"
                 />
               </div>
-      
+          
               <div class="form-group">
-                <label for="firstName">ชื่อ:</label>
+                <label for="User_Firstname">ชื่อ:</label>
                 <input
                   type="text"
-                  id="firstName"
-                  name="firstName"
-                  [(ngModel)]="user.firstName"
-                  required
+                  id="User_Firstname"
+                  formControlName="User_Firstname"
+                  class="form-control"
+                  placeholder="กรอกชื่อ"
                 />
               </div>
-      
-              <!-- Column 2 -->
+          
               <div class="form-group">
-                <label for="lastName">นามสกุล:</label>
+                <label for="User_Lastname">นามสกุล:</label>
                 <input
                   type="text"
-                  id="lastName"
-                  name="lastName"
-                  [(ngModel)]="user.lastName"
-                  required
+                  id="User_Lastname"
+                  formControlName="User_Lastname"
+                  class="form-control"
+                  placeholder="กรอกนามสกุล"
                 />
               </div>
-      
+          
               <div class="form-group">
-                <label for="houseNo">บ้านเลขที่:</label>
+                <label for="House_number">บ้านเลขที่:</label>
                 <input
                   type="text"
-                  id="houseNo"
-                  name="houseNo"
-                  [(ngModel)]="user.houseNo"
-                  required
+                  id="House_number"
+                  formControlName="House_number"
+                  class="form-control"
+                  placeholder="กรอกบ้านเลขที่"
                 />
               </div>
-      
+          
               <div class="form-group">
                 <label for="phone">เบอร์โทร:</label>
                 <input
                   type="tel"
                   id="phone"
-                  name="phone"
-                  [(ngModel)]="user.phone"
-                  pattern="[0-9]{10}"
-                  required
+                  formControlName="phone"
+                  class="form-control"
+                  placeholder="กรอกเบอร์โทร"
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">อีเมลล์:</label>
+                <input
+                  type="Email"
+                  id="email"
+                  formControlName="email"
+                  class="form-control"
+                  placeholder="กรอกอีเมลล์"
                 />
               </div>
             </div>
-      
+          
             <button type="submit" class="btn-submit">บันทึก</button>
           </form>
+          
         </div>
       </div>
