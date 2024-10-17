@@ -95,42 +95,48 @@ export class DashboardComponent {
   ]
   })
   pieChart = new Chart({
-    chart:{
-      type :'pie',
+    chart: {
+      type: 'pie',
       plotShadow: false,
     },
-    credits:{
-      enabled:false,
+    credits: {
+      enabled: false,
     },
-    plotOptions:{
-      pie:{
-        innerSize:'70%',
-        borderWidth:10,
-        borderColor:'',
-        slicedOffset:10,
-        dataLabels:{
-          connectorWidth:0,
+    plotOptions: {
+      pie: {
+        innerSize: '70%',
+        borderWidth: 10,
+        borderColor: '',
+        slicedOffset: 10,
+        dataLabels: {
+          enabled: true, // เปิดการแสดงป้ายชื่อ
+          format: '{point.name}: {point.percentage:.1f} %', // แสดงชื่อและเปอร์เซ็นต์ของแต่ละส่วน
+          connectorWidth: 0,
         },
       },
     },
-    title:{
-      verticalAlign:'middle',
-      floating:true,
-      text:'ประเภทบ้าน',
+    title: {
+      verticalAlign: 'middle',
+      floating: true,
+      text: 'ประเภทบ้าน',
     },
-    legend:{
-      enabled:false,
+    legend: {
+      enabled: true, // เปิดการแสดง legend
+      align: 'right', // จัดตำแหน่งของ legend
+      verticalAlign: 'middle', // จัดให้อยู่ตรงกลางแนวตั้ง
+      layout: 'vertical', // แสดง legend ในแนวตั้ง
     },
-    series:[
+    series: [
       {
-      type:'pie',
-      data: [
-        {name:'small',y:1,color:'#65e1f7'},
-        {name:'medium',y:2,color:'#da75ee'},
-        {name:'large',y:3,color:'#fda95b'},
-      
-      ],
+        type: 'pie',
+        name: 'บ้านแต่ละประเภท',
+        data: [
+          { name: 'small', y: 1, color: '#65e1f7' },
+          { name: 'medium', y: 2, color: '#da75ee' },
+          { name: 'large', y: 3, color: '#fda95b' },
+        ],
       },
     ],
-  })
+  });
+  
 }
