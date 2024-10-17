@@ -2,3 +2,30 @@
     font-family: "Dekko", cursive;
     text-align: center;
 }
+.report{
+    border: 2px solid black;
+    box-shadow: 5px 5px 10px rgba(38, 0, 255, 0.312);
+    width: 100%; /* ขยายเต็มหน้าจอ */
+    max-width: 1200px; /* กำหนดขนาดสูงสุดเพื่อไม่ให้เกินจอขนาดใหญ่ */
+    border-radius: 10px;
+    margin: 20px auto; /* จัดกึ่งกลางและให้มีระยะห่างรอบ */
+    padding: 20px;
+    margin-left: 50px;
+}
+th, td {
+    padding: 10px;
+    background: none;
+    border: none;
+    text-align: left;
+}
+table {
+    width: 70%;
+    border-collapse: collapse;
+    font-family: "Noto Sans Thai", sans-serif;
+}
+.line{
+    width: 90%;
+    margin-left: 50px;
+    box-shadow: 5px 5px 10px rgba(38, 0, 255, 0.312);
+
+}
