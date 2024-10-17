@@ -16,11 +16,12 @@
     font-family: "Noto Sans Thai", sans-serif; 
   }
   .content{
-    padding-top: 60px;
+    padding-top: 100px;
     justify-content: center;
   }
   .adminContent{
     margin-left: 250px;
+    padding-top:60px ;
   }
   .login-content {
     padding-top: 0;  /* ไม่มี padding-top ในหน้า login */

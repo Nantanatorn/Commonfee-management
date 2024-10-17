@@ -1,5 +1,7 @@
 .navbar{
   width: 100%;
+  position: fixed;
+  z-index: 1000;
 }
 .dark-mode {
     background-color: #121212;

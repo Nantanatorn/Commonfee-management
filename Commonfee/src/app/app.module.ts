@@ -35,6 +35,8 @@ import { FitnessComponent } from './user/fitness/fitness.component';
 import { HistoryBookingComponent } from './user/history-booking/history-booking.component';
 import { ChartsComponent } from './admin/charts/charts.component';
 
+import { HomeComponent } from './user/home/home.component';
+
 
 
 
@@ -65,7 +67,9 @@ import { ChartsComponent } from './admin/charts/charts.component';
     BookRoomComponent,
     FitnessComponent,
     HistoryBookingComponent,
-    ChartsComponent
+    ChartsComponent,
+
+    HomeComponent
   ],
 
   imports: [
