@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import {Chart} from 'angular-highcharts';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,9 +11,22 @@ import {Chart} from 'angular-highcharts';
   styleUrls: ['./dashboard.component.css'] // ใช้ styleUrls แทน styleUrl
 })
 export class DashboardComponent {
+
   isModalOpen: boolean = false;
   newsTitle: string = '';
   newsContent: string = '';
+  AddNewsform : FormGroup; 
+  selectedFile: File | null = null;
+
+  constructor(private fb: FormBuilder, 
+    private http: HttpClient, 
+    private router: Router, ){
+
+    this.AddNewsform = this.fb.group({
+      Announce_Title: ['', Validators.required],
+      Announce_Detail: ['', Validators.required]
+       });
+    }
 
   residents = [
     { houseNumber: 1, name: 'นายสมชาย' },
@@ -21,6 +37,8 @@ export class DashboardComponent {
     { houseNumber: 6, name: 'นางสาวกาญจนา' }
     // เพิ่มข้อมูลบ้านได้ตามต้องการ
   ];
+
+  
 
   getResidentInfo(houseNumber: number): string {
     const resident = this.residents.find(r => r.houseNumber === houseNumber);
@@ -139,4 +157,45 @@ export class DashboardComponent {
     ],
   });
   
+  onSubmit(): void {
+    if (this.AddNewsform.valid) {
+      const formData = new FormData();
+      formData.append('Announce_Title', this.AddNewsform.get('Announce_Title')?.value);
+      formData.append('Announce_Detail', this.AddNewsform.get('Announce_Detail')?.value);
+
+      if (this.selectedFile) {
+        formData.append('Announce_image', this.selectedFile);
+      }
+
+      this.http.post('http://localhost:3500/addanoucement', formData).subscribe({
+        next: (response) => {
+          console.log('Announcement successfully', response);
+          this.showPopup();
+          this.closeModal();
+        },
+        error: (error) => {
+          console.error('Error ', error);
+          console.log(this.AddNewsform.errors);
+          console.log(this.AddNewsform.value);
+        }
+      });
+    } else {
+      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+    }
+  }
+  showPopup() {
+    Swal.fire({
+      title: "สำเร็จ!",
+      text: "ข่าวสารได้ถูกประกาศออกไปแล้ว!",
+      icon: "success"
+    });
+  }
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+
 }

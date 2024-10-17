@@ -9,7 +9,7 @@ import { ReportComponent } from './user/Residentreport/report.component';
 import { StatusComponent } from './user/status/status.component';
 import { ServiceComponent } from './user/Residentservice/service.component';
 import { AboutUsComponent } from './user/about-us/about-us.component';
-import { HomeComponent } from './user/home/home.component';
+
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { HistoryPurchaseComponent } from './user/history-purchase/history-purchase.component';
 import { CommonfeeStatusComponent } from './user/commonfee-status/commonfee-status.component';
@@ -28,11 +28,13 @@ import { ResidentListComponent } from './admin/resident-list/resident-list.compo
 import { PaymentComponent } from './admin/payment/payment.component';
 import { ComplainRepairComponent } from './admin/complain-repair/complain-repair.component';
 import { ChartsComponent } from './admin/charts/charts.component';
+import { HomeComponent } from './user/home/home.component';
+
 
 const routes: Routes = [
   // user routes
   { path: '', redirectTo: 'login', pathMatch: 'full' },  
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component:HomeComponent},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'report', component: ReportComponent },
@@ -58,6 +60,7 @@ const routes: Routes = [
   {path:'complainRepair',component:ComplainRepairComponent},
   {path:'chart',component:ChartsComponent}
 
+  
 ];
 
 @NgModule({

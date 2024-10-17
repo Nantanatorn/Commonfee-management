@@ -146,19 +146,28 @@
         <button type="button" class="close" (click)="closeModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <label for="newsTitle">หัวข้อข่าวสาร</label>
-          <input type="text" id="newsTitle" [(ngModel)]="newsTitle" class="form-control" placeholder="กรอกหัวข้อข่าวสาร">
-        </div>
-        <div class="form-group">
-          <label for="newsContent">รายละเอียดข่าวสาร</label>
-          <textarea id="newsContent" [(ngModel)]="newsContent" class="form-control" placeholder="กรอกรายละเอียดข่าวสาร"></textarea>
-        </div>
+        <form [formGroup]="AddNewsform" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="Announce_Title">หัวข้อข่าวสาร</label>
+            <input type="text" id="Announce_Title" formControlName="Announce_Title" class="form-control" placeholder="กรอกหัวข้อข่าวสาร">
+          </div>
+        
+          <div class="form-group">
+            <label for="Announce_Detail">รายละเอียดข่าวสาร</label>
+            <textarea id="Announce_Detail" formControlName="Announce_Detail" class="form-control" placeholder="กรอกรายละเอียดข่าวสาร"></textarea>
+          </div>
+        
+          <div class="form-group">
+            <input id="Announce_image" type="file" class="form-control" (change)="onFileChange($event)" accept="image/*">
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">ยกเลิก</button>
+            <button type="submit" class="btn btn-primary">บันทึก</button>
+          </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModal()">ยกเลิก</button>
-        <button type="button" class="btn btn-primary" (click)="saveNews()">บันทึก</button>
-      </div>
+      
     </div>
   </div>
 </div>

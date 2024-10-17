@@ -8,10 +8,10 @@ const jwt = require('jsonwebtoken');
 
 
 module.exports.enrollment = async (req, res) => {
-    const { User_Firstname, User_Lastname, username,  email, houseID, IDcard, phone,password,confirmPassword} = req.body;
+    const {IDcard , User_Firstname , User_Lastname , House_number , phone , email} = req.body;
     const defaultRole = 'Resident';
     // Simple validation
-    if (!User_Firstname || !User_Lastname || !username || !email || !houseID ||  !IDcard || !phone || !password || !confirmPassword) {
+    if (!User_Firstname || !User_Lastname  || !email || !houseID ||  !IDcard || !phone || !House_number) {
         return res.status(400).json({ message: 'Please provide all required fields.' });
     }
 
@@ -32,8 +32,8 @@ module.exports.enrollment = async (req, res) => {
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds = 10
-
+        const hashedPassword = await bcrypt.hash(1234567890, 10); // Salt rounds = 10
+        const username = User_Firstname;
         // Insert new user
         const transaction = new sql.Transaction(pool)
         await transaction.begin();
@@ -73,7 +73,7 @@ module.exports.enrollment = async (req, res) => {
         res.status(500).json({ message: 'Server error, please try again later.' });
     }
 };
-module.exports.forgotPass = async (req, res ,next) => {
+module.exports.changepass = async (req, res ,next) => {
     const { username, email } = req.query;
     const { password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);

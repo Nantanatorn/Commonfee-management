@@ -1,4 +1,3 @@
-
 .card-text{
     font-size: 1.5em;
     text-align: left;
@@ -6,18 +5,18 @@
 }
 
 .card-title {
-    font-size: 2em; /* เพิ่มขนาดฟอนต์หัวข้อ */
+    font-size: 2em; /* เพิ่มขนาดฟอนต์หัวข้อ /
     text-align: center;
 
 }
 
 
 .card-footer {
-    font-size: 1em; /* ขนาดฟอนต์ของ footer */
+    font-size: 1em; / ขนาดฟอนต์ของ footer */
 }
 .inf{
     color: red;
-    
+
 }
 .information{
     text-align: center;
