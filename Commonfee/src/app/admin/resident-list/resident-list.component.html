@@ -47,21 +47,11 @@
     <div class="modal" [class.show]="isModalOpen">
         <div class="modal-content">
           <span class="close" (click)="closeModal()">&times;</span>
-          <h2>ลงทะเบียนผู้อยู่อาศัย/นิติบุคคล</h2>
+          <h2>ลงทะเบียนผู้อยู่อาศัย</h2>
       
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <div class="form-grid">
-              <div class="form-group">
-                <label for="IDcard">เลขบัตรประชาชน:</label>
-                <input
-                  type="text"
-                  id="IDcard"
-                  formControlName="IDcard"
-                  class="form-control"
-                  placeholder="กรอกเลขบัตรประชาชน"
-                />
-              </div>
-          
+             
               <div class="form-group">
                 <label for="User_Firstname">ชื่อ:</label>
                 <input
@@ -70,6 +60,7 @@
                   formControlName="User_Firstname"
                   class="form-control"
                   placeholder="กรอกชื่อ"
+                  maxlength="50" 
                 />
               </div>
           
@@ -81,6 +72,19 @@
                   formControlName="User_Lastname"
                   class="form-control"
                   placeholder="กรอกนามสกุล"
+                  maxlength="50" 
+                />
+              </div>
+              
+              <div class="form-group">
+                <label for="IDcard">เลขบัตรประชาชน:</label>
+                <input
+                  type="text"
+                  id="IDcard"
+                  formControlName="IDcard"
+                  class="form-control"
+                  placeholder="กรอกเลขบัตรประชาชน"
+                  maxlength="13" 
                 />
               </div>
           
@@ -92,6 +96,7 @@
                   formControlName="House_number"
                   class="form-control"
                   placeholder="กรอกบ้านเลขที่"
+                  maxlength="5" 
                 />
               </div>
           
@@ -103,6 +108,7 @@
                   formControlName="phone"
                   class="form-control"
                   placeholder="กรอกเบอร์โทร"
+                  maxlength="10" 
                 />
               </div>
               <div class="form-group">
@@ -113,10 +119,10 @@
                   formControlName="email"
                   class="form-control"
                   placeholder="กรอกอีเมลล์"
+                  maxlength="50" 
                 />
               </div>
             </div>
-          
             <button type="submit" class="btn-submit">บันทึก</button>
           </form>
           

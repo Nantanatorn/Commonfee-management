@@ -10,14 +10,13 @@ const jwt = require('jsonwebtoken');
 module.exports.enrollment = async (req, res) => {
     const {IDcard , User_Firstname , User_Lastname , House_number , phone , email} = req.body;
     const defaultRole = 'Resident';
+    const defaultStatus = 'Alive';
     // Simple validation
-    if (!User_Firstname || !User_Lastname  || !email || !houseID ||  !IDcard || !phone || !House_number) {
+    if (!User_Firstname || !User_Lastname  || !email  ||  !IDcard || !phone || !House_number) {
         return res.status(400).json({ message: 'Please provide all required fields.' });
     }
 
-    if (password !== confirmPassword) {
-        return res.status(400).json({ message: 'Passwords do not match.' });
-    }
+  
 
     try {
         const pool = await sql.connect(config);
@@ -32,7 +31,7 @@ module.exports.enrollment = async (req, res) => {
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(1234567890, 10); // Salt rounds = 10
+        const hashedPassword = await bcrypt.hash('1234567890', 10); // Salt rounds = 10
         const username = User_Firstname;
         // Insert new user
         const transaction = new sql.Transaction(pool)
@@ -40,25 +39,29 @@ module.exports.enrollment = async (req, res) => {
         try {
             const insertCustomer = await transaction.request()
                 
-                .input('User_Firstname', sql.VarChar, User_Firstname)
-                .input('User_Lastname', sql.VarChar, User_Lastname)
-                .input('username', sql.VarChar, username)
-                .input('email',sql.VarChar,email)
-                .input('password', sql.VarChar, hashedPassword) // Store hashed password
-                .input('phone', sql.VarChar, phone)
-                .input('role', sql.VarChar, defaultRole)
-                .input('IDcard',sql.VarChar,IDcard)
-                .input('houseID',sql.Int,houseID)
-                .query('INSERT INTO UserAccount ( User_Firstname, User_Lastname, username,email, password, phone,role,IDcard,houseID) OUTPUT INSERTED.User_ID VALUES (@User_Firstname, @User_Lastname, @username, @email, @password, @phone,@role,@IDcard,@houseID)');
+                .input('User_Firstname', sql.NVarChar, User_Firstname)
+                .input('User_Lastname', sql.NVarChar, User_Lastname)
+                .input('username', sql.NVarChar, username)
+                .input('email',sql.NVarChar,email)
+                .input('password', sql.NVarChar, hashedPassword) // Store hashed password
+                .input('phone', sql.NVarChar, phone)
+                .input('role', sql.NVarChar, defaultRole)
+                .input('IDcard',sql.NVarChar,IDcard)
+                .query('INSERT INTO UserAccount ( User_Firstname, User_Lastname, username,email, password, phone,role,IDcard) OUTPUT INSERTED.User_ID VALUES (@User_Firstname, @User_Lastname, @username, @email, @password, @phone,@role,@IDcard)');
 
             const User_ID = insertCustomer.recordset[0].User_ID;
             await transaction.request()
             .input('User_ID', sql.Int, User_ID)
-            .input('R_Firstname', sql.VarChar, User_Firstname) // Use User_Firstname as R_Firstname
-            .input('R_Lastname', sql.VarChar, User_Lastname)   // Use User_Lastname as R_Lastname
-            .query('INSERT INTO Resident (User_ID, R_Firstname, R_Lastname) VALUES (@User_ID, @R_Firstname, @R_Lastname)');
+            .input('R_Firstname', sql.NVarChar, User_Firstname) // Use User_Firstname as R_Firstname
+            .input('R_Lastname', sql.NVarChar, User_Lastname)   // Use User_Lastname as R_Lastname
+            .input('House_number',sql.NChar,House_number)
+            .input('status', sql.Char,defaultStatus)
+            .query('INSERT INTO Resident (User_ID, R_Firstname, R_Lastname, EntryDate,House_number,status ) VALUES (@User_ID, @R_Firstname, @R_Lastname, GETDATE(),@House_number,@status)');
     
-        
+            await transaction.request()
+            .input('House_number', sql.NChar, House_number) 
+            .input('Full', sql.NChar, 'Full') 
+            .query('UPDATE House SET House_status = @Full WHERE House_number = @House_number');
 
             await transaction.commit();
             res.status(201).json({ message: 'User registered successfully.' });

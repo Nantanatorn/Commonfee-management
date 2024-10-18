@@ -6,5 +6,7 @@ export interface User {
     picture? : string;
     password?: string;
     repassword?: string;
+    House_number?: string;
+    IDcard? : string;
 
 }
