@@ -29,21 +29,33 @@ export class DashboardComponent {
     }
 
   residents = [
-    { houseNumber: 1, name: 'นายสมชาย' },
-    { houseNumber: 2, name: 'นางสมศรี' },
-    { houseNumber: 3, name: 'นายจิตร' },
-    { houseNumber: 4, name: 'นางสมฤดี' },
-    { houseNumber: 5, name: 'นายกำธร' },
-    { houseNumber: 6, name: 'นางสาวกาญจนา' }
+    { houseNumber: 1, name: 'นายสมชาย' , hasResident: true,hasPaid: true},
+    { houseNumber: 2, name: 'นางสมศรี', hasResident: true ,hasPaid: true},
+    { houseNumber: 3, name: 'นายจิตร' , hasResident: true,hasPaid: true},
+    { houseNumber: 4, name: 'นางสมฤดี' , hasResident: true,hasPaid: true},
+    { houseNumber: 5, name: 'นายกำธร' , hasResident: true,hasPaid: true},
+    { houseNumber: 6, name: 'นางสาวกาญจนา' , hasResident: true,hasPaid: false}
     // เพิ่มข้อมูลบ้านได้ตามต้องการ
   ];
 
-  
+  getHouseColor(houseNumber: number): string {
+    const resident = this.residents.find(r => r.houseNumber === houseNumber);
+    if (!resident || !resident.hasResident) {
+      return '#ffffff'; // สีขาวสำหรับบ้านที่ไม่มีคนอยู่
+    } else if (!resident.hasPaid) {
+      return '#ff0000'; // สีแดงสำหรับบ้านที่ยังไม่จ่าย
+    } else {
+      return '#40ff00'; // สีเขียวที่คนอยู่และจ่ายแล้ว
+    }
+  }
 
   getResidentInfo(houseNumber: number): string {
     const resident = this.residents.find(r => r.houseNumber === houseNumber);
-    return resident ? `บ้านเลขที่ ${houseNumber}, ผู้อยู่อาศัย: ${resident.name}` : `บ้านเลขที่ ${houseNumber}, ไม่มีข้อมูลผู้อยู่อาศัย`;
+    return resident && resident.name
+      ? `บ้านเลขที่ ${houseNumber}, ผู้อยู่อาศัย: ${resident.name}`
+      : `บ้านเลขที่ ${houseNumber}, ไม่มีข้อมูลผู้อยู่อาศัย`;
   }
+
 
    // เปิด modal
    openModal() {
@@ -89,10 +101,12 @@ export class DashboardComponent {
       enabled: false
     },
     xAxis: {
-      categories: ['มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย','ต.ค','พ.ย'], // ชื่อสำหรับแกน X
+      categories: ['มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย','ต.ค'], // ชื่อสำหรับแกน X
       title: {
         text: 'เดือน'
-      }
+      },
+      min: 0, 
+      max: 4
     },
     yAxis: {
       title: {
