@@ -29,11 +29,12 @@ table {
   .profile-card {
     background-color: #f5f5f5;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 70%;
     text-align: left;
     padding: 20px;
     font-family: 'Noto Sans Thai', sans-serif;
+    box-shadow: 5px 5px 10px rgba(38, 0, 255, 0.312);
+
   }
   
   .profile-image {

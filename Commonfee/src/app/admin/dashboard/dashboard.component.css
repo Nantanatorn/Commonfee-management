@@ -162,4 +162,10 @@ table, th, td {
 }
 .nB{
   background-color: #ac7bc6;
+  color: #fff;  
+
+}
+.nB:hover{
+  background-color: #ac7bc6;
+  color: #fff;  
 }

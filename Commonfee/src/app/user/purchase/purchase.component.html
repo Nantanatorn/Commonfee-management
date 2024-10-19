@@ -61,6 +61,10 @@
     </table>
   
     <p>ชำระเงินวันที่ 2024-09-01 หากชำระเงินวันนี้ทำตามขั้นตอนและสแกนคิวอาร์โค้ดด้านล่าง</p>
-    <qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+    <div *ngIf="!isQrScanned">
+      <qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+    </div>
+    
+
     <p class="help-text">หากพบปัญหา ติดต่อ 090-XXX-XXXX</p>
   </div>
