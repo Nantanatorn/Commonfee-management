@@ -1,3 +1,4 @@
+import { AuthService } from './../../service/auth.service';
 import { Component, OnInit, Inject, Renderer2 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
@@ -5,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { BehaviorSubject, observable, Observable } from 'rxjs';
 import { Users } from '../../model/model';
+
 
 @Component({
   selector: 'app-header',
@@ -21,13 +23,14 @@ export class HeaderComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private renderer: Renderer2,
-    private router: Router
+    private router: Router,
+    private authService : AuthService
   ) {}
 
   ngOnInit(): void {
     // Logic ที่คุณต้องการใส่ใน ngOnInit (ถ้าไม่มีอะไรต้องการทำ ก็เว้นว่างได้)
     if (isPlatformBrowser(this.platformId)) {
-      
+      this.username = this.authService.getUsername();
 
       // ตรวจสอบว่ามีการเรียกใช้งาน localStorage ได้หรือไม่
       const storedTheme = localStorage.getItem('theme');
@@ -44,24 +47,11 @@ export class HeaderComponent implements OnInit {
 }
   
   logout(): void {
-    Swal.fire({
-      title: 'คุณต้องการออกจากเว็บไซต์ใช่ไหม?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'ใช่',
-      cancelButtonText: 'ไม่ใช่',
-      allowOutsideClick: false,
-      allowEscapeKey: false
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // ลบข้อมูลหรือ token เพื่อทำการ logout (ถ้ามี)
-        localStorage.removeItem('userToken'); 
-        
-        // นำทางไปยังหน้า login
-        this.router.navigate(['/login']);
-        console.log('User logged out');
-      }
-    });
+    // ตรวจสอบว่ากำลังทำงานในเบราว์เซอร์
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      this.router.navigate(['/']);
+    }
   }
   toggleDarkMode(): void {
     // ตรวจสอบว่ากำลังทำงานในเบราว์เซอร์

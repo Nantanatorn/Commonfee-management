@@ -8,11 +8,11 @@ const jwt = require('jsonwebtoken');
 
 
 module.exports.enrollment = async (req, res) => {
-    const {IDcard , User_Firstname , User_Lastname , House_number , phone , email} = req.body;
+    const {IDcard , User_Firstname , User_Lastname , House_number , phone , email,username} = req.body;
     const defaultRole = 'Resident';
     const defaultStatus = 'Alive';
     // Simple validation
-    if (!User_Firstname || !User_Lastname  || !email  ||  !IDcard || !phone || !House_number) {
+    if (!User_Firstname || !User_Lastname  || !email  ||  !IDcard || !phone || !House_number || !username) {
         return res.status(400).json({ message: 'Please provide all required fields.' });
     }
 
@@ -30,9 +30,17 @@ module.exports.enrollment = async (req, res) => {
             return res.status(400).json({ message: 'Email already exists.' });
         }
 
+        const checkHouse = await pool.request()
+            .input('House_number', sql.VarChar, House_number)
+            .query('SELECT * FROM Resident WHERE House_number = @House_number');
+
+        if (checkHouse.recordset.length > 0) {
+            return res.status(400).json({ message: 'House already exists.' });
+        }
+
         // Hash the password
         const hashedPassword = await bcrypt.hash('1234567890', 10); // Salt rounds = 10
-        const username = User_Firstname;
+        
         // Insert new user
         const transaction = new sql.Transaction(pool)
         await transaction.begin();

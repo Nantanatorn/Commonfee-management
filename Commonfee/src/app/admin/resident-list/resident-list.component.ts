@@ -22,6 +22,7 @@ export class ResidentListComponent implements OnInit {
         IDcard: ['', [Validators.required, Validators.maxLength(13)]],
         User_Firstname: ['', [Validators.required, Validators.maxLength(50)]],
         User_Lastname: ['', [Validators.required, Validators.maxLength(50)]],
+        username: ['', [Validators.required, Validators.maxLength(50)]],
         House_number: ['', [Validators.required, Validators.maxLength(5)]],
         phone: ['', [Validators.required, Validators.maxLength(10)]],
         email: ['', [Validators.required, Validators.maxLength(50)]],
@@ -59,7 +60,7 @@ export class ResidentListComponent implements OnInit {
         error => { 
           Swal.fire({
           title: "ลงทะเบียนไม่สำเร็จ",
-          text: "กรุณาตรวจสอบerror",
+          text: "กรุณาตรวจสอบEmail ของท่าน และ เลขที่บ้าน",
           icon: "error"
         });
           console.error('Registration error', error);

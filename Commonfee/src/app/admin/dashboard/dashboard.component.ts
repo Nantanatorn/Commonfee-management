@@ -30,14 +30,10 @@ export class DashboardComponent {
 
   residents = [
     { houseNumber: 1, name: 'นายสมชาย' , hasResident: true,hasPaid: true},
-    { houseNumber: 2, name: 'นางสมศรี', hasResident: true ,hasPaid: true},
-    { houseNumber: 3, name: 'นายจิตร' , hasResident: true,hasPaid: true},
-    { houseNumber: 4, name: 'นางสมฤดี' , hasResident: true,hasPaid: true},
-    { houseNumber: 5, name: 'นายกำธร' , hasResident: true,hasPaid: true},
-    { houseNumber: 6, name: 'นางสาวกาญจนา' , hasResident: true,hasPaid: false}
+ 
     // เพิ่มข้อมูลบ้านได้ตามต้องการ
   ];
-
+  
   getHouseColor(houseNumber: number): string {
     const resident = this.residents.find(r => r.houseNumber === houseNumber);
     if (!resident || !resident.hasResident) {
@@ -68,21 +64,7 @@ export class DashboardComponent {
     this.clearNewsFields(); // ล้างข้อมูลเมื่อปิด modal
   }
 
-  // บันทึกข้อมูลข่าวสาร
-  saveNews() {
-    if (this.newsTitle.trim() && this.newsContent.trim()) {
-      console.log('หัวข้อข่าวสาร:', this.newsTitle);
-      console.log('รายละเอียดข่าวสาร:', this.newsContent);
-      // คุณสามารถทำการบันทึกข้อมูลหรือส่งข้อมูลไปยัง backend ได้ที่นี่
-      this.closeModal();
-    } else {
-      Swal.fire({
-        title: "กรุณากรอกข้อมูลให้ครบถ้วน",       
-        icon: "info"
-       
-      });
-    }
-  }
+
 
   // ล้างข้อมูลในฟิลด์
   clearNewsFields() {

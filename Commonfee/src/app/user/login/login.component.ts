@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit{
        this.userRole = this.authService.getRole();
        if (this.userRole === 'admin') {
          this.router.navigate(['/AdminHome']);
-       } else if (this.userRole === 'customer') {
+       } else if (this.userRole === 'Resident') {
          this.router.navigate(['/home']);
        }
      }
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit{
 
             // Navigate based on the user's role
             if (this.userRole === 'admin') {
-              this.router.navigate(['/adminhome']);
+              this.router.navigate(['/dashboard']);
             } else if (this.userRole === 'Resident') {
               this.router.navigate(['/home']);
             }
