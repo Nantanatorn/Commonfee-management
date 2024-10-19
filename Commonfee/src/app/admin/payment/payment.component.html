@@ -2,7 +2,11 @@
 <div class="container">
     <div class="header">
         <h1>Payment</h1>
+        <img src="line.png" alt="error" width="200">
     </div>
+</div>
+<div class="charts">
+<div class="line" [chart]="lineCharts"></div>
 </div>
 <div class="history">
     <div class="row">
@@ -53,13 +57,13 @@
         </div>
         <div class="col-4">
         <div class="col">
-            <button type="button" class="btn btn-primary">เพิ่มอัตราชำระ</button>
+            <button type="button" class="btn btn-light">เพิ่มอัตราชำระ</button>
         </div>
         <div class="col">
-            <button type="button" class="btn btn-primary">แก้ไขอัตราชำระ</button>
+            <button type="button" class="btn btn-light">แก้ไขอัตราชำระ</button>
         </div>
         <div class="col">
-            <button type="button" class="btn btn-primary">ส่งใบแจ้งหนี้</button>
+            <button type="button" class="btn btn-light">ส่งใบแจ้งหนี้</button>
         </div>
         </div>
         </div>
@@ -93,6 +97,7 @@
 </div>
 <div class="col-6">
     <h4>รายการคนที่ค้างชำระ</h4>
+    <button type="button" class="btn nB" >แจ้งเตือน</button>
     <table>
         <thead>
             <tr>

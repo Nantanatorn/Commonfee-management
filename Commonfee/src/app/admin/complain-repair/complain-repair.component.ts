@@ -9,10 +9,16 @@ import {Chart} from 'angular-highcharts';
 export class ComplainRepairComponent {
   lineCharts = new Chart({
     chart :{
-      type:'line'
+      type:'line',
+      style:{
+        fontFamily: 'Noto Sans Thai, sans-serif',
+      }
     },
     title:{
-      text:'แสดงร้องเรียนในแต่ละเดือน'
+      text:'แสดงร้องเรียนในแต่ละเดือน',
+      style:{
+        fontFamily: 'Noto Sans Thai, sans-serif',
+      }
     },
     credits:{
       enabled: false
@@ -20,14 +26,20 @@ export class ComplainRepairComponent {
     xAxis: {
       categories: ['มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย','ต.ค'], // ชื่อสำหรับแกน X
       title: {
-        text: 'เดือน'
+        text: 'เดือน',
+        style:{
+          fontFamily: 'Noto Sans Thai, sans-serif',
+        }
       },
       min: 0, 
       max: 4 
     },
     yAxis: {
       title: {
-        text: 'จำนวนร้องเรียน'
+        text: 'จำนวนร้องเรียน',
+        style:{
+          fontFamily: 'Noto Sans Thai, sans-serif',
+        }
       },
       min: 0, // ค่าต่ำสุดของแกน Y
       max: 42 // ค่าสูงสุดของแกน Y (ถ้าต้องการ)
@@ -35,7 +47,8 @@ export class ComplainRepairComponent {
     series:[
       {
       name:'ร้องเรียนทั่วไป',
-      data:[10,12,18,20,11,14]
+      data:[10,12,18,20,11,14],
+      
     }as any,
     {
       name:'ร้องเรียนซ่อม',

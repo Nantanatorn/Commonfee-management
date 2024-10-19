@@ -1,4 +1,9 @@
+import { style } from '@angular/animations';
 import { Component } from '@angular/core';
+import {Chart} from 'angular-highcharts';
+
+
+
 
 @Component({
   selector: 'app-payment',
@@ -20,5 +25,50 @@ export class PaymentComponent {
     const resident = this.residents.find(r => r.houseNumber === houseNumber);
     return resident ? `บ้านเลขที่ ${houseNumber}, ผู้อยู่อาศัย: ${resident.name}` : `บ้านเลขที่ ${houseNumber}, ไม่มีข้อมูลผู้อยู่อาศัย`;
   }
-
+  lineCharts = new Chart({
+    chart :{
+      type:'line',
+      style:{
+        fontFamily: 'Noto Sans Thai, sans-serif',
+      }
+    },
+    title:{
+      text:'เงินเข้าแต่ละเดือน',
+      style:{
+        fontFamily: 'Noto Sans Thai, sans-serif',
+      }
+    },
+    credits:{
+      enabled: false
+    },
+    xAxis: {
+      categories: ['มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย','ต.ค'], // ชื่อสำหรับแกน X
+      title: {
+        text: 'เดือน',
+        style:{
+          fontFamily: 'Noto Sans Thai, sans-serif',
+        }
+      },
+      min: 0, // ค่าต่ำสุดของแกน Y
+      max: 4 // ค่าสูงสุดของแกน Y (ถ้าต้องการ)
+    },
+    yAxis: {
+      title: {
+        text: 'จำนวนเงิน(บาท)',
+        style:{
+          fontFamily: 'Noto Sans Thai, sans-serif',
+        }
+      },
+      min: 0, // ค่าต่ำสุดของแกน Y
+      max: 1000 // ค่าสูงสุดของแกน Y (ถ้าต้องการ)
+    },
+    series:[
+      {
+      name:'ลูกบ้าน',
+      data:[100,500,200,250,170,600],
+      color:'#f887dd'
+    }as any
+    
+  ]
+  })
 }

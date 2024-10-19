@@ -92,7 +92,10 @@ export class DashboardComponent {
 
   lineCharts = new Chart({
     chart :{
-      type:'line'
+      type:'line',
+      style:{
+        fontFamily: 'Noto Sans Thai, sans-serif',
+      }
     },
     title:{
       text:'ยอดการจ่ายแต่ละหลัง'
@@ -130,6 +133,9 @@ export class DashboardComponent {
     chart: {
       type: 'pie',
       plotShadow: false,
+      style:{
+        fontFamily: 'Noto Sans Thai, sans-serif',
+      }
     },
     credits: {
       enabled: false,

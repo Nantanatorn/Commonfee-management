@@ -123,3 +123,22 @@ button.btn-primary:hover {
         width: 100%;
     }
 }
+.line{
+    margin-top: 20px;
+    max-width: 1200px;
+    width: 100%;
+    margin-left: 40px;
+    box-shadow: 5px 5px 10px rgba(38, 0, 255, 0.312);
+}
+.nB{
+    background-color: #ac7bc6;
+    margin-left: 400px;
+    position: absolute;
+    margin-top: -50px;
+    color: #fff;  
+
+  }
+  .nB:hover{
+    background-color: #ac7bc6;
+    color: #fff;  
+  }
