@@ -25,9 +25,44 @@ module.exports.Addhouse = async ( res , req ) => {
     }catch(err){
 
         console.error(err);
-        res.status(500).send('Failt to get Announcement');
+        res.status(500).send('Failt to get Add');
 
     }
 
+}
 
+module.exports.GetEmptyHouse = async ( req , res ) => {
+    const conn = await sql.connect(config);
+
+    try {
+
+        const result = await conn.request()
+        .query("SELECT * FROM House WHERE House_status = 'Empty' ORDER BY House_No ASC;");
+
+        res.status(200).json(result.recordset);
+        
+    }catch(err){
+
+        console.error(err);
+        res.status(500).send('Fail');
+
+    }
+}
+
+module.exports.GetHouseWithResident = async ( req , res ) => {
+    const conn = await sql.connect(config);
+
+    try {
+
+        const result = await conn.request()
+        .query("Select * from HouseStatusView ");
+
+        res.status(200).json(result.recordset);
+        
+    }catch(err){
+
+        console.error(err);
+        res.status(500).send('Fail');
+
+    }
 }

@@ -31,19 +31,21 @@
 <button (click)="openModal()" class="btn-register">ลงทะเบียน</button>
 
 <div class="profile-cards-container">
-    <div class="profile-card">
+    <div class="profile-card" *ngFor="let resident of residents | async">
       <div class="profile-image">
         <img src="profile.jpg" alt="Profile" />
       </div>
       <div class="profile-details">
-        <p>เลขบัตรประชาชน: 1101125479568</p>
-        <p>ชื่อ :นันทนาธร</p>
-        <p>นามสกุล : ซื่อตรง</p>
-        <p>เลขที่บ้าน :123/456</p>
-        <p>เบอร์มือถือ : 0235687894</p>
+        <p>ชื่อ-สกุล : {{ resident.R_Firstname }}  {{ resident.R_Lastname }}</p>
+        <p>รหัสบัตรประชาชน : {{ resident.IDcard }}</p>
+        <p>อีเมลล์ : {{ resident.email }}</p>
+        <p>เบอร์โทรติดต่อ : {{ resident.phone   }}</p>
+        <p>บ้านเลขที่ : {{ resident.House_number }}</p>
+        <p>วันเข้าอาศัย : {{ resident.EntryDate | date: 'MM/dd/yyyy'}}</p>
+        <p>สถานะ : {{ resident.status }}</p>
       </div>
     </div>
-
+</div>
     <!-- ทำ modal สำหรับการลงทะเบียนลูกบ้าน -->
     <div class="modal" [class.show]="isModalOpen">
         <div class="modal-content">
@@ -103,14 +105,12 @@
           
               <div class="form-group">
                 <label for="House_number">บ้านเลขที่:</label>
-                <input
-                  type="text"
-                  id="House_number"
-                  formControlName="House_number"
-                  class="form-control"
-                  placeholder="กรอกบ้านเลขที่"
-                  maxlength="5" 
-                />
+                <select id="House_number" formControlName="House_number" class="form-select" aria-label="Default select example">
+                  <option value=""  selected>Select House</option>
+                  <option *ngFor="let house of House$ | async" [value]="house.House_number">
+                    {{ house.House_number }}
+                  </option>
+                </select>
               </div>
           
               <div class="form-group">

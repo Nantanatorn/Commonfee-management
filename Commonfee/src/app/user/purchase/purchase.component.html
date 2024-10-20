@@ -41,21 +41,23 @@
       <thead>
         <tr>
           <th>วันที่</th>
+          <th>บ้านเลขที่</th>
           <th>ขนาดบ้าน</th>
-          <th>ราคา</th>
           <th>รวม</th>
           <th>สถานะการชำระ</th>
+          <th>ครบกำหนดชำระ</th>
           <th>ใบเสร็จชำระเงิน</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>2024-09-01</td>
-          <td>s</td>
-          <td>500</td>
-          <td>500</td>
-          <td>N</td>
-          <td><button (click)="generatePDF()">Print</button></td>
+          <tr *ngFor="let payment of paymentHistory$ | async">
+            <td>{{ payment.Pay_Date | date: 'MM/dd/yyyy'}}</td>
+            <td>{{ payment.House_number }}</td>
+            <td>{{ payment.House_Size }}</td>
+            <td>{{ payment.Pay_Amount }}</td>
+            <td>{{ payment.Pay_Status }}</td>
+            <td>{{ payment.Pay_Deadline | date: 'MM/dd/yyyy'}}</td>
+            <td><button (click)="generatePDF()">Print</button></td>
         </tr>
       </tbody>
     </table>

@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,18 +17,16 @@ export class ReportComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private http : HttpClient
   ) {}
 
   ngOnInit(): void {
     // สร้าง FormGroup พร้อม Validators
     this.reportForm = this.fb.group({
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
-      houseID: ['', Validators.required],
-      reportDate: ['', Validators.required],
-      type:['',Validators.required],
-      detail: ['', Validators.required]
+      petition_Title: ['',Validators.required],
+      petition_Type:[null,Validators.required],
+      petition_detail: ['', Validators.required]
     });
     const today = new Date();
     this.currentDate = today.toISOString().substring(0, 10);
@@ -35,26 +34,46 @@ export class ReportComponent implements OnInit {
 
   onSubmit(): void {
     if (this.reportForm.valid) {
-      Swal.fire({
-        icon: 'question',
-        title: 'คุณแน่ใจใช่ไหมว่าจะร้องเรียน',
-        html: 'กรุณาตรวจสอบรายละเอียดคำร้องเรียน<br/>ยืนยันคำร้องเรียนสำเร็จ',
-        showConfirmButton: true,
-        showCancelButton: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire("บันทึกคำร้องเรียน", "", "success");
-        } else {
-          Swal.fire("ยกเลิกคำร้องเรียน", "", "error");
+      console.log('Form data', this.reportForm.value);
+  
+      // ดึง token จาก localStorage
+      const token = localStorage.getItem('token');
+      if (!token) {
+        Swal.fire({
+          title: "ไม่มีการยืนยันตัวตน!",
+          text: "กรุณาเข้าสู่ระบบก่อนทำการส่งคำร้อง",
+          icon: "warning"
+        });
+        return;
+      }
+  
+      // สร้าง header สำหรับการส่ง token
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  
+      // ส่งคำร้องไปยัง API (ระบุ responseType: 'text' เพื่อให้ Angular เข้าใจว่า response จะเป็นข้อความ)
+      this.http.post('http://localhost:3500/petition', this.reportForm.value, { headers, responseType: 'text' }).subscribe({
+        next: (response) => {
+          console.log('Successfully:', response);
+          Swal.fire({
+            title: "ส่งคำร้องเสร็จสิ้น!",
+            text: "เราได้รับคำร้องของคุณไว้แล้ว!",
+            icon: "success"
+          });
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          Swal.fire({
+            title: "เกิดข้อผิดพลาด!",
+            text: "ไม่สามารถส่งคำร้องได้ กรุณาลองใหม่อีกครั้ง",
+            icon: "error"
+          });
         }
       });
     } else {
-      // mark ทุกฟิลด์ว่า touched เพื่อแสดง error
-      Object.keys(this.reportForm.controls).forEach((key) => {
-        const control = this.reportForm.get(key);
-        if (control) {
-          control.markAsTouched();
-        }
+      Swal.fire({
+        title: "ข้อมูลไม่ครบถ้วน!",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งคำร้อง",
+        icon: "warning"
       });
     }
   }

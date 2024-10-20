@@ -32,7 +32,58 @@
   flex-wrap: wrap; /* ทำให้กล่องสามารถขึ้นบรรทัดใหม่ได้ */
 
 }
+.house:hover {
+  background-color: #f0f0f0; /* สีเมื่อ hover */
+}
 
+.house[title] {
+  position: relative;
+}
+
+/* Tooltip ที่จะปรากฏ */
+.house[title]::before {
+  content: attr(title);
+  position: absolute;
+  top: -50px; /* จัดตำแหน่งให้ tooltip อยู่เหนือบล็อกบ้าน */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 10;
+}
+
+.house:hover::before {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ลูกศรของ tooltip */
+.house[title]::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.house:hover::after {
+  visibility: visible;
+  opacity: 1;
+}
+/*  Tooltip end */
 .house {
   
   border: 2px solid #ff7043;

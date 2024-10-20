@@ -21,6 +21,7 @@ table {
   }
   .profile-cards-container {
     display: flex;
+    flex: 1 ;
     justify-content: center;
     gap: 20px;
     padding: 20px;

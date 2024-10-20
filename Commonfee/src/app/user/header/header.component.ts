@@ -19,6 +19,7 @@ export class HeaderComponent implements OnInit {
   user = new BehaviorSubject<Users[]>([]);
   username: string | null = null;
   picture: string | null;
+  USER_ID : number | null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -31,6 +32,7 @@ export class HeaderComponent implements OnInit {
     // Logic ที่คุณต้องการใส่ใน ngOnInit (ถ้าไม่มีอะไรต้องการทำ ก็เว้นว่างได้)
     if (isPlatformBrowser(this.platformId)) {
       this.username = this.authService.getUsername();
+      this.USER_ID = this.authService.getUserID();
 
       // ตรวจสอบว่ามีการเรียกใช้งาน localStorage ได้หรือไม่
       const storedTheme = localStorage.getItem('theme');

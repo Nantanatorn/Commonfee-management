@@ -68,7 +68,6 @@ import { HomeComponent } from './user/home/home.component';
     FitnessComponent,
     HistoryBookingComponent,
     ChartsComponent,
-
     HomeComponent
   ],
 

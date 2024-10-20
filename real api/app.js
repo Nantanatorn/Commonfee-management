@@ -11,6 +11,9 @@ const path = require('path');
 const registerroute =require('./routes/register');
 const loginroute = require('./routes/login');
 const newsroute = require('./routes/news');
+const residentroute = require('./routes/resident');
+const houseroute = require('./routes/house');
+const paymentsroute = require('./routes/payment');
 
 app.use(cors());
 app.use(express.json());
@@ -19,6 +22,9 @@ app.use(bodyParser.json());
 
 const port = 3500;
 
+app.use('/',paymentsroute);
+app.use('/',houseroute);
+app.use('/',residentroute);
 app.use('/',registerroute);
 app.use('/',loginroute);
 app.use('/',newsroute);

@@ -57,10 +57,11 @@
         </div>
         <div class="col-4">
         <div class="col">
-            <button type="button" class="btn btn-primary" (click)="openModal()" >แก้ไขอัตราชำระ</button>
             <button type="button" class="btn btn-light">เพิ่มอัตราชำระ</button>
         </div>
-     
+        <div class="col">
+            <button type="button" class="btn btn-light">แก้ไขอัตราชำระ</button>
+        </div>
         <div class="col">
             <button type="button" class="btn btn-light">ส่งใบแจ้งหนี้</button>
         </div>
@@ -122,28 +123,3 @@
 </div>
 </div>
 </div>
-<div class="modal" *ngIf="isModalOpen">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" >แก้ไขอัตราชำระ</h5>
-          <button type="button" class="close" (click)="closeModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form [formGroup]="editFee" (ngSubmit)="onSubmit()">
-          
-            <div class="form-group">
-                <label for="FeeRate">แก้ไขอัตราชำระ/ ตารางวา</label>
-                <input type="text" id="FeeRate" formControlName="FeeRate" class="form-control" placeholder="อัตราชำระ">
-              </div>
-          
-            
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" (click)="closeModal()">ยกเลิก</button>
-              <button type="submit" class="btn btn-primary">บันทึก</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>

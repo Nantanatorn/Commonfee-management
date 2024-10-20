@@ -31,3 +31,19 @@ exports.checkRole = (role) => {
         next();
     };
 };
+
+module.exports.verifyToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // 'Bearer <token>'
+
+    if (token == null) return res.status(401).json({ message: 'No Token' });
+
+    jwt.verify(token, 'jwtsecret', (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' });
+        }
+
+        req.user = decoded.user; // สร้าง req.user จาก payload ใน token
+        next();
+    });
+};

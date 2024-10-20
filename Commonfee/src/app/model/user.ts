@@ -8,5 +8,6 @@ export interface User {
     repassword?: string;
     House_number?: string;
     IDcard? : string;
+    User_ID? : number;
 
 }

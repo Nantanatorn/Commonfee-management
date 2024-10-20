@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { BanDeeService } from './../../service/ban-dee.service';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import {Chart} from 'angular-highcharts';
+import { Chart } from 'angular-highcharts';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -8,114 +9,195 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'] // ใช้ styleUrls แทน styleUrl
+  styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
+  residents: any[] = [];
   isModalOpen: boolean = false;
   newsTitle: string = '';
   newsContent: string = '';
-  AddNewsform : FormGroup; 
+  AddNewsform: FormGroup; 
   selectedFile: File | null = null;
 
-  constructor(private fb: FormBuilder, 
+  constructor(
+    private fb: FormBuilder, 
     private http: HttpClient, 
-    private router: Router, ){
-
+    private router: Router, 
+    private BanService: BanDeeService
+  ) {
     this.AddNewsform = this.fb.group({
       Announce_Title: ['', Validators.required],
       Announce_Detail: ['', Validators.required]
-       });
-    }
+    });
+  }
 
-  residents = [
-    { houseNumber: 1, name: 'นายสมชาย' , hasResident: true,hasPaid: true},
- 
-    // เพิ่มข้อมูลบ้านได้ตามต้องการ
-  ];
+  ngOnInit(): void {
+    this.loadResidentsData();
+  }
+
+  // ดึงข้อมูลลูกบ้านจาก API
+  loadResidentsData(): void {
+    this.BanService.getResidentStatus().subscribe((data) => {
+      this.residents = data.map(resident => ({
+        houseNo: resident.House_No,  // ใช้ House_No ที่เป็น number แทน House_number ที่เป็น string
+        name: `${resident.R_Firstname} ${resident.R_Lastname}`,  // ชื่อผู้อยู่อาศัย
+        hasResident: resident.status.trim() === 'Living',  // ตรวจสอบสถานะการอยู่อาศัย
+        hasPaid: resident.Pay_Status.trim() === 'Paid', // คุณอาจต้องปรับปรุงส่วนนี้ให้ดึงสถานะการจ่ายจาก API
+        phone : resident.phone,
+        House_number : resident.House_number
+      }));
+    }, error => {
+      console.error("Error loading residents data: ", error);
+    });
+  }
   
-  getHouseColor(houseNumber: number): string {
-    const resident = this.residents.find(r => r.houseNumber === houseNumber);
+  // ฟังก์ชันกำหนดสีของบ้าน
+  getHouseColor(houseNo: number): string {
+    const resident = this.residents.find(r => r.houseNo === houseNo);
     if (!resident || !resident.hasResident) {
       return '#ffffff'; // สีขาวสำหรับบ้านที่ไม่มีคนอยู่
     } else if (!resident.hasPaid) {
       return '#ff0000'; // สีแดงสำหรับบ้านที่ยังไม่จ่าย
     } else {
-      return '#40ff00'; // สีเขียวที่คนอยู่และจ่ายแล้ว
+      return '#40ff00'; // สีเขียวสำหรับบ้านที่จ่ายแล้ว
     }
   }
+  
+  // ฟังก์ชันแสดงข้อมูลผู้อยู่อาศัย
+  getResidentInfo(houseNo: number): string {
+  const resident = this.residents.find(r => r.houseNo === houseNo);
 
-  getResidentInfo(houseNumber: number): string {
-    const resident = this.residents.find(r => r.houseNumber === houseNumber);
-    return resident && resident.name
-      ? `บ้านเลขที่ ${houseNumber}, ผู้อยู่อาศัย: ${resident.name}`
-      : `บ้านเลขที่ ${houseNumber}, ไม่มีข้อมูลผู้อยู่อาศัย`;
+  if (resident) {
+    if (resident.hasResident) {
+      return `บ้านที่ ${houseNo}, บ้านเลขที่: ${resident.House_number}, ผู้อยู่อาศัย: ${resident.name}, เบอร์ติดต่อ: ${resident.phone}`;
+    } else {
+      return `บ้านเลขที่: ${resident.House_number}, ไม่มีผู้อยู่อาศัย`;  // ยังแสดงบ้านเลขที่แม้ไม่มีคนอาศัย
+    }
+  } else {
+    return `บ้านเลขที่ ${houseNo}, ไม่มีข้อมูลผู้อยู่อาศัย`;
   }
+}
 
-
-   // เปิด modal
-   openModal() {
+  
+  openModal() {
     this.isModalOpen = true;
   }
 
-  // ปิด modal
+  
   closeModal() {
     this.isModalOpen = false;
-    this.clearNewsFields(); // ล้างข้อมูลเมื่อปิด modal
+    this.clearNewsFields(); 
   }
 
-
-
-  // ล้างข้อมูลในฟิลด์
+ 
   clearNewsFields() {
     this.newsTitle = '';
     this.newsContent = '';
   }
 
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('กรุณาอัปโหลดไฟล์ที่เป็น .jpeg หรือ .png เท่านั้น');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) { // จำกัดขนาดไฟล์ไม่เกิน 5MB
+        alert('ขนาดไฟล์ต้องไม่เกิน 5MB');
+        return;
+      }
+      this.selectedFile = file;
+    }
+  }
+
+  // ฟังก์ชันสำหรับการส่งข้อมูลฟอร์ม
+  onSubmit(): void {
+    if (this.AddNewsform.invalid) {
+      Swal.fire({
+        title: 'ข้อมูลไม่ครบถ้วน!',
+        text: 'กรุณากรอกข้อมูลให้ครบถ้วนก่อนทำการบันทึก',
+        icon: 'error'
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('Announce_Title', this.AddNewsform.get('Announce_Title')?.value);
+    formData.append('Announce_Detail', this.AddNewsform.get('Announce_Detail')?.value);
+
+    if (this.selectedFile) {
+      formData.append('Announce_image', this.selectedFile);
+    }
+
+    this.http.post('http://localhost:3500/addanoucement', formData).subscribe({
+      next: (response) => {
+        Swal.fire({
+          title: "สำเร็จ!",
+          text: "ข่าวสารได้ถูกประกาศออกไปแล้ว!",
+          icon: "success"
+        });
+        this.closeModal();
+      },
+      error: (error) => {
+        Swal.fire({
+          title: 'เกิดข้อผิดพลาด!',
+          text: 'ไม่สามารถประกาศข่าวสารได้ กรุณาลองใหม่อีกครั้ง',
+          icon: 'error'
+        });
+        console.error('Error ', error);
+      }
+    });
+  }
+
+  // กราฟยอดการจ่าย
   lineCharts = new Chart({
-    chart :{
-      type:'line',
-      style:{
+    chart: {
+      type: 'line',
+      style: {
         fontFamily: 'Noto Sans Thai, sans-serif',
       }
     },
-    title:{
-      text:'ยอดการจ่ายแต่ละหลัง'
+    title: {
+      text: 'ยอดการจ่ายแต่ละหลัง'
     },
-    credits:{
+    credits: {
       enabled: false
     },
     xAxis: {
-      categories: ['มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย','ต.ค'], // ชื่อสำหรับแกน X
+      categories: ['มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย', 'ต.ค'],
       title: {
         text: 'เดือน'
       },
-      min: 0, 
+      min: 0,
       max: 4
     },
     yAxis: {
       title: {
         text: 'จำนวนลูกบ้าน'
       },
-      min: 0, // ค่าต่ำสุดของแกน Y
-      max: 42 // ค่าสูงสุดของแกน Y (ถ้าต้องการ)
+      min: 0,
+      max: 42
     },
-    series:[
+    series: [
       {
-      name:'คนจ่าย',
-      data:[10,12,18,20,11,14]
-    }as any,
-    {
-      name:'คนไม่จ่าย',
-      data:[12,15,7]
-    }as any
-  ]
-  })
+        name: 'คนจ่าย',
+        data: [10, 12, 18, 20, 11, 14]
+      } as any,
+      {
+        name: 'คนไม่จ่าย',
+        data: [12, 15, 7]
+      } as any
+    ]
+  });
+
+  // กราฟประเภทบ้าน
   pieChart = new Chart({
     chart: {
       type: 'pie',
       plotShadow: false,
-      style:{
+      style: {
         fontFamily: 'Noto Sans Thai, sans-serif',
       }
     },
@@ -126,11 +208,10 @@ export class DashboardComponent {
       pie: {
         innerSize: '70%',
         borderWidth: 10,
-        borderColor: '',
         slicedOffset: 10,
         dataLabels: {
-          enabled: true, // เปิดการแสดงป้ายชื่อ
-          format: '{point.name}: {point.percentage:.1f} %', // แสดงชื่อและเปอร์เซ็นต์ของแต่ละส่วน
+          enabled: true,
+          format: '{point.name}: {point.percentage:.1f} %',
           connectorWidth: 0,
         },
       },
@@ -141,10 +222,10 @@ export class DashboardComponent {
       text: 'ประเภทบ้าน',
     },
     legend: {
-      enabled: true, // เปิดการแสดง legend
-      align: 'right', // จัดตำแหน่งของ legend
-      verticalAlign: 'middle', // จัดให้อยู่ตรงกลางแนวตั้ง
-      layout: 'vertical', // แสดง legend ในแนวตั้ง
+      enabled: true,
+      align: 'right',
+      verticalAlign: 'middle',
+      layout: 'vertical',
     },
     series: [
       {
@@ -158,46 +239,4 @@ export class DashboardComponent {
       },
     ],
   });
-  
-  onSubmit(): void {
-    if (this.AddNewsform.valid) {
-      const formData = new FormData();
-      formData.append('Announce_Title', this.AddNewsform.get('Announce_Title')?.value);
-      formData.append('Announce_Detail', this.AddNewsform.get('Announce_Detail')?.value);
-
-      if (this.selectedFile) {
-        formData.append('Announce_image', this.selectedFile);
-      }
-
-      this.http.post('http://localhost:3500/addanoucement', formData).subscribe({
-        next: (response) => {
-          console.log('Announcement successfully', response);
-          this.showPopup();
-          this.closeModal();
-        },
-        error: (error) => {
-          console.error('Error ', error);
-          console.log(this.AddNewsform.errors);
-          console.log(this.AddNewsform.value);
-        }
-      });
-    } else {
-      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-    }
-  }
-  showPopup() {
-    Swal.fire({
-      title: "สำเร็จ!",
-      text: "ข่าวสารได้ถูกประกาศออกไปแล้ว!",
-      icon: "success"
-    });
-  }
-
-  onFileChange(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-    }
-  }
-
 }

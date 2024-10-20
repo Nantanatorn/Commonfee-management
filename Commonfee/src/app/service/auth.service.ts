@@ -62,11 +62,11 @@ export class AuthService {
     }
     return null;
   }
-  getPicture(){
+  getUserID(){
     const token=localStorage.getItem('token');
     if(token){
       const payload =this.decodeToken(token);
-      return payload?.user?.picture || null;
+      return payload?.user?.User_ID || null;
     }
   }
   // Decode JWT token

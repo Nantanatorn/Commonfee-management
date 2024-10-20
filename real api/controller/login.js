@@ -21,8 +21,9 @@ module.exports.loginUser = async(req,res)=>{
         }
         if (result.recordset.length > 0) {
             const user = result.recordset[0];
+            console.log(user);
             const storedHashedPassword = user.password;
-        
+            
             const isPasswordValid = await bcrypt.compare(password, storedHashedPassword);
             // Successful login
             if (isPasswordValid) {
@@ -30,14 +31,16 @@ module.exports.loginUser = async(req,res)=>{
                     user: {
                         username:user.username,
                         role:user.role,
-                        picture:user.picture
+                        User_ID: user.User_ID
+                        
                     }
                 }
                 jwt.sign(payload, 'jwtsecret', { expiresIn: '1h' }, (err, token) => {
                     if (err) throw err;
 
                     // Send the token and login success message together
-                    return res.status(200).json({ message: 'Login successful', token });//เพิ่มpayload
+                    return res.status(200).json({ message: 'Login successful', token ,data: result.recordset})
+                    //เพิ่มpayload
                 });
             } else {
                 res.status(401).json({ message: 'Invalid username or password' });

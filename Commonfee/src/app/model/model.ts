@@ -15,3 +15,45 @@ export interface Announcement{
   Announce_Detail : string,
   Announce_image : string,
 }
+
+export interface Resident {
+  IDcard: string
+  R_Firstname: string
+  R_Lastname: string
+  phone: string
+  House_number: string
+  EntryDate: string
+  status: string
+  email: string
+  House_No : number
+}
+
+export interface House {
+  House_No : number
+  House_number : string
+  House_Size : string
+  House_status : string
+}
+
+export interface ResidentStatus {
+  R_ID: number
+  R_Lastname: string
+  R_Firstname: string
+  status: string
+  phone: string
+  Pay_Status: string
+  House_number: string
+  House_No: number
+}
+
+export interface paymentHistory{
+  Pay_Date : string
+  User_ID : number
+  R_Firstname : string
+  R_Lastname : string
+  House_number : string
+  House_Size : string
+  Pay_Amount : number
+  Pay_Deadline : string
+  Pay_Status : string
+}
