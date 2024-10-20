@@ -57,3 +57,26 @@ export interface paymentHistory{
   Pay_Deadline : string
   Pay_Status : string
 }
+export interface PetitionHistory{
+  User_ID : number
+  R_ID : number
+  petition_ID : number
+  petition_Title : string
+  petition_status : string
+  petition_detail : string
+  petition_Date : string
+  petition_Type : string
+  House_number : string
+}
+
+export interface PetitionAdmin {
+  petition_Date: string
+  R_Firstname: string
+  R_Lastname: string
+  House_number: string
+  petition_Title: string
+  petition_detail: string
+  petition_Type: string
+  petition_status: string
+}
+

@@ -1,5 +1,8 @@
+import { BanDeeService } from './../../service/ban-dee.service';
 import { Component } from '@angular/core';
 import {Chart} from 'angular-highcharts';
+import { Observable } from 'rxjs';
+import { PetitionAdmin } from '../../model/model';
 
 @Component({
   selector: 'app-complain-repair',
@@ -7,6 +10,18 @@ import {Chart} from 'angular-highcharts';
   styleUrl: './complain-repair.component.css'
 })
 export class ComplainRepairComponent {
+
+  petitionadmin : Observable< PetitionAdmin[]> | undefined;
+
+  constructor(private bandeeservice : BanDeeService,){}
+
+  ngOnInit(): void {
+    this.petitionadmin = this.bandeeservice.getPetitionAdmin();
+  }
+
+
+
+
   lineCharts = new Chart({
     chart :{
       type:'line',

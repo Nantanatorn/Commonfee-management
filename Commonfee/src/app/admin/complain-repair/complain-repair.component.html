@@ -7,24 +7,29 @@
 </div>
 <div class="line" [chart]="lineCharts"> </div>
 <div class="report">
-    <h3>ร้องเรียน</h3>
+    <h3>บันทึกคำร้องเรียน</h3>
     <table>
         <thead>
             <tr>
-                <th>ชื่อ</th>
-                <th>นามสกุล</th>
-                <th>รายการร้องเรียน</th>
-                <th>ประเภทร้องเรียน</th>
-                <th>สถานะการร้องเรียน</th>
+                <th>วันที่แจ้ง</th>
+                <th>ชื่อ - สกุล</th>
+                <th>บ้านเลขที่</th>
+                <th>หัวข้อ</th>
+                <th>รายละเอียด</th>
+                <th>ประเภท</th>
+                <th>สถานะ</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>สมชาย</td>
-                <td>ชื่นชม</td>
-                <td>ไฟในห้องไม่ติด</td>
-                <td>ร้องเรียนซ่อม</td>
-                <td>ดำเนินการอยู่</td>
+            <tr *ngFor="let pet of petitionadmin | async">
+                <td>{{ pet.petition_Date | date: 'MM/dd/yyyy'}}</td>
+                <td>{{ pet.R_Firstname }} {{ pet.R_Lastname }}</td>
+                <td>{{ pet.House_number}}</td>
+                <td>{{ pet.petition_Title}}</td>
+                <td>{{ pet.petition_detail}}</td>
+                <td>{{ pet.petition_Type}}</td>
+                <td>{{ pet.petition_status}}</td>
+
             </tr>
         </tbody>
     </table>

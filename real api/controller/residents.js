@@ -55,3 +55,51 @@ module.exports.SentPetition = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 }
+
+
+module.exports.Getpetition = async (req, res) => {
+    try {
+        // ดึงค่า userId จาก token ที่ผ่าน middleware มา
+        const userId = req.user.User_ID; // เปลี่ยนเป็น User_ID จาก payload ของ JWT
+
+        // เชื่อมต่อฐานข้อมูล
+        var pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('id', sql.Int, userId) // ใช้ userId จาก JWT
+            .query("SELECT * FROM Petition WHERE User_ID = @id");
+        
+        // ตรวจสอบว่าพบข้อมูลหรือไม่
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Not found');
+        }
+
+        // ส่งข้อมูลกลับไปในรูปแบบ JSON
+        res.status(200).json(result.recordset);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+module.exports.GetpetitionAdmin = async (req, res) => {
+    
+    try {
+   
+        var pool = await sql.connect(config);
+        const result = await pool.request()
+            
+            .query("SELECT * FROM PetitionViewForAdmin");
+        
+        // ตรวจสอบว่าพบข้อมูลหรือไม่
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Not found');
+        }
+
+        // ส่งข้อมูลกลับไปในรูปแบบ JSON
+        res.status(200).json(result.recordset);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+};

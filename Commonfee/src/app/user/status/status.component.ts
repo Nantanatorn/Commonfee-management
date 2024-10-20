@@ -1,4 +1,9 @@
 import { Component, Input } from '@angular/core';
+import { BanDeeService } from '../../service/ban-dee.service';
+import { AuthService } from '../../service/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { PetitionHistory } from '../../model/model';
 
 @Component({
   selector: 'app-status',
@@ -6,13 +11,21 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./status.component.css']
 })
 export class StatusComponent {
-  // (สมมติว่าข้อมูลของผู้ใช้ถูกดึงมาจากเซิร์ฟเวอร์)
-  @Input() house = {
-    date : '10 Oct 2024',
-    houseNumber: 'A1',  
-    ownerName: 'นายสมชาย',
-    title: ' ไฟบริเวณวงเวียนไม่ทำงาน',
-    type: ' ซ่อม ',
-    isFinish: true
-  };
+  
+  petitionHistory$! : Observable<PetitionHistory[]>
+
+  constructor(private http: HttpClient , 
+              private authService : AuthService , 
+              private banDeeService: BanDeeService){}
+  ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+     
+      this.petitionHistory$ = this.banDeeService.getPetitionUser(token);
+    } else {
+      console.error('No token found. Please login first.');
+    }
+  }
+
+
 }

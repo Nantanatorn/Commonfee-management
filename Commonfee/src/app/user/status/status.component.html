@@ -41,25 +41,22 @@
       <thead>
         <tr>
           <th>วันที่</th>
-          <th>บ้านเลขที่</th>
-          <th>เจ้าของ</th>
           <th>หัวข้อคำร้อง</th>
+          <th>เนื้อหาคำร้อง</th>
           <th>ประเภทคำร้อง</th>
           <th>สถานะคำร้อง</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>{{ house.date }}</td>
-          <td>{{ house.houseNumber }}</td>
-          <td>{{ house.ownerName }}</td>
-          <td>{{ house.title}}</td>
-          <td>{{ house.type }}</td>
-          <td>
-            <span [class.finish]="house.isFinish" [class.unfinish]="!house.isFinish">
-              {{ house.isFinish ? 'ดำเนินการเสร็จสิ้น' : 'กำลังดำเนินการ' }}
-            </span>
-          </td>
+        <tr *ngFor="let petition of petitionHistory$ | async">
+          <td>{{ petition.petition_Date | date: 'MM/dd/yyyy'}}</td>
+          <td>{{ petition.petition_Title}}</td>
+          <td>{{ petition.petition_detail }}</td>
+          <td>{{ petition.petition_Type }}</td>
+          <td><span [class.ongoing] = "petition.petition_status" [class.finish]="!petition.petition_status">
+            {{ petition.petition_status ? 'Ongoing' : 'Finish'}}
+          </span></td>
+          
         </tr>
       </tbody>
     </table>

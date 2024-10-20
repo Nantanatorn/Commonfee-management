@@ -44,8 +44,8 @@
           <th>บ้านเลขที่</th>
           <th>ขนาดบ้าน</th>
           <th>รวม</th>
-          <th>สถานะการชำระ</th>
           <th>ครบกำหนดชำระ</th>
+          <th>สถานะการชำระ</th>
           <th>ใบเสร็จชำระเงิน</th>
         </tr>
       </thead>
@@ -54,9 +54,14 @@
             <td>{{ payment.Pay_Date | date: 'MM/dd/yyyy'}}</td>
             <td>{{ payment.House_number }}</td>
             <td>{{ payment.House_Size }}</td>
-            <td>{{ payment.Pay_Amount }}</td>
-            <td>{{ payment.Pay_Status }}</td>
+            <td>{{ payment.Pay_Amount }} บาท</td>
             <td>{{ payment.Pay_Deadline | date: 'MM/dd/yyyy'}}</td>
+            <td>
+              <span [class.Overdue] = "payment.Pay_Status" [class.Paid]="!payment.Pay_Status">
+                {{ payment.Pay_Status ? 'Overdue' : 'Paid'}}
+              </span>
+            </td>
+            
             <td><button (click)="generatePDF()">Print</button></td>
         </tr>
       </tbody>
