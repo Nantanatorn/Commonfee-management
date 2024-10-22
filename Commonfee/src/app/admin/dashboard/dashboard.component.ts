@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit {
       }
     },
     title: {
-      text: 'ยอดการจ่ายแต่ละหลัง'
+      text: 'แสดงผู้จ่ายและไม่จ่ายในแต่ละเดือน'
     },
     credits: {
       enabled: false
@@ -183,11 +183,11 @@ export class DashboardComponent implements OnInit {
     series: [
       {
         name: 'คนจ่าย',
-        data: [10, 12, 18, 20, 11, 14]
+        data: [42, 40, 22, 32, 17, 37]
       } as any,
       {
         name: 'คนไม่จ่าย',
-        data: [12, 15, 7]
+        data: [0, 2, 20, 10, 25, 5]
       } as any
     ]
   });

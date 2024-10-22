@@ -5,7 +5,13 @@ const { verifyToken } = require('../middleware/auth');
 
 require('dotenv').config();
 
-router.get('/paymenthistory', verifyToken, paymentcon.PaymentHistory);
+    router.get('/paymenthistory', verifyToken, paymentcon.PaymentHistory);
+    router.get('/getpaid',paymentcon.getpaidhistory);
+    router.get('/getunPaid',paymentcon.getUnpaidhistory);
+    router.put('/pay/:payId', verifyToken, paymentcon.Payment);
+    router.post('/sendBill',verifyToken,paymentcon.FeeBill);
 
 
-module.exports = router;
+
+
+module.exports = router;   

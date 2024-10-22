@@ -1,5 +1,5 @@
 <div class="payment-section">
-    <h2>ชำระเงิน</h2>
+    <h2>ชำระค่าส่วนกล</h2>
     <div class="filter">
       <div class="headfilter"><h5>ประวัติการชำระเงิน</h5></div>
       <div class="filtercontrol">
@@ -37,41 +37,46 @@
       
 
   </div>
-    <table class="payment-table">
-      <thead>
-        <tr>
-          <th>วันที่</th>
-          <th>บ้านเลขที่</th>
-          <th>ขนาดบ้าน</th>
-          <th>รวม</th>
-          <th>ครบกำหนดชำระ</th>
-          <th>สถานะการชำระ</th>
-          <th>ใบเสร็จชำระเงิน</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr *ngFor="let payment of paymentHistory$ | async">
-            <td>{{ payment.Pay_Date | date: 'MM/dd/yyyy'}}</td>
-            <td>{{ payment.House_number }}</td>
-            <td>{{ payment.House_Size }}</td>
-            <td>{{ payment.Pay_Amount }} บาท</td>
-            <td>{{ payment.Pay_Deadline | date: 'MM/dd/yyyy'}}</td>
-            <td>
-              <span [class.Overdue] = "payment.Pay_Status" [class.Paid]="!payment.Pay_Status">
-                {{ payment.Pay_Status ? 'Overdue' : 'Paid'}}
-              </span>
-            </td>
-            
-            <td><button (click)="generatePDF()">Print</button></td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <p>ชำระเงินวันที่ 2024-09-01 หากชำระเงินวันนี้ทำตามขั้นตอนและสแกนคิวอาร์โค้ดด้านล่าง</p>
-    <div *ngIf="!isQrScanned">
-      <qrcode [qrdata]="myAngularxQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
-    </div>
-    
+  <table class="payment-table">
+    <thead>
+      <tr>
+        <th>วันที่</th>
+        <th>บ้านเลขที่</th>
+        <th>ขนาดบ้าน</th>
+        <th>รวม</th>
+        <th>ครบกำหนดชำระ</th>
+        <!-- <th>สถานะการชำระ</th> --> 
+         <th>สถานะ</th>
+        <th>ใบเสร็จชำระเงิน</th>
+       
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let payment of paymentHistory$ | async">
+          <td>{{ payment.Pay_Date | date: 'MM/dd/yyyy'}}</td>
+          <td>{{ payment.House_number }}</td>
+          <td>{{ payment.Land_size }} ตร.ว.</td>
+          <td>{{ payment.Pay_Amount }} บาท</td>
+          <td>{{ payment.Pay_Deadline | date: 'MM/dd/yyyy'}}</td>
+           <!-- <td>{{ payment.Pay_Status}}</td>  -->
+          <td>
+            <!-- ปุ่มชำระเงิน -->
+            <button *ngIf="payment.Pay_Status.trim() !== 'Paid'" (click)="onGenerateQR(payment)">ชำระเงิน</button>
+            <button *ngIf="payment.Pay_Status.trim() === 'Paid'" disabled>ชำระแล้ว</button>
+          </td>
+          <td><button (click)="generatePDF(payment)">Print</button></td>
+      </tr>
+    </tbody>
+  </table>
 
-    <p class="help-text">หากพบปัญหา ติดต่อ 090-XXX-XXXX</p>
-  </div>
+  <!-- ส่วนสำหรับแสดง QR Code และปุ่ม Manual Scan -->
+  <div *ngIf="myAngularxQrCode && selectedPayment && selectedPayment.Pay_Status !== 'Paid'">
+    <p>ชำระเงินวันที่ {{ selectedPayment.Pay_Date | date: 'MM/dd/yyyy' }} หากต้องการชำระเงินแสกนคิวอาร์โค้ด หรือ กดปุ่มชำระเงิน</p>
+    <img [src]="myAngularxQrCode" alt="PromptPay QR Code" />
+    <div class="manual-payment mt-3">
+        <button (click)="onManualScan()">ชำระเงิน</button>
+    </div>
+  </div> 
+
+  <p class="help-text">หากพบปัญหา ติดต่อ 090-XXX-XXXX</p>
+</div>

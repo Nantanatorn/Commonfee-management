@@ -1,6 +1,10 @@
 import { style } from '@angular/animations';
 import { Component } from '@angular/core';
 import {Chart} from 'angular-highcharts';
+import { Observable } from 'rxjs';
+import { PeymentForAdmin } from '../../model/model';
+import { BanDeeService } from '../../service/ban-dee.service';
+import Swal from 'sweetalert2';
 
 
 
@@ -12,19 +16,43 @@ import {Chart} from 'angular-highcharts';
 })
 export class PaymentComponent {
 
-  residents = [
-    { houseNumber: 1, name: 'นายสมชาย' , hasResident: true },
-    { houseNumber: 2, name: 'นางสมศรี' , hasResident: true },
-    { houseNumber: 3, name: 'นายจิตร', hasResident: true  },
-    { houseNumber: 4, name: 'นางสมฤดี' , hasResident: true },
-    { houseNumber: 5, name: 'นายกำธร' , hasResident: true },
-    { houseNumber: 6, name: 'นางสาวกาญจนา', hasResident: true  }
-    // เพิ่มข้อมูลบ้านได้ตามต้องการ
-  ];
-  getResidentInfo(houseNumber: number): string {
-    const resident = this.residents.find(r => r.houseNumber === houseNumber);
-    return resident ? `บ้านเลขที่ ${houseNumber}, ผู้อยู่อาศัย: ${resident.name}` : `บ้านเลขที่ ${houseNumber}, ไม่มีข้อมูลผู้อยู่อาศัย`;
+  Unpaid : Observable<PeymentForAdmin[]> | undefined;  
+  paid : Observable<PeymentForAdmin[]> | undefined;
+
+  constructor(private bandeeservice : BanDeeService,){}
+
+  ngOnInit(): void {
+    this.Unpaid = this.bandeeservice.getUnpaid();
+    this.paid = this.bandeeservice.getPaid();
   }
+
+  SendBill(){
+    this.bandeeservice.sendBill().subscribe({
+      next: (response) => {
+        console.log('Bill created successfully:', response);
+        Swal.fire({
+          title: 'สำเร็จ!',
+          text: 'คุณได้ทำการสร้างบิลใหม่แล้ว',
+          icon: 'success',
+        });
+        this.Unpaid = this.bandeeservice.getUnpaid();
+        this.paid = this.bandeeservice.getPaid();
+      },  error: (err) => {
+        console.error('Error creating bill:', err);
+        Swal.fire({
+          title: 'เกิดข้อผิดพลาด!',
+          text: 'ไม่สามารถสร้างบิลได้ กรุณาลองใหม่อีกครั้ง',
+          icon: 'error',
+        });
+      }
+    });
+  }
+
+  changeFee(){
+    
+  }
+
+
   lineCharts = new Chart({
     chart :{
       type:'line',

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ChartModule } from 'angular-highcharts';
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './user/login/login.component';
@@ -36,6 +37,8 @@ import { HistoryBookingComponent } from './user/history-booking/history-booking.
 import { ChartsComponent } from './admin/charts/charts.component';
 
 import { HomeComponent } from './user/home/home.component';
+
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 
 
@@ -80,7 +83,8 @@ import { HomeComponent } from './user/home/home.component';
     QRCodeModule,
     CommonModule,
     GoogleMapsModule,
-    ChartModule
+    ChartModule,
+    ZXingScannerModule
     
   ],
   providers: [

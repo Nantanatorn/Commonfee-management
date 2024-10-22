@@ -1,6 +1,11 @@
 import { jsPDF } from 'jspdf';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { BanDeeService } from './service/ban-dee.service';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from './service/auth.service';
+import { response } from 'express';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +21,8 @@ export class AppComponent implements OnInit {
   isHomeUserPage:boolean;
   adminSide:boolean;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+    ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // ตรวจสอบ URL เพื่อตั้งค่า isLoginPage, isRegisterPage และ isAdminPage
@@ -44,6 +50,7 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe(() => {
       this.checkHeaderVisibility();
     });
+    
   }
 
   checkHeaderVisibility(): void {

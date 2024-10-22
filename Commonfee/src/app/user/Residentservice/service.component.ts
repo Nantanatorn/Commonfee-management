@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { BanDeeService } from '../../service/ban-dee.service';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-service',
@@ -9,10 +12,44 @@ import { HttpClient } from '@angular/common/http';
 export class ServiceComponent implements OnInit {
   services: any[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private route : Router,private banDeeService : BanDeeService,) {}
 
   ngOnInit() {
     this.loadServices();
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.banDeeService.getPaymentHistory(token).subscribe({
+        next: (response: any) => {
+          console.log('API Response:', response);
+          // ตรวจสอบว่า response มีข้อมูลและ Pay_Status เป็น "Overdue"
+          if (response && response[0] && response[0].Pay_Status.trim() === 'Overdue') {
+            console.log('Status is Overdue, showing alert');
+            Swal.fire({
+              title: 'คุณมียอดค้างชำระ',
+              text: 'คุณค้างชำระค่าส่วนกลาง โปรดดำเนินการให้เสร็จสิ้น!',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'ชำระเงิน'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.route.navigate(['/purchase']);
+              }
+            });
+          }
+        },
+        error: (err) => {
+          // จัดการเมื่อเกิดปัญหาในการเรียก API
+          console.error('Error fetching payment history:', err);
+          Swal.fire({
+            title: 'เกิดข้อผิดพลาด!',
+            text: 'ไม่สามารถโหลดข้อมูลการชำระเงินได้ กรุณาลองใหม่อีกครั้ง',
+            icon: 'error'
+          });
+        }
+      });
+    }
   }
 
   loadServices() {

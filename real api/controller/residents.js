@@ -103,3 +103,34 @@ module.exports.GetpetitionAdmin = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+module.exports.UpdatePetition = async (req, res) => {
+    try {
+      const petition_ID = req.params.petition_ID || req.body.petition_ID;
+  
+      if (!petition_ID) {
+        return res.status(400).json({ message: 'Petition ID is required' });
+      }
+  
+      var pool = await sql.connect(config);
+      const result = await pool
+        .request()
+        .input('petition_ID', sql.Int, petition_ID)
+        .input('petition_status', sql.Char, 'Finish')
+        .query(
+          `UPDATE Petition SET petition_status = @petition_status WHERE petition_ID = @petition_ID`
+        );
+  
+      if (result.rowsAffected[0] === 0) {
+        return res.status(404).json({ message: 'Petition not found' });
+      }
+  
+      res.status(200).json({ message: 'Petition updated successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+  
+  

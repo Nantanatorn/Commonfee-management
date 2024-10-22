@@ -13,22 +13,28 @@
             <tr>
                 <th>วันที่แจ้ง</th>
                 <th>ชื่อ - สกุล</th>
+                <th>เบอร์ติดต่อ</th>
                 <th>บ้านเลขที่</th>
                 <th>หัวข้อ</th>
                 <th>รายละเอียด</th>
                 <th>ประเภท</th>
                 <th>สถานะ</th>
+                <th>เปลี่ยนสถานะ</th>
+                
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let pet of petitionadmin | async">
                 <td>{{ pet.petition_Date | date: 'MM/dd/yyyy'}}</td>
                 <td>{{ pet.R_Firstname }} {{ pet.R_Lastname }}</td>
+                <td>{{ pet.phone }}</td>
                 <td>{{ pet.House_number}}</td>
                 <td>{{ pet.petition_Title}}</td>
                 <td>{{ pet.petition_detail}}</td>
                 <td>{{ pet.petition_Type}}</td>
                 <td>{{ pet.petition_status}}</td>
+                
+                 <td><button (click)="updatePetitionStatus(pet.petition_ID)">ปรับสถานะ</button></td> 
 
             </tr>
         </tbody>

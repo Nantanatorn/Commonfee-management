@@ -16,7 +16,26 @@ export class ComplainRepairComponent {
   constructor(private bandeeservice : BanDeeService,){}
 
   ngOnInit(): void {
+    this.loadPetitions();
+  }
+
+  loadPetitions(): void {
+    // โหลดข้อมูลร้องเรียนผ่าน bandeeservice
     this.petitionadmin = this.bandeeservice.getPetitionAdmin();
+  }
+
+  updatePetitionStatus(petitionId: number) {
+    this.bandeeservice.updatePetition(petitionId).subscribe({
+      next: (response) => {
+        console.log('Petition updated:', response);
+        
+        this.loadPetitions(); // โหลดข้อมูลใหม่เพื่อแสดงผลอัปเดตในตาราง
+      },
+      error: (err) => {
+        console.error('Error updating petition:', err);
+        
+      }
+    });
   }
 
 

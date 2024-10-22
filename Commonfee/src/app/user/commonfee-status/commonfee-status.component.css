@@ -50,10 +50,7 @@
     color: #fff;
   }
   
-  .status-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
+
   .paid {
     color: green;
     font-weight: bold;

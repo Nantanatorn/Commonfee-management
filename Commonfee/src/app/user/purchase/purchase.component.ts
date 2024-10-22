@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+ import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import Swal from 'sweetalert2';
@@ -17,132 +17,148 @@ var thSarabunFontBase64 = 'AAEAAAAVAQAABABQR0RFRgdNC+QABvmIAAAAVEdQT1OM1rlcAAb53
   styleUrl: './purchase.component.css'
 })
 export class PurchaseComponent implements OnInit{
-  myAngularxQrCode:any;
+  
+  myAngularxQrCode: string = '';
   isQrScanned: boolean = false;
-  intervalId: any;
   paymentHistory$!: Observable<paymentHistory[]>;
+  phoneNumber: string = '0906323838';
+  selectedPayment: paymentHistory | null = null; // เก็บรายการที่ถูกเลือก
+  isPaid: boolean ;
 
-  constructor(private http: HttpClient , private authService : AuthService , private banDeeService: BanDeeService){
-    this.myAngularxQrCode = 'จ่ายมา 2500 บาท';
-  }
+
+  constructor(private http: HttpClient, private authService: AuthService, private banDeeService: BanDeeService, private cd: ChangeDetectorRef) {}
+
   ngOnInit(): void {
-
     const token = localStorage.getItem('token');
     if (token) {
-      // เรียกใช้ฟังก์ชัน getPaymentHistory และเก็บไว้ในตัวแปร paymentHistory$
       this.paymentHistory$ = this.banDeeService.getPaymentHistory(token);
+      this.paymentHistory$.subscribe({
+        next: (data) => {
+          console.log('Data received from API:', data);
+        },
+        error: (err) => {
+          console.error('Error fetching payment history:', err);
+        },
+      });
     } else {
       console.error('No token found. Please login first.');
     }
-
-    // ตรวจสอบสถานะการสแกนทุก ๆ 8 วินาที
-    this.intervalId = setInterval(() => {
-      this.checkPaymentStatus();
-    }, 8000); 
-    
   }
 
-  
+  onGenerateQR(payment: paymentHistory) {
+    // กำหนดค่ารายการที่เลือก
+    this.selectedPayment = payment;
 
-
-  onScanQrCode() {
-    // เมื่อแสกนสำเร็จ
-    this.isQrScanned = true;  // ซ่อน QR Code หลังจากสแกน
+    // สร้าง QR Code สำหรับรายการนี้
+    this.banDeeService.generatePromptPayQr(this.phoneNumber, payment.Pay_Amount, payment.Pay_ID).subscribe({
+      next: (data) => {
+        this.myAngularxQrCode = data.qrCodeUrl;
+        console.log('QR Code URL:', this.myAngularxQrCode);
+      },
+      error: (err) => {
+        console.error('Error generating QR Code:', err);
+      },
+    });
   }
 
-  checkPaymentStatus() {
-    // ทดสอบสถานะการสแกนจากเซิร์ฟเวอร์ (หรือข้อมูลจริงจาก backend)
-    const paymentStatus = this.getPaymentStatusFromServer();
-
-    // หากมีการสแกนสำเร็จ ซ่อน QR Code และหยุดการทำงานของ setInterval
-    if (paymentStatus === 'paid') {
-      this.isQrScanned = true;
-      clearInterval(this.intervalId); // หยุดการทำงานเมื่อชำระเงินสำเร็จ
-      this.showPaymentSuccessNotification(); // แสดงการแจ้งเตือนสำเร็จ
+  onManualScan() {
+    // ใช้ Pay_ID จากรายการที่เลือก
+    if (this.selectedPayment) {
+      console.log('Using Pay ID from Selected Record:', this.selectedPayment.Pay_ID);
+      this.handlePayment(this.selectedPayment.Pay_ID.toString()); // ใช้ Pay_ID จาก selectedPayment ที่ถูกเลือก
+    } else {
+      Swal.fire({
+        title: 'ไม่พบ Pay ID',
+        text: 'กรุณาตรวจสอบว่าคุณได้เลือกข้อมูลการชำระเงินแล้ว',
+        icon: 'warning',
+      });
     }
   }
 
-  // ฟังก์ชันจำลองการดึงสถานะการชำระเงินจากเซิร์ฟเวอร์
-  getPaymentStatusFromServer(): string {
-    // ตรงนี้คุณต้องเชื่อมต่อกับ backend เพื่อรับสถานะจริง
-    // จำลองสถานะว่าได้รับการชำระแล้ว
-    return 'PAID';
-  }
-
-  // แสดงการแจ้งเตือนเมื่อชำระเงินสำเร็จ
-  showPaymentSuccessNotification() {
-    Swal.fire({
-      title: 'สำเร็จ!',
-      text: 'ขอบคุณสำหรับการชำระเงิน!',
-      icon: 'success',
-      confirmButtonText: 'ตกลง'
-    });
-  }
-  generatePDF(){
-    const doc = new jsPDF();
+  private handlePayment(payId: string) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      Swal.fire({
+        title: 'ไม่มีการยืนยันตัวตน!',
+        text: 'กรุณาเข้าสู่ระบบก่อนทำการชำระเงิน',
+        icon: 'warning',
+      });
+      return;
+    }
   
-       // เพิ่มฟอนต์ภาษาไทยที่แปลงมา
-       doc.addFileToVFS('THSarabunNew.ttf', thSarabunFontBase64);
-       doc.addFont('THSarabunNew.ttf', 'THSarabunNew', 'normal');
-       doc.setFont('THSarabunNew', 'normal');
-
-    // ตั้งค่าหัวข้อ
-    doc.setFontSize(16);
-    doc.text('เย็นสบาย แมนชั่น', 10, 10);
-    doc.setFontSize(12);
-    doc.text('234 ม.8 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี', 10, 16);
-    doc.text('อ.ศรีราชา จ.ชลบุรี 20230', 10, 22);
-    doc.text('โทร: 038 - 352960-7', 10, 28);
-
-    // ข้อมูลลูกค้า
-    doc.setFontSize(12);
-    doc.text('ชื่อ: คุณนันทนาธร ซื่อตรง', 10, 40);
-    doc.text('ที่อยู่: 28/4 ม.4 ต.บางแสนสาย2 อ.เมือง จ.ชลบุรี', 10, 46);
-    doc.text('โอนเข้าบัญชี: ณัฐ มัครมาก TTB 623-2-66107-1', 10, 52);
-    doc.text('วันที่เริ่มคิดค่าบริการ: 25/08/24 00:00 - 25/09/24 00:00', 10, 58);
-
-    // ข้อมูลการแจ้งหนี้
-    doc.text('เลขที่: 00014219', 140, 40);
-    doc.text('วันที่: 01/10/24 07:26', 140, 46);
-    doc.text('ห้อง: 2316', 140, 52);
-
-    // สร้างตารางรายการค่าใช้จ่าย
-    const columns = ['ลำดับ', 'รายการ', 'จำนวน', 'ราคา', 'จำนวนเงิน', 'ภาษี', 'รวมเงิน'];
-    const rows = [
-      ['1', 'ค่าห้อง', '1', '1,900.00', '1,900.00', '0.00', '1,900.00'],
-      ['2', 'ค่าไฟ 09202 - 09499', '297/6', '6.0/6.0', '1,782.00', '0.00', '1,782.00'],
-      ['3', 'ค่าน้ำ 01173 - 01178', '5', '30.0', '150.00', '0.00', '150.00'],
-      ['4', 'ค่าเช่าเฟอร์นิเจอร์', '1', '1,000.00', '1,000.00', '0.00', '1,000.00'],
-      ['5', 'ค่าเช่าเครื่องปรับอากาศ', '1', '700.00', '700.00', '0.00', '700.00'],
-      ['6', 'ค่าเช่าเครื่องทำน้ำอุ่น', '1', '500.00', '500.00', '0.00', '500.00'],
-      ['7', 'ค่าส่วนกลาง', '1', '100.00', '100.00', '0.00', '100.00'],
-      ['8', 'ค่าเน็ต', '1', '350.00', '350.00', '0.00', '350.00']
-    ];
-
-    // ใช้ jsPDF-AutoTable เพื่อสร้างตาราง
-    (doc as any).autoTable({
-      head: [columns],
-      body: rows,
-      startY: 65, // กำหนดจุดเริ่มต้นของตาราง
-      styles: { 
-        font: "THSarabunNew",
-        fontSize: 10 },
-      headStyles: { 
-        font: "THSarabunNew",
-        fillColor: [150, 150, 150] }, // สีหัวตาราง
-      margin: { left: 10, right: 10 },
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.http.put(`http://localhost:3500/pay/${payId}`, {}, { headers }).subscribe({
+      next: () => {
+        Swal.fire({
+          title: 'ชำระเงินสำเร็จ!',
+          text: 'ขอบคุณที่ชำระเงินค่าส่วนกลาง',
+          icon: 'success',
+        });
+  
+        // รีเฟรชข้อมูลการชำระเงินใหม่หลังจากชำระเงินสำเร็จ
+        this.refreshPaymentHistory(token);
+        this.paymentHistory$.subscribe({
+          next: (data) => {
+            this.selectedPayment = data.find(p => p.Pay_ID === parseInt(payId));
+            if (this.selectedPayment) {
+              this.isPaid = this.selectedPayment.Pay_Status === 'Paid';
+            }
+            // ซ่อน QR Code และปุ่มชำระเงินเมื่อชำระแล้ว
+            this.myAngularxQrCode = '';
+          },
+          error: (err) => {
+            console.error('Error refreshing payment history:', err);
+          },
+        });
+      },
+      error: (err) => {
+        console.error('Error updating payment status:', err);
+        Swal.fire({
+          title: 'เกิดข้อผิดพลาด!',
+          text: 'ไม่สามารถชำระเงินได้ กรุณาลองใหม่อีกครั้ง',
+          icon: 'error',
+        });
+      },
     });
+  }
 
-    // ยอดเงินรวม
-    let finalY = (doc as any).lastAutoTable.finalY;
+  refreshPaymentHistory(token: string) {
+    this.paymentHistory$ = this.banDeeService.getPaymentHistory(token);
+    this.paymentHistory$.subscribe(() => {
+      this.cd.detectChanges();
+    });
+  }
+
+  generatePDF(payment: paymentHistory) {
+    const doc = new jsPDF();
+
+    doc.addFileToVFS('THSarabunNew.ttf', thSarabunFontBase64);
+    doc.addFont('THSarabunNew.ttf', 'THSarabunNew', 'normal');
+    doc.setFont('THSarabunNew', 'normal');
+
+    doc.setFontSize(16);
+    doc.text('โครงการ บ้านดี', 10, 10);
     doc.setFontSize(12);
-    doc.text('ยอดเงินสุทธิ: 6,482.00', 140, finalY + 10);
+    doc.text('1234 ม.8 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี', 10, 16);
+    doc.text('อ.ศรีราชา จ.ชลบุรี 20230', 10, 22);
+    doc.text('โทร: 090-632-3838 ', 10, 28);
 
-    // ข้อความเพิ่มเติม
+    doc.setFontSize(12);
+    doc.text(`ชื่อ: คุณ ${payment.R_Firstname} ${payment.R_Lastname}`, 10, 40);
+    doc.text(`บ้านเลขที่: ${payment.House_number}`, 10, 46);
+    doc.text(`ขนาดบ้าน: ${payment.Pay_Amount} บาท`, 10, 52);
+    doc.text(`จำนวนเงินที่ต้องชำระ: ${payment.Pay_Amount} บาท`, 10, 58);
+    doc.text(`ครบกำหนดชำระ: ${payment.Pay_Deadline}`, 10, 64);
+
+    doc.text('เลขที่: 00014219', 140, 40);
+    doc.text('วันที่: ' + new Date().toLocaleDateString(), 140, 46);
+
+    doc.setFontSize(12);
+    doc.text(`ยอดเงินสุทธิ: ${payment.Pay_Amount} บาท`, 140, 70);
+
     doc.setFontSize(10);
-    doc.text('* หักพันธบัตรแปลงสินสองบาทถ้วน *', 10, finalY + 10);
+    doc.text('* กรุณาชำระเงินภายในเวลาที่กำหนด *', 10, 80);
     doc.save('bill.pdf');
   }
-  // serverRenderTimeout: 120000;
 }
 

@@ -23,6 +23,7 @@
     "@angular/router": "^18.1.0",
     "@angular/ssr": "^18.1.1",
     "@asymmetrik/ngx-leaflet": "^18.0.1",
+    "@zxing/ngx-scanner": "^18.0.1",
     "angular-highcharts": "^17.0.1",
     "angularx-qrcode": "^18.0.2",
     "bootstrap": "^5.3.3",

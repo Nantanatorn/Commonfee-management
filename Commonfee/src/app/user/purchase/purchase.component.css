@@ -63,11 +63,10 @@ a{
   text-decoration: none;
   color: black; /*เดี๋ยวกลับมาแก้*/
 }
-.Overdue{
-     color: red;
-    font-weight: bold;
+.Overdue {
+  color: red; /* สีแดงสำหรับสถานะ Overdue */
 }
-.Paid{
-  color: green;
-    font-weight: bold;
+
+.Paid {
+  color: green; /* สีเขียวสำหรับสถานะ Paid */
 }

@@ -47,6 +47,7 @@ export interface ResidentStatus {
 }
 
 export interface paymentHistory{
+  Pay_ID : number
   Pay_Date : string
   User_ID : number
   R_Firstname : string
@@ -56,6 +57,7 @@ export interface paymentHistory{
   Pay_Amount : number
   Pay_Deadline : string
   Pay_Status : string
+  Land_size : number
 }
 export interface PetitionHistory{
   User_ID : number
@@ -73,10 +75,24 @@ export interface PetitionAdmin {
   petition_Date: string
   R_Firstname: string
   R_Lastname: string
+  phone : string
   House_number: string
   petition_Title: string
   petition_detail: string
   petition_Type: string
   petition_status: string
+  petition_ID: number
 }
+
+export interface PeymentForAdmin {
+  R_Firstname: string
+  R_Lastname: string
+  House_number: string
+  phone: string
+  Pay_Amount: number
+  Pay_Deadline: string
+  Pay_Status: string
+  Pay_Out : number
+}
+
 

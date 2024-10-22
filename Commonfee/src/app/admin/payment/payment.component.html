@@ -57,13 +57,13 @@
         </div>
         <div class="col-4">
         <div class="col">
-            <button type="button" class="btn btn-light">เพิ่มอัตราชำระ</button>
+            <button type="button" class="btn btn-light ">แจ้งเตือน</button>
         </div>
         <div class="col">
-            <button type="button" class="btn btn-light">แก้ไขอัตราชำระ</button>
+            <button type="button" class="btn btn-light" (click)="changeFee()">แก้ไขอัตราชำระ</button>
         </div>
         <div class="col">
-            <button type="button" class="btn btn-light">ส่งใบแจ้งหนี้</button>
+            <button type="button" class="btn btn-light" (click)="SendBill()">เก็บค่าส่วนกลาง</button>
         </div>
         </div>
         </div>
@@ -75,48 +75,47 @@
     <table>
         <thead>
             <tr>
-                <th>ชื่อ</th>
-                <th>นามสกุล</th>
+                <th>ชื่อ - สกุล </th>
                 <th>เลขที่บ้าน</th>
-                <th>ขนาดบ้าน</th>
+                <th>เบอร์ติดต่อ</th>
                 <th>จำนวนเงิน</th>
-                <th>สถานะการจ่าย</th>
+                <th>สถานะชำระ</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>ใจบุญ</td>
-                <td>เมตตา</td>
-                <td>698/789</td>
-                <td>40 ตร.ม</td>
-                <td>800.-</td>
-                <td>จ่ายแล้ว</td>
+            <tr *ngFor="let paid of paid | async">
+                <td>{{ paid.R_Firstname }} {{ paid.R_Lastname }}</td>
+                <td>{{ paid.House_number}}</td>
+                <td>{{ paid.phone}}</td>
+                <td>{{ paid.Pay_Amount}}</td>
+                <td>{{ paid.Pay_Status}}</td>
             </tr>
         </tbody>
     </table>
 </div>
 <div class="col-6">
     <h4>รายการคนที่ค้างชำระ</h4>
-    <button type="button" class="btn nB" >แจ้งเตือน</button>
     <table>
         <thead>
             <tr>
-                <th>ชื่อ</th>
-                <th>นามสกุล</th>
+                <th>ชื่อ - สกุล </th>
                 <th>เลขที่บ้าน</th>
-                <th>ขนาดบ้าน</th>
-                <th>จำนวนเงิน</th>
-                <th>สถานะการจ่าย</th>
+                <th>เบอร์ติดต่อ</th>
+                <th>ค้างทั้งหมด (เดือน)</th>
+                <th>จำนวนเงินทั้งหมด</th>
+                <th>วันครบกำหนดชำระ</th>
+                
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>ใจบุญ</td>
-                <td>เมตตา</td>
-                <td>698/789</td>
-                <td>40 ตร.ม</td>
-                <td>800.-</td>
-                <td>ค้างชำระ</td>
+            <tr *ngFor="let Unpaid of Unpaid | async">
+                <td>{{ Unpaid.R_Firstname }} {{ Unpaid.R_Lastname }}</td>
+                <td>{{ Unpaid.House_number}}</td>
+                <td>{{ Unpaid.phone}}</td>
+                <td>{{ Unpaid.Pay_Out}}</td>
+                <td>{{ Unpaid.Pay_Amount}}</td>
+                <td>{{ Unpaid.Pay_Deadline | date: 'MM/dd/yyyy'}}</td>
+                
             </tr>
         </tbody>
     </table>
