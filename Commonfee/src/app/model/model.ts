@@ -44,6 +44,7 @@ export interface ResidentStatus {
   Pay_Status: string
   House_number: string
   House_No: number
+  overdueCount: number; 
 }
 
 export interface paymentHistory{
@@ -95,4 +96,9 @@ export interface PeymentForAdmin {
   Pay_Out : number
 }
 
+export interface MonthlyPaymentData {
+  Pay_Month: string
+  Paid_Count: number
+  Overdue_Count: number
+}
 

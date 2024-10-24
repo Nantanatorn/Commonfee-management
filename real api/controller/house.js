@@ -55,7 +55,20 @@ module.exports.GetHouseWithResident = async ( req , res ) => {
     try {
 
         const result = await conn.request()
-        .query("Select * from HouseStatusView ");
+        .query(`SELECT dbo.Resident.R_ID, 
+                dbo.Resident.R_Lastname, 
+                dbo.Resident.R_Firstname, 
+                dbo.Resident.status, 
+                dbo.UserAccount.phone, 
+                dbo.House.House_number, 
+                dbo.House.House_No, 
+                dbo.PayCommonfee.Pay_Status,
+                dbo.PayCommonfee.Pay_ID
+                FROM dbo.Resident
+                INNER JOIN dbo.UserAccount ON dbo.Resident.User_ID = dbo.UserAccount.User_ID
+                INNER JOIN dbo.House ON dbo.Resident.House_number = dbo.House.House_number
+                LEFT JOIN dbo.PayCommonfee ON dbo.Resident.R_ID = dbo.PayCommonfee.R_ID
+                ORDER BY dbo.PayCommonfee.Pay_ID DESC;`);
 
         res.status(200).json(result.recordset);
         

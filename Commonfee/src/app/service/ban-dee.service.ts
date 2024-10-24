@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Announcement, House, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Resident, ResidentStatus } from '../model/model';
+import { Announcement, House, MonthlyPaymentData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Resident, ResidentStatus } from '../model/model';
 
 const api_URL = 'http://localhost:3500'; 
 
@@ -66,6 +66,12 @@ export class BanDeeService {
 
     return this.httpClient.put(`${api_URL}/updatepetition/${petitionId}`, {}, { headers });
   }
+
+  getMonthlyPaymentData(): Observable<MonthlyPaymentData[]> {
+    return this.httpClient.get<MonthlyPaymentData[]>(`${api_URL}/monthly-payment`);
+  }
+
+
   
 }
 

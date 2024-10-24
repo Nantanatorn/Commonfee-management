@@ -42,11 +42,7 @@ export class ServiceComponent implements OnInit {
         error: (err) => {
           // จัดการเมื่อเกิดปัญหาในการเรียก API
           console.error('Error fetching payment history:', err);
-          Swal.fire({
-            title: 'เกิดข้อผิดพลาด!',
-            text: 'ไม่สามารถโหลดข้อมูลการชำระเงินได้ กรุณาลองใหม่อีกครั้ง',
-            icon: 'error'
-          });
+          
         }
       });
     }

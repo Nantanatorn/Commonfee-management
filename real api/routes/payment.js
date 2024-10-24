@@ -8,8 +8,10 @@ require('dotenv').config();
     router.get('/paymenthistory', verifyToken, paymentcon.PaymentHistory);
     router.get('/getpaid',paymentcon.getpaidhistory);
     router.get('/getunPaid',paymentcon.getUnpaidhistory);
+    router.get('/monthly-payment',paymentcon.getMonthly);
     router.put('/pay/:payId', verifyToken, paymentcon.Payment);
     router.post('/sendBill',verifyToken,paymentcon.FeeBill);
+    
 
 
 

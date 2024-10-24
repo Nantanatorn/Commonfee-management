@@ -53,11 +53,11 @@
     </thead>
     <tbody>
         <tr *ngFor="let payment of paymentHistory$ | async">
-          <td>{{ payment.Pay_Date | date: 'MM/dd/yyyy'}}</td>
+          <td>{{ payment.Pay_Date | date: 'dd MMM yyyy'}}</td>
           <td>{{ payment.House_number }}</td>
           <td>{{ payment.Land_size }} ตร.ว.</td>
           <td>{{ payment.Pay_Amount }} บาท</td>
-          <td>{{ payment.Pay_Deadline | date: 'MM/dd/yyyy'}}</td>
+          <td>{{ payment.Pay_Deadline | date: 'dd MMM yyyy'}}</td>
            <!-- <td>{{ payment.Pay_Status}}</td>  -->
           <td>
             <!-- ปุ่มชำระเงิน -->
