@@ -18,6 +18,7 @@ export class AuthService {
     const token =localStorage.getItem('token');
     if(token){
       const payload =this.decodeToken(token);
+      const firstname = payload?.user?.firstname || null;
       const username =payload?.user?.username || null;
       const picture = payload?.user?.picture || null;
       this.usernameSubject.next(username);
@@ -67,6 +68,13 @@ export class AuthService {
     if(token){
       const payload =this.decodeToken(token);
       return payload?.user?.User_ID || null;
+    }
+  }
+  getFirstname(){
+    const token=localStorage.getItem('token');
+    if(token){
+      const payload =this.decodeToken(token);
+      return payload?.user?.User_Firstname || null;
     }
   }
   // Decode JWT token

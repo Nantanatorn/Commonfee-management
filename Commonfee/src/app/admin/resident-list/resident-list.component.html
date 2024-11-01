@@ -27,11 +27,13 @@
         </tbody>
     </table>
 </div> -->
-
-<button (click)="openModal()" class="btn-register">ลงทะเบียน</button>
-
-<div class="profile-cards-container">
-    <div class="profile-card" *ngFor="let resident of residents | async">
+<div class="search-container">
+  <input type="text" [(ngModel)]="searchQuery" placeholder="ค้นหาจากบ้านเลขที่ ชื่อ และ รหัสบัตรประชาชน " class="search-input" (keyup.enter)="searchresident()"/>
+  <button class="search-btn" (click)="searchresident()">ค้นหา</button>
+  <button (click)="openModal()" class="btn-register">ลงทะเบียน</button>
+</div>
+<div class="profile-cards-container mt-5">
+    <div class="profile-card " *ngFor="let resident of residents$ | async">
       <div class="profile-image">
         <img src="profile.jpg" alt="Profile" />
       </div>
@@ -45,6 +47,11 @@
         <p>สถานะ : {{ resident.status }}</p>
       </div>
     </div>
+</div>
+<div class="pagination">
+   <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
+  <button>Page {{ currentPage }} of {{ totalPages }}</button>
+  <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
 </div>
     <!-- ทำ modal สำหรับการลงทะเบียนลูกบ้าน -->
     <div class="modal" [class.show]="isModalOpen">

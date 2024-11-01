@@ -31,7 +31,8 @@ module.exports.loginUser = async(req,res)=>{
                     user: {
                         username:user.username,
                         role:user.role,
-                        User_ID: user.User_ID
+                        User_ID: user.User_ID,
+                        User_Firstname: user.User_Firstname
                         
                     }
                 }

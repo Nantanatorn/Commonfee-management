@@ -101,4 +101,9 @@ export interface MonthlyPaymentData {
   Paid_Count: number
   Overdue_Count: number
 }
+export interface MonthlyPetitionData {
+  petition_Date: string
+  Repair_Count: number
+  Normal_Count: number
+}
 

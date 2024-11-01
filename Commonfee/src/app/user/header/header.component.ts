@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
   isProfilePopupVisible = false;
   user = new BehaviorSubject<Users[]>([]);
   username: string | null = null;
+  firstname : string | null = null;
   picture: string | null;
   USER_ID : number | null;
 
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.username = this.authService.getUsername();
       this.USER_ID = this.authService.getUserID();
+      this.firstname = this.authService.getFirstname();
 
       // ตรวจสอบว่ามีการเรียกใช้งาน localStorage ได้หรือไม่
       const storedTheme = localStorage.getItem('theme');

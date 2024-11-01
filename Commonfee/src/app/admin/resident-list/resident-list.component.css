@@ -18,23 +18,30 @@ table {
     font-family: "Dekko", cursive;
     text-align: center;
     margin-bottom: 20px;
+    margin-right: 3rem;
+    
   }
   .profile-cards-container {
     display: flex;
-    flex: 1 ;
-    justify-content: center;
-    gap: 20px;
+    flex-wrap: wrap; /* ให้กล่องโปรไฟล์ขึ้นแถวใหม่เมื่อครบ 3 กล่อง */
+    justify-content: flex-start; /* ให้กล่องเริ่มจากทางซ้าย */
+    gap: 20px; /* ระยะห่างระหว่างกล่อง */
     padding: 20px;
+    margin-left: 5rem;
   }
   
   .profile-card {
+    margin-top: 3rem;
     background-color: #f5f5f5;
     border-radius: 15px;
-    width: 70%;
+    width: 100%;
+    max-width: 22%;
     text-align: left;
     padding: 20px;
     font-family: 'Noto Sans Thai', sans-serif;
     box-shadow: 5px 5px 10px rgba(38, 0, 255, 0.312);
+    flex-basis: calc(33.333% - 20px); 
+    box-sizing: border-box; 
 
   }
   
@@ -73,12 +80,11 @@ table {
 .btn-register {
   background-color: #ac7bc6;
   color: white;
+  font-size: 16px;
   padding: 10px 20px;
   border: none;
-  cursor: pointer;
   border-radius: 5px;
-  margin-top: 20px;
-  margin-left: 560px;
+  cursor: pointer;
 }
 
 /* โครงสร้างของ Modal */
@@ -158,4 +164,77 @@ input {
 
 .btn-submit:hover {
   background-color: #0b7dda;
+}
+
+@media (max-width: 1200px) {
+  .profile-card {
+      max-width: 32%; /* ลดจำนวนการ์ดในแต่ละแถวเมื่อหน้าจอแคบลง */
+  }
+}
+
+@media (max-width: 800px) {
+  .profile-card {
+      max-width: 48%; /* ลดจำนวนการ์ดเหลือ 2 ในแถว เมื่อหน้าจอแคบลง */
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-card {
+      max-width: 100%; /* แสดงการ์ดเต็มแถวในหน้าจอเล็ก */
+  }
+}
+
+.search-input {
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 80%;                  
+  border-radius: 5px;           
+  border: 1px solid #ccc;  
+  z-index: 50;     
+  margin-left: 5rem;
+  
+}
+
+.search-container {
+  display: flex;              
+  align-items: center;        
+  gap: 10px;              
+
+}
+.search-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #3b3f60;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-right: 4.5rem;
+  margin-bottom:  1rem;
+  
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #ac7bc6;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+ 
+}
+
+.pagination button.active {
+  background-color: #ac7bc6;
+}
+
+.pagination button:hover {
+  background-color: #ac7bc6;
 }

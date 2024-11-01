@@ -9,5 +9,8 @@ require('dotenv').config();
     router.get('/getpetition',verifyToken, residentscontroll.Getpetition);
     router.get('/getpetitionAdmin', residentscontroll.GetpetitionAdmin);
     router.put('/updatepetition/:petition_ID',residentscontroll.UpdatePetition);
+    router.get('/monthly-petition',residentscontroll.getMonthlyPetition);
+    router.get('/searchresident',residentscontroll.SreachResident);
+    router.get('/pageresident',residentscontroll.pageresident);
 
 module.exports = router;
