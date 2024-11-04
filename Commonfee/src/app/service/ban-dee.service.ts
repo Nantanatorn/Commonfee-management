@@ -88,9 +88,9 @@ export class BanDeeService {
   sendUnpaidNotification(): Observable<any> {
     return this.httpClient.post(`${api_URL}/unpaidnoti`, {});
   }
-  getAllReceipt(): Observable<Receipt[]>{
-    return this.httpClient.get<Receipt[]>(`${api_URL}/getreceipt`);
-  }
+  getReceiptByPayId(payId: number): Observable<Receipt[]> {
+    return this.httpClient.get<Receipt[]>(`${api_URL}/getreceipt/${payId}`);
+}
   getUserinfo(token: string): Observable<Userinfo[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.httpClient.get<Userinfo[]>(`${api_URL}/userinfo`, { headers });

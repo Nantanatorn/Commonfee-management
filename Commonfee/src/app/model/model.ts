@@ -128,6 +128,8 @@ export interface Receipt {
   Paid_Amount: number
   Paid_Fine: number
   Receipt_Total: number
+  Pay_ID : number
+  User_ID : number
 }
 
 export interface Income {

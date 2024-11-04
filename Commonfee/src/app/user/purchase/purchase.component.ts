@@ -4,7 +4,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../service/auth.service';
-import { paymentHistory } from '../../model/model';
+import { paymentHistory, Receipt } from '../../model/model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BanDeeService } from '../../service/ban-dee.service';
 
@@ -131,47 +131,89 @@ export class PurchaseComponent implements OnInit{
 
 
 
-  generatePDF(payment: paymentHistory) {
-    const doc = new jsPDF();
+  generatePDF(payId: number): void {
+    // ตรวจสอบว่ามี Pay_ID ที่จะใช้ในการดึงข้อมูลใบเสร็จ
+    if (!payId) {
+        Swal.fire({
+            title: 'เกิดข้อผิดพลาด!',
+            text: 'ไม่พบข้อมูลการชำระเงิน',
+            icon: 'error',
+        });
+        return;
+    }
 
-    doc.addFileToVFS('THSarabunNew.ttf', thSarabunFontBase64);
-    doc.addFont('THSarabunNew.ttf', 'THSarabunNew', 'normal');
-    doc.setFont('THSarabunNew', 'normal');
+    // เรียกใช้ API เพื่อดึงข้อมูลใบเสร็จโดยใช้ Pay_ID ที่เลือกไว้
+    this.banDeeService.getReceiptByPayId(payId).subscribe({
+        next: (receipts: Receipt[]) => {
+            // ตรวจสอบว่าได้รับข้อมูลใบเสร็จหรือไม่
+            if (receipts.length > 0) {
+                const matchingReceipt = receipts[0]; // ใช้ข้อมูลใบเสร็จที่ตรงกัน
 
-    doc.setFontSize(16);
-    doc.text('นิติบุคคล บ้านดี', 25, 10);
-    doc.setFontSize(12);
-    doc.text('1234 ม.8 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี', 25, 16);
-    doc.text('อ.ศรีราชา จ.ชลบุรี 20230', 25, 22);
-    doc.text('โทร: 090-632-3838 ', 25, 28);
+                // สร้าง PDF โดยใช้ข้อมูลที่ดึงมา
+                const doc = new jsPDF();
 
-    doc.setFontSize(12);
-    doc.text(`ชื่อ: ${payment.R_Firstname} ${payment.R_Lastname}`, 25, 40);
-    doc.text(`บ้านเลขที่: ${payment.House_number} หมู่ 8 อ.ศรีราชา จ.ชลบุรี`, 25, 46);
-    doc.text(`อ.ศรีราชา จ.ชลบุรี 20230`, 35, 52);
+                doc.addFileToVFS('THSarabunNew.ttf', thSarabunFontBase64);
+                doc.addFont('THSarabunNew.ttf', 'THSarabunNew', 'normal');
+                doc.setFont('THSarabunNew', 'normal');
 
-    doc.setFontSize(14);
-    doc.text(`รายการ `, 65, 65);
-    doc.text(`จำนวนเงิน`,140,65);
-    doc.setFontSize(12);
-    const formattedMonthYear = new Date(payment.Receipt_Date).toLocaleDateString('th-TH', {
-      year: 'numeric',
-      month: 'long'
+                // ตั้งค่าข้อมูลที่ต้องการลงใน PDF
+                doc.setFontSize(16);
+                doc.text('นิติบุคคล บ้านดี', 25, 10);
+                doc.setFontSize(12);
+                doc.text('1234 ม.8 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี', 25, 16);
+                doc.text('อ.ศรีราชา จ.ชลบุรี 20230', 25, 22);
+                doc.text('โทร: 090-632-3838 ', 25, 28);
+
+                // ข้อมูลผู้รับ
+                doc.setFontSize(12);
+                doc.text(`ชื่อ: ${matchingReceipt.R_Firstname} ${matchingReceipt.R_Lastname}`, 25, 40);
+                doc.text(`บ้านเลขที่: ${matchingReceipt.House_number.trim()} หมู่ 8 อ.ศรีราชา จ.ชลบุรี`, 25, 46);
+                doc.text(`อ.ศรีราชา จ.ชลบุรี 20230`, 35, 52);
+
+                // ข้อมูลรายการชำระเงิน
+                doc.setFontSize(14);
+                doc.text(`รายการ `, 65, 65);
+                doc.text(`จำนวนเงิน`, 140, 65);
+                doc.setFontSize(12);
+
+                const formattedMonthYear = new Date(matchingReceipt.Receipt_Date).toLocaleDateString('th-TH', {
+                    year: 'numeric',
+                    month: 'long'
+                });
+                doc.text(`ชำระค่าส่วนกลาง ${formattedMonthYear}`, 25, 75);
+                doc.text(`ค่าปรับ`, 25, 85);
+                doc.text(`รวมทั้งหมด`, 25, 105);
+
+                // ข้อมูลใบเสร็จ
+                doc.text(`เลขที่: ${matchingReceipt.Receipt_ID}`, 140, 40);
+                const formattedDate = new Date(matchingReceipt.Receipt_Date).toLocaleDateString('th-TH', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                doc.text(`วันที่:  ${formattedDate}`, 140, 46);
+
+                doc.setFontSize(12);
+                doc.text(`${matchingReceipt.Paid_Amount} บาท`, 145, 75);
+                doc.text(`${matchingReceipt.Paid_Fine} บาท`, 145, 85);
+                doc.text(`${matchingReceipt.Receipt_Total} บาท`, 145, 105);
+
+                // บันทึก PDF
+                doc.save('bill.pdf');
+            } else {
+                Swal.fire({
+                    title: 'ไม่พบข้อมูล',
+                    text: 'ไม่พบข้อมูลใบเสร็จสำหรับรายการชำระเงินนี้',
+                    icon: 'warning',
+                });
+            }
+        },
+        error: (err) => {
+            console.error('Error fetching receipt data:', err);
+            Swal.fire({
+                title: 'เกิดข้อผิดพลาด!',
+                text: 'ไม่สามารถดึงข้อมูลใบเสร็จได้ กรุณาลองใหม่อีกครั้ง',
+                icon: 'error',
+            });
+        }
     });
-    doc.text(`ชำระค่าส่วนกลาง ${formattedMonthYear}`, 25, 75);
-    doc.text(`ค่าปรับ`, 25, 85)
-    doc.text(`รวมทั้งหมด`, 25, 105)
+}
 
-    doc.text(`เลขที่: ${payment.Receipt_ID}`, 140, 40);
-    const formattedDate = new Date(payment.Receipt_Date).toLocaleDateString('th-TH', { year: 'numeric', month: '2-digit', day: '2-digit' });
-    doc.text(`วันที่:  ${formattedDate}`, 140, 46);
-
-    doc.setFontSize(12);
-    doc.text(`${payment.Pay_Amount} บาท`, 145, 75);
-    doc.text(`${payment.Pay_Fine} บาท`, 145, 85);
-    doc.text(`${payment.Receipt_Total}  บาท`, 145, 105);
-
-    doc.save('bill.pdf');
-  }
 }
 

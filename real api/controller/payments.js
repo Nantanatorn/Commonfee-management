@@ -374,20 +374,26 @@ module.exports.GetAllFee = async (req , res ) => {
 }
 
 
-module.exports.getReceipt = async ( req , res ) => {
-    const conn = await sql.connect(config);
+module.exports.getReceipt = async (req, res) => {
+    try {
+        const { payId } = req.params; // รับ Pay_ID จาก params
 
-    try{    
-        const result = await conn.request()
-        .query('select * from ReceiptView')
+        // เชื่อมต่อฐานข้อมูล
+        var pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('payId', sql.Int, payId) // ใช้ payId จาก request
+            .query("SELECT * FROM ReceiptView WHERE Pay_ID = @payId");
 
-        res.status(200).json(result.recordset);
+        // ตรวจสอบว่าพบข้อมูลหรือไม่
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Not found');
+        }
 
-    }catch(err){
-
+        // ส่งข้อมูลกลับไปในรูปแบบ JSON
+        res.status(200).json(result.recordset); // ส่งเฉพาะใบเสร็จที่ตรงกับ Pay_ID
+    } catch (err) {
         console.error(err);
-        res.status(500).send('Fail to get ');
-
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -417,3 +423,4 @@ module.exports.GetIncome = async ( req , res ) => {
 
     }
 }
+

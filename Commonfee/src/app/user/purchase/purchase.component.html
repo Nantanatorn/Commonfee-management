@@ -68,7 +68,7 @@
           </td>
           <td>
               <button *ngIf="payment.Pay_Status.trim() !== 'Paid'" disabled >Print</button>
-              <button *ngIf="payment.Pay_Status.trim() === 'Paid'" (click)="generatePDF(payment)">Print</button>
+              <button *ngIf="payment.Pay_Status.trim() === 'Paid'" (click)="generatePDF(payment.Pay_ID)">Print</button>
           </td>
       </tr>
     </tbody>
