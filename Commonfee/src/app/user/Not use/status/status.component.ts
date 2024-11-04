@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { BanDeeService } from '../../service/ban-dee.service';
-import { AuthService } from '../../service/auth.service';
+import { BanDeeService } from '../../../service/ban-dee.service';
+import { AuthService } from '../../../service/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PetitionHistory } from '../../model/model';
+import { PetitionHistory } from '../../../model/model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';

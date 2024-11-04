@@ -1,4 +1,5 @@
 require('dotenv').config();
+const nodemailer = require('nodemailer');
 
 const config = {
     user: process.env.DB_USER,
@@ -13,5 +14,7 @@ const config = {
     },
     port: parseInt(process.env.DB_PORT, 10),
 };
+
+
 
 module.exports = config;

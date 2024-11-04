@@ -59,6 +59,7 @@ export interface paymentHistory{
   Pay_Deadline : string
   Pay_Status : string
   Land_size : number
+  Pay_Fine : number 
 }
 export interface PetitionHistory{
   User_ID : number
@@ -105,5 +106,12 @@ export interface MonthlyPetitionData {
   petition_Date: string
   Repair_Count: number
   Normal_Count: number
+}
+
+export interface FeeRate{
+  House_Size : string
+  Land_size : number
+  FeeRate : number
+  Fine : number
 }
 

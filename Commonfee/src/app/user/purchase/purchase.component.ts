@@ -137,27 +137,32 @@ export class PurchaseComponent implements OnInit{
     doc.setFont('THSarabunNew', 'normal');
 
     doc.setFontSize(16);
-    doc.text('โครงการ บ้านดี', 10, 10);
+    doc.text('นิติบุคคล บ้านดี', 25, 10);
     doc.setFontSize(12);
-    doc.text('1234 ม.8 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี', 10, 16);
-    doc.text('อ.ศรีราชา จ.ชลบุรี 20230', 10, 22);
-    doc.text('โทร: 090-632-3838 ', 10, 28);
+    doc.text('1234 ม.8 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี', 25, 16);
+    doc.text('อ.ศรีราชา จ.ชลบุรี 20230', 25, 22);
+    doc.text('โทร: 090-632-3838 ', 25, 28);
 
     doc.setFontSize(12);
-    doc.text(`ชื่อ: คุณ ${payment.R_Firstname} ${payment.R_Lastname}`, 10, 40);
-    doc.text(`บ้านเลขที่: ${payment.House_number}`, 10, 46);
-    doc.text(`ขนาดบ้าน: ${payment.Pay_Amount} บาท`, 10, 52);
-    doc.text(`จำนวนเงินที่ต้องชำระ: ${payment.Pay_Amount} บาท`, 10, 58);
-    doc.text(`ครบกำหนดชำระ: ${payment.Pay_Deadline}`, 10, 64);
+    doc.text(`ชื่อ: ${payment.R_Firstname} ${payment.R_Lastname}`, 25, 40);
+    doc.text(`บ้านเลขที่: ${payment.House_number} หมู่ 8 อ.ศรีราชา จ.ชลบุรี`, 25, 46);
+    doc.text(`อ.ศรีราชา จ.ชลบุรี 20230`, 35, 52);
+
+    doc.setFontSize(14);
+    doc.text(`รายการ `, 65, 65);
+    doc.text(`จำนวนเงิน`,140,65);
+    doc.setFontSize(12);
+    doc.text(`ชำระค่าส่วนกลาง มีนาคม 2567`, 25, 75)
+    doc.text(`ค่าปรับ`, 25, 85)
+
 
     doc.text('เลขที่: 00014219', 140, 40);
     doc.text('วันที่: ' + new Date().toLocaleDateString(), 140, 46);
 
     doc.setFontSize(12);
-    doc.text(`ยอดเงินสุทธิ: ${payment.Pay_Amount} บาท`, 140, 70);
-
-    doc.setFontSize(10);
-    doc.text('* กรุณาชำระเงินภายในเวลาที่กำหนด *', 10, 80);
+    doc.text(`${payment.Pay_Amount} บาท`, 145, 75);
+    doc.text(`0 บาท`, 145, 85);
+    
     doc.save('bill.pdf');
   }
 }

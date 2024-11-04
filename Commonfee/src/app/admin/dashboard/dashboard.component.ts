@@ -5,7 +5,7 @@ import { Chart } from 'angular-highcharts';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { MonthlyPaymentData, PeymentForAdmin } from '../../model/model';
+import { FeeRate, MonthlyPaymentData, PeymentForAdmin } from '../../model/model';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
@@ -17,13 +17,17 @@ export class DashboardComponent implements OnInit {
 
   residents: any[] = [];
   isModalOpen: boolean = false;
+  isModalOpen1: boolean = false;
   newsTitle: string = '';
   newsContent: string = '';
   AddNewsform: FormGroup; 
+  ChangeFee : FormGroup;
   selectedFile: File | null = null;
   Unpaid : Observable<PeymentForAdmin[]> | undefined;  
   paid : Observable<PeymentForAdmin[]> | undefined;
   lineCharts: Chart | undefined;
+  houseSizes: FeeRate[] = [];
+  isLoading: boolean = false;
 
 
   constructor(
@@ -36,13 +40,90 @@ export class DashboardComponent implements OnInit {
       Announce_Title: ['', Validators.required],
       Announce_Detail: ['', Validators.required]
     });
+    this.ChangeFee = this.fb.group({
+      House_Size: ['', Validators.required],
+      Land_size: ['', [Validators.required, Validators.min(0)]], 
+      FeeRate: ['', [Validators.required, Validators.min(0)]],
+      Fine: ['', [Validators.required, Validators.min(0)]],
+    });
   }
 
   ngOnInit(): void {
     this.loadResidentsData();
     this.fetchMonthlyPaymentData();
+    this.loadHouseSizes(); 
+    
     
   }
+
+  loadHouseSizes(): void {
+    this.BanService.getAllFee().subscribe({
+      next: (sizes: FeeRate[]) => {
+        this.houseSizes = sizes;
+      },
+      error: (error) => {
+        console.error('Error fetching house sizes:', error);
+      }
+    });
+  }
+  
+  onHouseSizeChange(event: any): void {
+    const selectedSize = event.target.value;
+  
+    if (selectedSize) {
+      this.BanService.getFeeByHouseSize(selectedSize).subscribe({
+        next: (feeRates: FeeRate[]) => {
+          if (feeRates.length > 0) {
+            const feeRate = feeRates[0];
+            // แสดงค่าที่ได้รับจาก API
+            console.log('Fee Rate Data:', feeRate);
+            this.ChangeFee.patchValue({
+              Land_size: feeRate.Land_size,
+              FeeRate: feeRate.FeeRate,
+              Fine: feeRate.Fine,
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching fee rate:', error);
+        }
+      });
+    }
+  }
+
+  changeFee(): void {
+    if (this.ChangeFee.valid) {
+      // สร้าง object formData เพื่อส่งข้อมูลไป backend
+      const formData = {
+        House_Size: this.ChangeFee.value.House_Size,
+        Land_size: this.ChangeFee.value.Land_size,
+        FeeRate: this.ChangeFee.value.FeeRate,
+        Fine : this.ChangeFee.value.Fine
+      };
+      console.log('Form Data:', formData);
+  
+      // ใช้ HTTP PUT เพื่อส่งข้อมูลไปที่ backend API
+      this.http.put('http://localhost:3500/changerate', formData).subscribe({
+        next: (response) => {
+          Swal.fire({
+            title: "สำเร็จ!",
+            text: 'Update Success!',
+            icon: "success"
+          });
+          this.closeModal1(); // ปิด Modal หลังจากการอัปเดตสำเร็จ
+        },
+        error: (error) => {
+          Swal.fire({
+            title: 'เกิดข้อผิดพลาด!',
+            text: 'กรุณาลองใหม่อีกครั้ง',
+            icon: 'error'
+          });
+          console.error('Error ', error);
+        }
+      });
+    }
+  }
+
 
   // ดึงข้อมูลลูกบ้านจาก API
   loadResidentsData(): void {
@@ -102,6 +183,14 @@ export class DashboardComponent implements OnInit {
   }
 
 SendBill(){
+  Swal.fire({
+    title: 'กรุณารอสักครู่...',
+    html: 'กำลังเรียกเก็บเงิน...',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading(); // แสดง loading spinner
+    },
+  });
   this.BanService.sendBill().subscribe({
     next: (response) => {
       console.log('Bill created successfully:', response);
@@ -127,16 +216,23 @@ SendBill(){
   openModal() {
     this.isModalOpen = true;
   }
+  openModal1() {
+    this.isModalOpen1 = true;
+  }
 
   
   closeModal() {
     this.isModalOpen = false;
     this.clearNewsFields(); 
   }
-
-  changeFee(){
-
+  closeModal1() {
+    this.isModalOpen1 = false;
+    this.clearNewsFields(); 
   }
+
+
+
+
   clearNewsFields() {
     this.newsTitle = '';
     this.newsContent = '';
@@ -196,6 +292,37 @@ SendBill(){
       }
     });
   }
+
+  sendWarning() {
+    // แสดง SweetAlert spinner ขณะที่รอการทำงานเสร็จสิ้น
+    Swal.fire({
+      title: 'กรุณารอสักครู่...',
+      html: 'กำลังส่งการแจ้งเตือน...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); // แสดง loading spinner
+      },
+    });
+  
+    this.BanService.sendUnpaidNotification().subscribe({
+      next: (response) => {
+        Swal.fire({
+          title: 'สำเร็จ!',
+          text: response.message,
+          icon: 'success',
+        });
+      },
+      error: (error) => {
+        Swal.fire({
+          title: 'เกิดข้อผิดพลาด!',
+          text: 'การส่งอีเมลล้มเหลว กรุณาลองใหม่อีกครั้ง',
+          icon: 'error',
+        });
+        console.error('Error while sending notification:', error);
+      },
+    });
+  }
+  
  
   
   fetchMonthlyPaymentData(): void {

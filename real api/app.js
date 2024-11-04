@@ -15,6 +15,7 @@ const residentroute = require('./routes/resident');
 const houseroute = require('./routes/house');
 const paymentsroute = require('./routes/payment');
 const promptpayroute = require('./routes/promptpay');
+const notificationroute = require('./routes/notification');
 
 app.use(cors());
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 
 const port = 3500;
 
+app.use('/',notificationroute);
 app.use('/',promptpayroute);
 app.use('/',paymentsroute);
 app.use('/',houseroute);

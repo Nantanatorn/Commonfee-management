@@ -221,3 +221,23 @@ table, th, td {
   color: #fff;  
 }
 
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.spinner-border {
+  width: 10rem;
+  height: 10rem;
+  margin-bottom: 10px;
+}

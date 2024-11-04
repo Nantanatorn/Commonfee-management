@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BanDeeService } from '../../service/ban-dee.service';
+import { BanDeeService } from '../../../service/ban-dee.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Announcement, House, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Resident, ResidentStatus } from '../model/model';
+import { Announcement, FeeRate, House, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Resident, ResidentStatus } from '../model/model';
 
 const api_URL = 'http://localhost:3500'; 
 
@@ -77,6 +77,17 @@ export class BanDeeService {
   pageresident(page: number, limit: number): Observable<{ currentPage: number, totalPages: number, data: Resident[] }> {
     return this.httpClient.get<{ currentPage: number, totalPages: number, data: Resident[] }>(`${api_URL}/pageresident?page=${page}&limit=${limit}`);
   }
+
+  getFeeByHouseSize(houseSize: string): Observable<FeeRate[]> {
+    return this.httpClient.get<FeeRate[]>(`${api_URL}/Fee`, { params: { House_Size: houseSize } });
+  }
+  getAllFee(): Observable<FeeRate[]> {
+    return this.httpClient.get<FeeRate[]>(`${api_URL}/AllFee`);
+  }
+  sendUnpaidNotification(): Observable<any> {
+    return this.httpClient.post(`${api_URL}/unpaidnoti`, {});
+  }
+
 
   
 }
