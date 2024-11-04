@@ -11,3 +11,17 @@ export interface User {
     User_ID? : number;
 
 }
+
+export interface Userinfo {
+    User_ID: number
+    User_Firstname: string
+    User_Lastname: string
+    IDcard: string
+    username: string
+    email: string
+    password: string
+    phone: string
+    role: string
+    User_image: any
+  }
+  

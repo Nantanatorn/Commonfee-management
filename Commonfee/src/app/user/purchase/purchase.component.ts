@@ -24,7 +24,7 @@ export class PurchaseComponent implements OnInit{
   phoneNumber: string = '0906323838';
   selectedPayment: paymentHistory | null = null; // เก็บรายการที่ถูกเลือก
   isPaid: boolean ;
-
+  total : number;
 
   constructor(private http: HttpClient, private authService: AuthService, private banDeeService: BanDeeService, private cd: ChangeDetectorRef) {}
 
@@ -48,9 +48,9 @@ export class PurchaseComponent implements OnInit{
   onGenerateQR(payment: paymentHistory) {
     // กำหนดค่ารายการที่เลือก
     this.selectedPayment = payment;
-
+    this.total = payment.Pay_Amount + payment.Pay_Fine;
     // สร้าง QR Code สำหรับรายการนี้
-    this.banDeeService.generatePromptPayQr(this.phoneNumber, payment.Pay_Amount, payment.Pay_ID).subscribe({
+    this.banDeeService.generatePromptPayQr(this.phoneNumber, this.total, payment.Pay_ID).subscribe({
       next: (data) => {
         this.myAngularxQrCode = data.qrCodeUrl;
         console.log('QR Code URL:', this.myAngularxQrCode);
@@ -129,6 +129,8 @@ export class PurchaseComponent implements OnInit{
     });
   }
 
+
+
   generatePDF(payment: paymentHistory) {
     const doc = new jsPDF();
 
@@ -152,17 +154,23 @@ export class PurchaseComponent implements OnInit{
     doc.text(`รายการ `, 65, 65);
     doc.text(`จำนวนเงิน`,140,65);
     doc.setFontSize(12);
-    doc.text(`ชำระค่าส่วนกลาง มีนาคม 2567`, 25, 75)
+    const formattedMonthYear = new Date(payment.Receipt_Date).toLocaleDateString('th-TH', {
+      year: 'numeric',
+      month: 'long'
+    });
+    doc.text(`ชำระค่าส่วนกลาง ${formattedMonthYear}`, 25, 75);
     doc.text(`ค่าปรับ`, 25, 85)
+    doc.text(`รวมทั้งหมด`, 25, 105)
 
-
-    doc.text('เลขที่: 00014219', 140, 40);
-    doc.text('วันที่: ' + new Date().toLocaleDateString(), 140, 46);
+    doc.text(`เลขที่: ${payment.Receipt_ID}`, 140, 40);
+    const formattedDate = new Date(payment.Receipt_Date).toLocaleDateString('th-TH', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    doc.text(`วันที่:  ${formattedDate}`, 140, 46);
 
     doc.setFontSize(12);
     doc.text(`${payment.Pay_Amount} บาท`, 145, 75);
-    doc.text(`0 บาท`, 145, 85);
-    
+    doc.text(`${payment.Pay_Fine} บาท`, 145, 85);
+    doc.text(`${payment.Receipt_Total}  บาท`, 145, 105);
+
     doc.save('bill.pdf');
   }
 }

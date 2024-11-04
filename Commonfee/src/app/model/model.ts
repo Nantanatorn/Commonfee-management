@@ -26,6 +26,7 @@ export interface Resident {
   status: string
   email: string
   House_No : number
+  User_image : string
 }
 
 export interface House {
@@ -60,6 +61,9 @@ export interface paymentHistory{
   Pay_Status : string
   Land_size : number
   Pay_Fine : number 
+  Receipt_ID: number
+  Receipt_Date: string
+  Receipt_Total: number
 }
 export interface PetitionHistory{
   User_ID : number
@@ -114,4 +118,16 @@ export interface FeeRate{
   FeeRate : number
   Fine : number
 }
+
+export interface Receipt {
+  Receipt_ID: number
+  Receipt_Date: string
+  R_Firstname: string
+  R_Lastname: string
+  House_number: string
+  Paid_Amount: number
+  Paid_Fine: number
+  Receipt_Total: number
+}
+
 

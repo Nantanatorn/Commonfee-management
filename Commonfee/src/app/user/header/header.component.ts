@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit {
       this.username = this.authService.getUsername();
       this.USER_ID = this.authService.getUserID();
       this.firstname = this.authService.getFirstname();
+      this.picture = this.authService.getUserImage();
 
       // ตรวจสอบว่ามีการเรียกใช้งาน localStorage ได้หรือไม่
       const storedTheme = localStorage.getItem('theme');

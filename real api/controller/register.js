@@ -84,26 +84,39 @@ module.exports.enrollment = async (req, res) => {
         res.status(500).json({ message: 'Server error, please try again later.' });
     }
 };
-module.exports.changepass = async (req, res ,next) => {
-    const { username, email } = req.query;
+
+module.exports.changepass = async (req, res, next) => {
+    const { identifier } = req.query; // ใช้ identifier เพื่อรับค่าได้ทั้ง username หรือ email
     const { password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+
+    if (!identifier || !password) {
+        return res.status(400).json({ message: 'Invalid input data, identifier and password are required' });
+    }
 
     try {
+        // เข้ารหัสรหัสผ่านก่อนอัปเดตในฐานข้อมูล
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
         const conn = await sql.connect(config);
         const result = await conn.request()
-            .input('username', sql.VarChar, username || null)
-            .input('email', sql.VarChar, email || null)
+            .input('identifier', sql.VarChar, identifier)
             .input('password', sql.VarChar, hashedPassword)
-            .query(`UPDATE UserAccount SET password = @password WHERE username = @username OR email = @email`);
+            .query(`
+                UPDATE UserAccount 
+                SET password = @password 
+                WHERE username = @identifier OR email = @identifier
+            `);
 
+        // ตรวจสอบว่ามีการอัปเดตจริงหรือไม่
         if (result.rowsAffected[0] > 0) {
             res.status(200).json({ message: 'Password updated successfully.' });
         } else {
-            res.status(404).json({ message: 'User not found or email does not match.' });
+            res.status(404).json({ message: 'User not found.' });
         }
     } catch (error) {
         console.error('Error during password update:', error);
         res.status(500).json({ message: 'Server error, please try again later.' });
     }
 };
+
+

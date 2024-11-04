@@ -7,13 +7,11 @@ import { LoginComponent } from './user/login/login.component';
 import { ReportComponent } from './user/Residentreport/report.component';
 import { StatusComponent } from './user/Not use/status/status.component';
 import { AboutUsComponent } from './user/about-us/about-us.component';
-
 import { PurchaseComponent } from './user/purchase/purchase.component';
-
 import { BookRoomComponent } from './user/Not use/book-room/book-room.component';
 import { FitnessComponent } from './user/Not use/fitness/fitness.component';
 import { HistoryBookingComponent } from './user/Not use/history-booking/history-booking.component';
-
+import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
 
 //admin components
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
@@ -24,6 +22,7 @@ import { ResidentListComponent } from './admin/resident-list/resident-list.compo
 import { PaymentComponent } from './admin/payment/payment.component';
 import { ComplainRepairComponent } from './admin/complain-repair/complain-repair.component';
 import { HomeComponent } from './user/home/home.component';
+import { ForgotpassComponent } from './user/forgotpass/forgotpass.component';
 
 
 const routes: Routes = [
@@ -39,6 +38,8 @@ const routes: Routes = [
   {path:'bookRoom',component:BookRoomComponent},
   {path:'fitness',component:FitnessComponent},
   {path:'historyBooking',component:HistoryBookingComponent},
+  {path: 'editprofile',component:EditProfileComponent},
+  {path: 'forgotpass',component:ForgotpassComponent},
   // admin routes
   
   {path:'adminstatus',component:statusAdminComponent},

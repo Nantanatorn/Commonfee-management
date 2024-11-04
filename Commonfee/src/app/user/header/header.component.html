@@ -32,9 +32,9 @@
     </span>
     <div id="profilePopup" class="profile-popup" [ngStyle]="{ 'visibility': isProfilePopupVisible ? 'visible' : 'hidden' }">
       <div class="profile-popup-content">
-        <img src="profile.jpg" alt="Profile image" class="profile-image">
+        <img [src]="'http://localhost:3500/' + picture " alt="Profile image" class="profile-image">
         <p>Hello {{ firstname }}</p>
-        <button class="edit-profile-btn" routerLink="/edit-profile" >Edit Profile</button>
+        <button class="edit-profile-btn" routerLink="/editprofile" >Edit Profile</button>
         </div>
       </div>
   

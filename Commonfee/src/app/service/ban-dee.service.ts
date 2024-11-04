@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Announcement, FeeRate, House, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Resident, ResidentStatus } from '../model/model';
+import { Announcement, FeeRate, House, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Receipt, Resident, ResidentStatus } from '../model/model';
+import { Userinfo } from '../model/user';
 
 const api_URL = 'http://localhost:3500'; 
 
@@ -87,6 +88,14 @@ export class BanDeeService {
   sendUnpaidNotification(): Observable<any> {
     return this.httpClient.post(`${api_URL}/unpaidnoti`, {});
   }
+  getAllReceipt(): Observable<Receipt[]>{
+    return this.httpClient.get<Receipt[]>(`${api_URL}/getreceipt`);
+  }
+  getUserinfo(token: string): Observable<Userinfo[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.httpClient.get<Userinfo[]>(`${api_URL}/userinfo`, { headers });
+  }
+
 
 
   

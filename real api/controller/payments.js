@@ -172,6 +172,7 @@ module.exports.Payment = async (req, res) => {
             .input('Paid_Date', sql.DateTime, new Date())
             .input('R_ID', sql.Int, paymentData.R_ID)
             .input('Paid_Amount', sql.Money, paymentData.Pay_Amount)
+            .input('Paid_Fine',sql.Money,paymentData.Pay_Fine)
             .input('Pay_ID', sql.Int, payId)
             .execute('UpdatePayment');
 
@@ -361,6 +362,24 @@ module.exports.GetAllFee = async (req , res ) => {
     try{    
         const result = await conn.request()
         .query('select * from PriceandSize')
+
+        res.status(200).json(result.recordset);
+
+    }catch(err){
+
+        console.error(err);
+        res.status(500).send('Fail to get ');
+
+    }
+}
+
+
+module.exports.getReceipt = async ( req , res ) => {
+    const conn = await sql.connect(config);
+
+    try{    
+        const result = await conn.request()
+        .query('select * from ReceiptView')
 
         res.status(200).json(result.recordset);
 

@@ -43,7 +43,8 @@
         <th>วันที่</th>
         <th>บ้านเลขที่</th>
         <th>ขนาดบ้าน</th>
-        <th>รวม</th>
+        <th>ค่าปรับ</th>
+        <th>ค่าส่วนกลาง</th>
         <th>ครบกำหนดชำระ</th>
         <!-- <th>สถานะการชำระ</th> --> 
          <th>สถานะ</th>
@@ -56,6 +57,7 @@
           <td>{{ payment.Pay_Date | date: 'dd MMM yyyy'}}</td>
           <td>{{ payment.House_number }}</td>
           <td>{{ payment.Land_size }} ตร.ว.</td>
+          <td>{{ payment.Pay_Fine}} บาท</td>
           <td>{{ payment.Pay_Amount  }} บาท</td>
           <td>{{ payment.Pay_Deadline | date: 'dd MMM yyyy'}}</td>
            <!-- <td>{{ payment.Pay_Status}}</td>  -->

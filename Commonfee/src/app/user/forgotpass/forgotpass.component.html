@@ -1,0 +1,52 @@
+<div class="form-container">
+    <form [formGroup]="changePassForm" (ngSubmit)="onChange()">
+        <h3 style="text-align: center; color:#fff">เปลี่ยนรหัสผ่าน</h3>
+        <hr style="border-width: 3px; border-color: white">
+
+        <div class="input-field">
+            <span class="bi bi-person-fill fs-4">&nbsp;</span>
+            <input
+                type="text"
+                id="identifier"
+                formControlName="identifier"
+                placeholder="ชื่อผู้ใช้หรืออีเมล"
+                maxlength="50"
+                required
+                class="box"
+            />
+        </div>
+
+        <div class="input-field">
+            <span class="bi bi-shield-lock-fill fs-4">&nbsp;</span>
+            <input
+                [type]="type"
+                id="password"
+                formControlName="password"
+                placeholder="รหัสผ่านใหม่"
+                maxlength="50"
+                required
+                class="box"
+            />
+            <span (click)="hideShowPass()" class="{{eyeIcon}}"></span>
+        </div>
+
+        <div class="input-field">
+            <span class="bi bi-shield-lock-fill fs-4">&nbsp;</span>
+            <input
+                [type]="type"
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                placeholder="ยืนยันรหัสผ่านใหม่"
+                maxlength="50"
+                required
+                class="box"
+            />
+            <span (click)="hideShowPass()" class="{{eyeIcon}}"></span>
+            <div *ngIf="changePassForm.hasError('notSame') && changePassForm.get('confirmPassword')?.touched" class="error">
+                รหัสผ่านไม่ตรงกัน กรุณายืนยันใหม่
+            </div>
+        </div>
+
+        <button type="submit" class="btn" style="font-weight: bold;">เปลี่ยนรหัสผ่าน</button>
+    </form>
+</div>

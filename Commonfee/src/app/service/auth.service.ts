@@ -77,6 +77,13 @@ export class AuthService {
       return payload?.user?.User_Firstname || null;
     }
   }
+  getUserImage(){
+    const token=localStorage.getItem('token');
+    if(token){
+      const payload =this.decodeToken(token);
+      return payload?.user?.User_image || null;
+    }
+  }
   // Decode JWT token
   private decodeToken(token: string):any{
     try{

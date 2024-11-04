@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   [x: string]: any;
   showHeader = true;
   isLoginPage: boolean;
-  isregisterPage: boolean;
+  isforgotPage: boolean;
   isAdminPage: boolean;
   isHomeUserPage:boolean;
   adminSide:boolean;
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         // ตรวจสอบ URL เพื่อตั้งค่า isLoginPage, isRegisterPage และ isAdminPage
         this.isLoginPage = this.router.url.includes('/login');
-        this.isregisterPage = this.router.url.includes('/register');
+        this.isforgotPage = this.router.url.includes('/forgotpass');
         this.isHomeUserPage = this.router.url.includes('/home');
         this.isAdminPage = this.router.url.includes('/adminsidebar') || 
                            this.router.url.includes('/adminlogin') || 
@@ -65,7 +65,7 @@ export class AppComponent implements OnInit {
       this.router.url.includes('/complainRepair') || 
       currentRoute.includes('adminstatus') || 
       currentRoute.includes('login') || 
-      currentRoute.includes('register')
+      currentRoute.includes('forgotpass')
     );
   }
 }

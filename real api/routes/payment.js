@@ -14,6 +14,7 @@ require('dotenv').config();
     router.put('/pay/:payId', verifyToken, paymentcon.Payment);
     router.post('/sendBill',verifyToken,paymentcon.FeeBill);
     router.put('/changerate',paymentcon.ChangePayrate);
+    router.get('/getreceipt',paymentcon.getReceipt);
     
 
 
