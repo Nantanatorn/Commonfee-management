@@ -130,4 +130,7 @@ export interface Receipt {
   Receipt_Total: number
 }
 
-
+export interface Income {
+  Month : string
+  TotalAmount : number
+}

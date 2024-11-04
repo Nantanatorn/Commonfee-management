@@ -12,5 +12,6 @@ require('dotenv').config();
     router.get('/monthly-petition',residentscontroll.getMonthlyPetition);
     router.get('/searchresident',residentscontroll.SreachResident);
     router.get('/pageresident',residentscontroll.pageresident);
+    router.get('/petitioncount',residentscontroll.GetpetitionCount);
 
 module.exports = router;

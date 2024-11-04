@@ -5,7 +5,7 @@ import { Chart } from 'angular-highcharts';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FeeRate, MonthlyPaymentData, PeymentForAdmin } from '../../model/model';
+import { FeeRate, Income, MonthlyPaymentData, MonthlyPetitionData, PeymentForAdmin } from '../../model/model';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
@@ -26,9 +26,10 @@ export class DashboardComponent implements OnInit {
   Unpaid : Observable<PeymentForAdmin[]> | undefined;  
   paid : Observable<PeymentForAdmin[]> | undefined;
   lineCharts: Chart | undefined;
+  lineCharts1 : Chart | undefined
   houseSizes: FeeRate[] = [];
   isLoading: boolean = false;
-
+  pieChart : Chart;
 
   constructor(
     private fb: FormBuilder, 
@@ -52,6 +53,8 @@ export class DashboardComponent implements OnInit {
     this.loadResidentsData();
     this.fetchMonthlyPaymentData();
     this.loadHouseSizes(); 
+    this.getMonthlyIncome();
+    this.loadPieChartData();
     
     
   }
@@ -336,6 +339,67 @@ SendBill(){
     );
   }
 
+  getMonthlyIncome(): void {
+    this.BanService.getIncome().subscribe(
+      (data: Income[]) => {
+        // Call getIncome method with the retrieved data
+        this.getIncome(data);
+      }, 
+      (error) => {
+        console.error('Error fetching monthly payment data:', error);
+      }
+    );
+  }
+  
+  getIncome(data: Income[]): void {
+    const Income = data.map((item) => item.TotalAmount);
+    const Month = data.map((item) => item.Month);
+  
+    this.lineCharts1 = new Chart({
+      chart: {
+        type: 'line',
+        style: {
+          fontFamily: 'Noto Sans Thai, sans-serif',
+        }
+      },
+      title: {
+        text: 'รายได้จากการค่าส่วนกลาง',
+        style: {
+          fontFamily: 'Noto Sans Thai, sans-serif',
+        }
+      },
+      credits: {
+        enabled: false
+      },
+      xAxis: {
+        categories: Month, // Update with dynamic month data
+        title: {
+          text: 'เดือน',
+          style: {
+            fontFamily: 'Noto Sans Thai, sans-serif',
+          }
+        },
+        min: 0
+      },
+      yAxis: {
+        title: {
+          text: 'จำนวนเงิน(บาท)',
+          style: {
+            fontFamily: 'Noto Sans Thai, sans-serif',
+          }
+        },
+        min: 0,
+      },
+      series: [
+        {
+          name: 'รายได้',
+          data: Income, // Update with dynamic income data
+          color: '#f887dd'
+        } as any
+      ]
+    });
+  }
+
   MonthlyPaidCheck(data: MonthlyPaymentData[]): void {
     const categories = data.map((item) => item.Pay_Month);
     const paidData = data.map((item) => item.Paid_Count);
@@ -378,98 +442,70 @@ SendBill(){
     });
   }
 
-  lineCharts1 = new Chart({
-    chart :{
-      type:'line',
-      style:{
-        fontFamily: 'Noto Sans Thai, sans-serif',
-      }
-    },
-    title:{
-      text:'เงินเข้าแต่ละเดือน',
-      style:{
-        fontFamily: 'Noto Sans Thai, sans-serif',
-      }
-    },
-    credits:{
-      enabled: false
-    },
-    xAxis: {
-      categories: ['มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย','ต.ค'], // ชื่อสำหรับแกน X
-      title: {
-        text: 'เดือน',
-        style:{
-          fontFamily: 'Noto Sans Thai, sans-serif',
+  loadPieChartData(): void {
+    this.BanService.getAllPetitionCount().subscribe(
+        (data: MonthlyPetitionData[]) => {
+            const totalRepair = data.reduce((sum, item) => sum + item.Repair_Count, 0);
+            const totalNormal = data.reduce((sum, item) => sum + item.Normal_Count, 0);
+
+            // แปลงข้อมูลให้เป็นรูปแบบที่ Pie Chart ต้องการ
+            const pieChartData = [
+                { name: 'ซ่อม', y: totalRepair, color: '#da75ee' },
+                { name: 'ทั่วไป', y: totalNormal, color: '#65e1f7' },
+            ];
+
+            this.updatePieChart(pieChartData);
+        },
+        (error) => {
+            console.error('Error fetching complaint data:', error);
         }
-      },
-      min: 0, // ค่าต่ำสุดของแกน Y
-      max: 4 // ค่าสูงสุดของแกน Y (ถ้าต้องการ)
-    },
-    yAxis: {
-      title: {
-        text: 'จำนวนเงิน(บาท)',
-        style:{
+    );
+}
+  
+  updatePieChart(data: { name: string; y: number; color: string }[]): void {
+    this.pieChart = new Chart({
+      chart: {
+        type: 'pie',
+        plotShadow: false,
+        style: {
           fontFamily: 'Noto Sans Thai, sans-serif',
-        }
-      },
-      min: 0, // ค่าต่ำสุดของแกน Y
-      max: 1000 // ค่าสูงสุดของแกน Y (ถ้าต้องการ)
-    },
-    series:[
-      {
-      name:'ลูกบ้าน',
-      data:[100,500,200,250,170,600],
-      color:'#f887dd'
-    }as any
-    
-  ]
-  })
-  // กราฟประเภทบ้าน
-  pieChart = new Chart({
-    chart: {
-      type: 'pie',
-      plotShadow: false,
-      style: {
-        fontFamily: 'Noto Sans Thai, sans-serif',
-      }
-    },
-    credits: {
-      enabled: false,
-    },
-    plotOptions: {
-      pie: {
-        innerSize: '70%',
-        borderWidth: 10,
-        slicedOffset: 10,
-        dataLabels: {
-          enabled: true,
-          format: '{point.name}: {point.percentage:.1f} %',
-          connectorWidth: 0,
         },
       },
-    },
-    title: {
-      verticalAlign: 'middle',
-      floating: true,
-      text: 'ประเภทบ้าน',
-    },
-    legend: {
-      enabled: true,
-      align: 'right',
-      verticalAlign: 'middle',
-      layout: 'vertical',
-    },
-    series: [
-      {
-        type: 'pie',
-        name: 'บ้านแต่ละประเภท',
-        data: [
-          { name: 'small', y: 1, color: '#65e1f7' },
-          { name: 'medium', y: 2, color: '#da75ee' },
-          { name: 'large', y: 3, color: '#fda95b' },
-        ],
+      credits: {
+        enabled: false,
       },
-    ],
-  });
-
+      plotOptions: {
+        pie: {
+          innerSize: '70%',
+          borderWidth: 10,
+          slicedOffset: 10,
+          dataLabels: {
+            enabled: true,
+            format: '{point.name}: {point.percentage:.1f} %',
+            connectorWidth: 0,
+          },
+        },
+      },
+      title: {
+        verticalAlign: 'middle',
+        floating: true,
+        text: 'คำร้องเรียน',
+      },
+      legend: {
+        enabled: true,
+        align: 'right',
+        verticalAlign: 'middle',
+        layout: 'vertical',
+      },
+      series: [
+        {
+          type: 'pie',
+          name: 'ประเภทคำร้องเรียน',
+          data: data, // ใช้ข้อมูลที่แปลงแล้ว
+        },
+      ],
+    });
+  }
+  
+  
   }

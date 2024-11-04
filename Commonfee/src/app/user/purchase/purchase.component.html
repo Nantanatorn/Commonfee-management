@@ -67,7 +67,7 @@
             <button *ngIf="payment.Pay_Status.trim() === 'Paid'" disabled>ชำระแล้ว</button>
           </td>
           <td>
-              <button *ngIf="payment.Pay_Status.trim() !== 'Paid'" (click)="generatePDF(payment)">Print</button>
+              <button *ngIf="payment.Pay_Status.trim() !== 'Paid'" disabled >Print</button>
               <button *ngIf="payment.Pay_Status.trim() === 'Paid'" (click)="generatePDF(payment)">Print</button>
           </td>
       </tr>

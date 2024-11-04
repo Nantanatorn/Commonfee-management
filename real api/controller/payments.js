@@ -390,3 +390,30 @@ module.exports.getReceipt = async ( req , res ) => {
 
     }
 }
+
+module.exports.GetIncome = async ( req , res ) => {
+    const conn = await sql.connect(config);
+
+    try{    
+        const result = await conn.request()
+        .query(`SELECT 
+                DATENAME(MONTH, Receipt_Date) AS Month,
+                SUM(Receipt_Total) AS TotalAmount
+                FROM 
+                ReceiptView
+                GROUP BY 
+                DATENAME(MONTH, Receipt_Date), 
+                MONTH(Receipt_Date)
+                ORDER BY 
+                MONTH(Receipt_Date);
+            `)
+
+        res.status(200).json(result.recordset);
+
+    }catch(err){
+
+        console.error(err);
+        res.status(500).send('Fail to get ');
+
+    }
+}

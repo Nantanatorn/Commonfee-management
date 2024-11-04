@@ -268,4 +268,20 @@ module.exports.pageresident = async (req, res) => {
 };
   
   
-  
+module.exports.GetpetitionCount = async (req , res) => {
+    try {
+        var pool = await sql.connect(config);
+
+        const result = await pool.request()
+        .query(`select
+          SUM(CASE WHEN petition_Type = 'Repair' THEN 1 ELSE 0 END) AS Repair_Count,
+          SUM(CASE WHEN petition_Type = 'Normal' THEN 1 ELSE 0 END) AS Normal_Count
+          FROM 
+          Petition`);
+
+        res.status(200).json(result.recordset);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }   
+}  
