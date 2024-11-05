@@ -5,8 +5,9 @@ import { Chart } from 'angular-highcharts';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FeeRate, Income, MonthlyPaymentData, MonthlyPetitionData, PeymentForAdmin } from '../../model/model';
+import { FeeRate, Income, Lastpaid, MonthlyPaymentData, MonthlyPetitionData, PeymentForAdmin } from '../../model/model';
 import { Observable } from 'rxjs/internal/Observable';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +31,13 @@ export class DashboardComponent implements OnInit {
   houseSizes: FeeRate[] = [];
   isLoading: boolean = false;
   pieChart : Chart;
+  private LastpaidS = new BehaviorSubject<Lastpaid[]>([]);
+  LastpaidS$: Observable<Lastpaid[]> = this.LastpaidS.asObservable();
+  currentPage: number = 1;
+  totalPages: number = 1;
+  pageSize: number = 5;
+
+
 
   constructor(
     private fb: FormBuilder, 
@@ -55,8 +63,40 @@ export class DashboardComponent implements OnInit {
     this.loadHouseSizes(); 
     this.getMonthlyIncome();
     this.loadPieChartData();
-    
-    
+    this.loadLastpaidData(this.currentPage, this.pageSize);
+  }
+
+  loadLastpaidData(page: number, limit: number): void {
+    this.BanService.getLast(page, limit).subscribe({
+      next: (response) => {
+        this.LastpaidS.next(response.data);
+        this.currentPage = response.currentPage;
+        this.totalPages = response.totalPages;
+      },
+      error: (error) => {
+        console.error('Error loading residents:', error);
+      },
+    });
+  }  
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadLastpaidData(this.currentPage, this.pageSize);
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadLastpaidData(this.currentPage, this.pageSize);
+    }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadLastpaidData(this.currentPage, this.pageSize);
+    }
   }
 
   loadHouseSizes(): void {

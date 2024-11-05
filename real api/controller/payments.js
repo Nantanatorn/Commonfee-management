@@ -424,3 +424,88 @@ module.exports.GetIncome = async ( req , res ) => {
     }
 }
 
+module.exports.PaymentHistorysw23 = async (req, res) => {
+    try {
+        // ดึงค่า userId จาก token ที่ผ่าน middleware มา
+        const userId = req.user.User_ID;
+
+        // ดึงค่า page และ pageSize จาก query parameter (ใช้ default 1 และ 10 ถ้าไม่ได้ส่งมา)
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 10;
+
+        // คำนวณตำแหน่งข้อมูลที่จะเริ่มดึง
+        const offset = (page - 1) * pageSize;
+
+        // เชื่อมต่อฐานข้อมูล
+        var pool = await sql.connect(config);
+        const result = await pool.request()
+            .input('id', sql.Int, userId)
+            .input('pageSize', sql.Int, pageSize)
+            .input('offset', sql.Int, offset)
+            .query(`
+                SELECT * FROM PaymentHistoryView 
+                WHERE User_ID = @id 
+                ORDER BY Pay_ID DESC
+                OFFSET @offset ROWS
+                FETCH NEXT @pageSize ROWS ONLY;
+            `);
+        
+        // ตรวจสอบว่าพบข้อมูลหรือไม่
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Not found');
+        }
+
+        // ส่งข้อมูลกลับไปในรูปแบบ JSON
+        res.status(200).json(result.recordset);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+module.exports.LastPaid = async ( req , res ) => {
+
+    try{
+            const page = parseInt(req.query.page) || 1; 
+            const limit = parseInt(req.query.limit) || 5; 
+
+            // คำนวณ OFFSET เพื่อใช้ในการเลื่อนข้อมูล
+            const offset = (page - 1) * limit;
+
+            // เชื่อมต่อฐานข้อมูล
+            const conn = await sql.connect(config);
+            
+            // ใช้ OFFSET และ FETCH สำหรับการทำ Pagination
+            const result = await conn.request()
+                .input('limit', sql.Int, limit)
+                .input('offset', sql.Int, offset)
+                .query(`
+                    SELECT *,
+                    DATEADD(HOUR, -7, Paid_Date) AS Adjusted_Paid_Date
+                    FROM Payment
+                    ORDER BY Paid_ID DESC
+                    OFFSET @offset ROWS
+                    FETCH NEXT @limit ROWS ONLY;
+                `);
+            
+            // นับจำนวนรายการทั้งหมด (เพื่อนำไปคำนวณหน้าทั้งหมด)
+            const countResult = await conn.request()
+                .query(`SELECT COUNT(*) AS total FROM Payment`);
+            
+            const total = countResult.recordset[0].total;
+            const totalPages = Math.ceil(total / limit);
+
+            // ส่งข้อมูลการทำ Pagination กลับไปยัง Client
+            res.status(200).json({
+                currentPage: page,
+                totalPages: totalPages,
+                totalItems: total,
+                data: result.recordset
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Fail to get Resident');
+    }
+
+}

@@ -38,6 +38,7 @@
         <img [src]="'http://localhost:3500/' + resident.User_image " alt="Profile" />
       </div>
       <div class="profile-details">
+        <p>ชื่อผู้ใช้ : {{ resident.username}}</p>
         <p>ชื่อ-สกุล : {{ resident.R_Firstname }}  {{ resident.R_Lastname }}</p>
         <p>รหัสบัตรประชาชน : {{ resident.IDcard }}</p>
         <p>อีเมลล์ : {{ resident.email }}</p>

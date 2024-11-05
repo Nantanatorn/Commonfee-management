@@ -1,6 +1,3 @@
-
-<div class="container mt-4"></div>
-<br>
 <div class="report-form">
   <h3 style="text-align:center ;font-weight: 600;">แจ้งคำร้องเรียน / คำร้องซ่อม</h3>
   <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
@@ -29,16 +26,18 @@
         กรุณากรอกหัวข้อคำร้อง
       </div>
     </div>
+
     
     <div class="form-group">
       <label for="petition_Type">เลือกประเถทคำร้อง</label>
       <select id="petition_Type" formControlName="petition_Type" class="form-select"  aria-label="Default select example">
         <option value="">เลือกประเภทคำร้อง</option>
         <option value="Normal">ร้องเรียนทั่วไป</option>
-        <option value="Repair">คำร้องขอซ่อม</option> 
+        <option value="Repair">คำร้องขอซ่อม</option>
+ 
       </select>
     </div>
-  
+
     <div class="form-group">
       <label for="petition_detail">รายละเอียดคำร้องเรียน</label>
       <textarea
@@ -66,3 +65,32 @@
     <button type="submit" class="btn btn-light">ยืนยัน</button>
   </form>
 </div>
+
+
+
+<div class="container mt-5">
+  <h3>สถานะคำร้องเรียน / ซ่อม</h3> 
+    <table class="status-table">
+      <thead>
+        <tr>
+          <th>วันที่</th>
+          <th>หัวข้อคำร้อง</th>
+          <th>เนื้อหาคำร้อง</th>
+          <th>ประเภทคำร้อง</th>
+          <th>สถานะคำร้อง</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let petition of petitionHistory$ | async">
+          <td>{{ petition.petition_Date | date: 'MM/dd/yyyy'}}</td>
+          <td>{{ petition.petition_Title}}</td>
+          <td>{{ petition.petition_detail }}</td>
+          <td>{{ petition.petition_Type }}</td>
+          <td><span [class.ongoing] = "petition.petition_status" [class.finish]="!petition.petition_status">
+            {{ petition.petition_status ? 'Ongoing' : 'Finish'}}
+          </span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+  </div>

@@ -1,38 +1,79 @@
+import { Component, Input } from '@angular/core';
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { PetitionHistory } from '../../model/model';
+import { AuthService } from '../../service/auth.service';
+import { BanDeeService } from '../../service/ban-dee.service';
+
 
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.css']
 })
-export class ReportComponent implements OnInit {
-
+export class ReportComponent  {
+  
+  petitionHistory$! : Observable<PetitionHistory[]>
   reportForm!: FormGroup;
-  currentDate: string;
 
-
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private http : HttpClient
-  ) {}
-
+  constructor(private http: HttpClient , 
+              private authService : AuthService , 
+              private banDeeService: BanDeeService,
+              private fb: FormBuilder,
+              private route : Router,){}
   ngOnInit(): void {
-    // สร้าง FormGroup พร้อม Validators
+    
     this.reportForm = this.fb.group({
       petition_Title: ['',Validators.required],
       petition_Type:[null,Validators.required],
       petition_detail: ['', Validators.required]
     });
-    const today = new Date();
-    this.currentDate = today.toISOString().substring(0, 10);
+    const token = localStorage.getItem('token');
+    if (token) {
+     
+      this.petitionHistory$ = this.banDeeService.getPetitionUser(token);
+    } else {
+      console.error('No token found. Please login first.');
+    }
+    
+    if (token) {
+      this.banDeeService.getPaymentHistory(token).subscribe({
+        next: (response: any) => {
+          console.log('API Response:', response);
+          // ตรวจสอบว่า response มีข้อมูลและ Pay_Status เป็น "Overdue"
+          if (response && response[0] && response[0].Pay_Status.trim() === 'Overdue') {
+            console.log('Status is Overdue, showing alert');
+            Swal.fire({
+              title: 'คุณมียอดค้างชำระ',
+              text: 'คุณค้างชำระค่าส่วนกลาง โปรดดำเนินการให้เสร็จสิ้น!',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'ชำระเงิน'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.route.navigate(['/purchase']);
+              }
+            });
+          }
+        },
+        error: (err) => {
+          // จัดการเมื่อเกิดปัญหาในการเรียก API
+          console.error('Error fetching payment history:', err);
+         
+        }
+      });
+    }
   }
 
   onSubmit(): void {
+
     if (this.reportForm.valid) {
       console.log('Form data', this.reportForm.value);
   
@@ -59,6 +100,9 @@ export class ReportComponent implements OnInit {
             text: "เราได้รับคำร้องของคุณไว้แล้ว!",
             icon: "success"
           });
+          
+          this.petitionHistory$ = this.banDeeService.getPetitionUser(token);
+
         },
         error: (error) => {
           console.error('Error:', error);
@@ -76,6 +120,6 @@ export class ReportComponent implements OnInit {
         icon: "warning"
       });
     }
+   
   }
-  
 }

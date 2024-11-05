@@ -12,7 +12,6 @@ import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
 import { HeaderComponent } from './user/header/header.component';
 import { AboutUsComponent } from './user/about-us/about-us.component';
-import { StatusComponent } from './user/Not use/status/status.component';
 import { ReportComponent } from './user/Residentreport/report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -41,7 +40,6 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
     RegisterComponent,
     HeaderComponent,
     AboutUsComponent,
-    StatusComponent,
     ReportComponent,
     PurchaseComponent,
     statusAdminComponent,

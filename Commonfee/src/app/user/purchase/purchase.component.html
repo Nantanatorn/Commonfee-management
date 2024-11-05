@@ -35,8 +35,9 @@
       <button type="submit" class="btn btn-primary">กรอง</button>
       </div>
       
-
+      
   </div>
+
   <table class="payment-table">
     <thead>
       <tr>
@@ -53,8 +54,8 @@
       </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let payment of paymentHistory$ | async">
-          <td>{{ payment.Pay_Date | date: 'dd MMM yyyy'}}</td>
+      <tr *ngFor="let payment of paymentHistory$ | async">
+          <td>{{ payment.Pay_Date| date: 'dd MMM yyyy'}}</td>
           <td>{{ payment.House_number }}</td>
           <td>{{ payment.Land_size }} ตร.ว.</td>
           <td>{{ payment.Pay_Fine}} บาท</td>

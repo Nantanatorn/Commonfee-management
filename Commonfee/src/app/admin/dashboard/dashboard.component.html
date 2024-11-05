@@ -116,25 +116,32 @@
 </div>
     <div class="col-4">
       <div class="reviewdetail">
-      <h5>แสดงเงินเข้าล่าสุด</h5>
+      <h5 class="mt-3">แสดงเงินเข้าล่าสุด</h5>
       <table class="table">
-        <thead>
+        <thead >
           <tr>
-            <th>ชื่อ</th>
-            <th>รายการจอง</th>
-            <th>เวลา</th>
+            <th>รหัสชำระ</th>
             <th>วันที่</th>
+            <th>ชื่อ - สกุล </th>
+            <th>จำนวนเงิน</th>
+            
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>อิง</td>
-            <td>ฟิตเนต</td>
-            <td>12.00-15.00</td>
-            <td>16/10/2024</td>
+          <tr *ngFor="let Last of LastpaidS$ | async">
+            <td>{{ Last.Paid_ID }}</td>
+            <td> {{ Last.Adjusted_Paid_Date | date: 'dd MMM yyyy, HH:mm:ss' }}</td>
+            <td>{{ Last.R_Firstname}} {{ Last.R_Lastname}}</td>
+            <td>{{ Last.Paid_Amount}}</td>
+            
           </tr>
         </tbody>
       </table>
+      <div class="pagination">
+        <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
+       <button>Page {{ currentPage }} of {{ totalPages }}</button>
+       <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
+     </div>
     </div>
     </div>
   </div>

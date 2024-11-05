@@ -16,6 +16,7 @@ require('dotenv').config();
     router.put('/changerate',paymentcon.ChangePayrate);
     router.get('/getreceipt/:payId',paymentcon.getReceipt);
     router.get('/getincome',paymentcon.GetIncome);
+    router.get('/paidhistory',paymentcon.LastPaid);
     
 
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Announcement, FeeRate, House, Income, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Receipt, Resident, ResidentStatus } from '../model/model';
+import { Announcement, FeeRate, House, Income, Lastpaid, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Receipt, Resident, ResidentStatus } from '../model/model';
 import { Userinfo } from '../model/user';
 
 const api_URL = 'http://localhost:3500'; 
@@ -33,6 +33,7 @@ export class BanDeeService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.httpClient.get<paymentHistory[]>(`${api_URL}/paymenthistory`, { headers });
   }
+  
 
   getPetitionUser(token: string): Observable<PetitionHistory[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -101,8 +102,14 @@ export class BanDeeService {
   getAllPetitionCount(): Observable<MonthlyPetitionData[]> {
     return this.httpClient.get<MonthlyPetitionData[]>(`${api_URL}/petitioncount`);
   }
+  getLast(page: number, limit: number): Observable<{ currentPage: number, totalPages: number, totalItems: number, data: Lastpaid[] }> {
+    return this.httpClient.get<{ currentPage: number, totalPages: number, totalItems: number, data: Lastpaid[] }>(
+      `${api_URL}/paidhistory?page=${page}&limit=${limit}`
+    );
+  }
+}
 
 
   
-}
+
 

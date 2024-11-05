@@ -27,6 +27,7 @@ export interface Resident {
   email: string
   House_No : number
   User_image : string
+  username : string
 }
 
 export interface House {
@@ -135,4 +136,16 @@ export interface Receipt {
 export interface Income {
   Month : string
   TotalAmount : number
+}
+
+export interface Lastpaid {
+  R_ID: number
+  R_Firstname: string
+  R_Lastname: string
+  Pay_ID: number
+  Paid_ID: number
+  Paid_Date: string
+  Paid_Amount: number
+  Paid_Fine: number
+  Adjusted_Paid_Date : number
 }
