@@ -209,6 +209,7 @@ module.exports.SreachResident = async ( req , res ) => {
                 OR R_Lastname LIKE @search
                 OR House_number LIKE @search
                 OR email LIKE @search
+                OR username LIKE @search
             `);
 
         if (result.recordset.length === 0) {

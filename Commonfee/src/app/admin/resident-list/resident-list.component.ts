@@ -135,16 +135,23 @@ export class ResidentListComponent implements OnInit {
 
   searchresident() {
     console.log(`Searching for Member: ${this.searchQuery}`);
-    this.http
-      .get<Resident[]>(`http://localhost:3500/searchresident?search=${this.searchQuery}`)
-      .subscribe({
-        next: (response: Resident[]) => {
-          console.log('Search result:', response);
-          this.residentsSubject.next(response);
-        },
-        error: (error) => {
-          console.error('Error fetching residents:', error);
-        },
-      });
+    
+    if (this.searchQuery.trim() === '') {
+      // ถ้าช่องค้นหาว่างเปล่า ให้โหลดข้อมูลทั้งหมด
+      this.loadResidentsData(this.currentPage, this.pageSize);
+    } else {
+      // ถ้าไม่ว่าง ให้ค้นหาข้อมูลตามคำค้นหา
+      this.http
+        .get<Resident[]>(`http://localhost:3500/searchresident?search=${this.searchQuery}`)
+        .subscribe({
+          next: (response: Resident[]) => {
+            console.log('Search result:', response);
+            this.residentsSubject.next(response);
+          },
+          error: (error) => {
+            console.error('Error fetching residents:', error);
+          },
+        });
+    }
   }
 }

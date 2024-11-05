@@ -509,3 +509,42 @@ module.exports.LastPaid = async ( req , res ) => {
     }
 
 }
+
+module.exports.SearchPaymentHistory = async (req, res) => {
+    try {
+        // รับค่า month, year, และ User ID จาก request
+        const month = parseInt(req.query.month);
+        const year = parseInt(req.query.year);
+        const userId = req.user.User_ID; // รับ User_ID จาก token ผ่าน middleware
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
+
+        // เชื่อมต่อฐานข้อมูล
+        let pool = await sql.connect(config);
+
+        // ค้นหาข้อมูลโดยใช้เดือน, ปี และ User_ID
+        const result = await pool.request()
+            .input('month', sql.Int, month)
+            .input('year', sql.Int, year)
+            .input('userId', sql.Int, userId)
+            .query(`
+                SELECT * FROM PaymentHistoryView
+                WHERE (MONTH(Pay_Date) = @month OR @month IS NULL)
+                AND (YEAR(Pay_Date) = @year OR @year IS NULL)
+                AND User_ID = @userId
+                ORDER BY Pay_ID DESC
+            `);
+
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ message: 'No payment history found' });
+        }
+
+        // ส่งข้อมูลที่ค้นหากลับไปยัง Client
+        res.status(200).json(result.recordset);
+    } catch (err) {
+        console.error('Error searching payment history:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};

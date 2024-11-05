@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Announcement, FeeRate, House, Income, Lastpaid, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Receipt, Resident, ResidentStatus } from '../model/model';
@@ -107,6 +107,21 @@ export class BanDeeService {
       `${api_URL}/paidhistory?page=${page}&limit=${limit}`
     );
   }
+
+  searchPaymentHistory(month: number | null, year: number | null, token: string): Observable<paymentHistory[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    let params = new HttpParams();
+    if (month) {
+        params = params.set('month', month.toString());
+    }
+    if (year) {
+        params = params.set('year', year.toString());
+    }
+
+    return this.httpClient.get<paymentHistory[]>(`${api_URL}/searchpayment`, { headers, params });
+}
+
 }
 
 

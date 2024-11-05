@@ -16,24 +16,26 @@ var thSarabunFontBase64 = 'AAEAAAAVAQAABABQR0RFRgdNC+QABvmIAAAAVEdQT1OM1rlcAAb53
   templateUrl: './purchase.component.html',
   styleUrl: './purchase.component.css'
 })
-export class PurchaseComponent implements OnInit{
+export class PurchaseComponent implements OnInit {
   
   myAngularxQrCode: string = '';
   isQrScanned: boolean = false;
-  paymentHistory$!: Observable<paymentHistory[]>;
+  paymentHistory$: BehaviorSubject<paymentHistory[]> = new BehaviorSubject<paymentHistory[]>([]); // เปลี่ยนเป็น BehaviorSubject
   phoneNumber: string = '0906323838';
-  selectedPayment: paymentHistory | null = null; // เก็บรายการที่ถูกเลือก
-  isPaid: boolean ;
-  total : number;
+  selectedPayment: paymentHistory | null = null;
+  isPaid: boolean;
+  total: number;
+  month: number | null = null; // ตัวแปรเก็บค่าของเดือน
+  year: number | null = null;
 
   constructor(private http: HttpClient, private authService: AuthService, private banDeeService: BanDeeService, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     if (token) {
-      this.paymentHistory$ = this.banDeeService.getPaymentHistory(token);
-      this.paymentHistory$.subscribe({
+      this.banDeeService.getPaymentHistory(token).subscribe({
         next: (data) => {
+          this.paymentHistory$.next(data); // ใช้ next() เพื่ออัปเดต BehaviorSubject
           console.log('Data received from API:', data);
         },
         error: (err) => {
@@ -65,7 +67,7 @@ export class PurchaseComponent implements OnInit{
     // ใช้ Pay_ID จากรายการที่เลือก
     if (this.selectedPayment) {
       console.log('Using Pay ID from Selected Record:', this.selectedPayment.Pay_ID);
-      this.handlePayment(this.selectedPayment.Pay_ID.toString()); // ใช้ Pay_ID จาก selectedPayment ที่ถูกเลือก
+      this.handlePayment(this.selectedPayment.Pay_ID.toString());
     } else {
       Swal.fire({
         title: 'ไม่พบ Pay ID',
@@ -94,22 +96,7 @@ export class PurchaseComponent implements OnInit{
           text: 'ขอบคุณที่ชำระเงินค่าส่วนกลาง',
           icon: 'success',
         });
-  
-        // รีเฟรชข้อมูลการชำระเงินใหม่หลังจากชำระเงินสำเร็จ
-        this.refreshPaymentHistory(token);
-        this.paymentHistory$.subscribe({
-          next: (data) => {
-            this.selectedPayment = data.find(p => p.Pay_ID === parseInt(payId));
-            if (this.selectedPayment) {
-              this.isPaid = this.selectedPayment.Pay_Status === 'Paid';
-            }
-            // ซ่อน QR Code และปุ่มชำระเงินเมื่อชำระแล้ว
-            this.myAngularxQrCode = '';
-          },
-          error: (err) => {
-            console.error('Error refreshing payment history:', err);
-          },
-        });
+        this.refreshPaymentHistory();
       },
       error: (err) => {
         console.error('Error updating payment status:', err);
@@ -122,12 +109,38 @@ export class PurchaseComponent implements OnInit{
     });
   }
 
-  refreshPaymentHistory(token: string) {
-    this.paymentHistory$ = this.banDeeService.getPaymentHistory(token);
-    this.paymentHistory$.subscribe(() => {
-      this.cd.detectChanges();
-    });
+  refreshPaymentHistory() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.banDeeService.getPaymentHistory(token).subscribe({
+        next: (data) => {
+          this.paymentHistory$.next(data);
+          this.cd.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error refreshing payment history:', err);
+        }
+      });
+    }
   }
+
+  filterPaymentHistory() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.error('No token found. Please login first.');
+        return;
+    }
+
+    this.banDeeService.searchPaymentHistory(this.month, this.year, token).subscribe({
+        next: (response) => {
+            this.paymentHistory$.next(response);
+            console.log('Filtered Payment History:', response);
+        },
+        error: (error) => {
+            console.error('Error fetching filtered payment history:', error);
+        }
+    });
+}
 
 
 
