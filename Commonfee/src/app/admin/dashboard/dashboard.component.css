@@ -241,3 +241,37 @@ table, th, td {
   height: 10rem;
   margin-bottom: 10px;
 }
+
+.product-card {
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 20px auto;
+  height: 25rem;
+  width: 100rem;
+  border-radius: 10px;
+}
+
+.photo {
+  width: 500px;
+  height: 20rem;
+  background-color: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin-left: 75px;
+}
+
+.details {
+  flex-grow: 1;
+  margin-left: 75px;
+  text-align: left;
+}
+
+.edit-btn {
+  margin-right: 10px;
+}

@@ -5,7 +5,7 @@ import { Chart } from 'angular-highcharts';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FeeRate, Income, Lastpaid, MonthlyPaymentData, MonthlyPetitionData, PeymentForAdmin } from '../../model/model';
+import { Announcement, FeeRate, Income, Lastpaid, MonthlyPaymentData, MonthlyPetitionData, PeymentForAdmin } from '../../model/model';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
@@ -19,10 +19,12 @@ export class DashboardComponent implements OnInit {
   residents: any[] = [];
   isModalOpen: boolean = false;
   isModalOpen1: boolean = false;
+  isModalOpen2: boolean = false;
   newsTitle: string = '';
   newsContent: string = '';
   AddNewsform: FormGroup; 
   ChangeFee : FormGroup;
+  EditNewsform : FormGroup;
   selectedFile: File | null = null;
   Unpaid : Observable<PeymentForAdmin[]> | undefined;  
   paid : Observable<PeymentForAdmin[]> | undefined;
@@ -36,7 +38,12 @@ export class DashboardComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   pageSize: number = 5;
+  Announcement = new BehaviorSubject<Announcement[]>([]);
+  selectedAnnouncementID: number | null = null;
 
+  currentPage1: number = 1;
+  totalPages1: number = 1;
+  pageSize1: number = 3;
 
 
   constructor(
@@ -55,6 +62,11 @@ export class DashboardComponent implements OnInit {
       FeeRate: ['', [Validators.required, Validators.min(0)]],
       Fine: ['', [Validators.required, Validators.min(0)]],
     });
+    this.EditNewsform = this.fb.group({
+      Announce_Title: ['', Validators.required],
+      Announce_Detail: ['', Validators.required],
+      Announce_Status : ['']
+    });
   }
 
   ngOnInit(): void {
@@ -64,7 +76,94 @@ export class DashboardComponent implements OnInit {
     this.getMonthlyIncome();
     this.loadPieChartData();
     this.loadLastpaidData(this.currentPage, this.pageSize);
+    this.reloadNews(this.currentPage1, this.pageSize1);
   }
+
+  reloadNews(page: number, limit: number) {
+    this.BanService.getNewsPage(page, limit).subscribe({
+      next: (response) => {
+        this.Announcement.next(response.data); 
+        this.currentPage1 = response.currentPage; 
+        this.totalPages1 = response.totalPages;
+      },
+      error: (error) => {
+        console.error('Error loading announcements:', error);
+      },
+    });
+  }
+  goToNextPage1(): void {
+    if (this.currentPage1 < this.totalPages1) {
+      this.currentPage1++;
+      this.reloadNews(this.currentPage1, this.pageSize1);
+    }
+  }
+
+  goToPreviousPage1(): void {
+    if (this.currentPage1 > 1) {
+      this.currentPage1--;
+      this.reloadNews(this.currentPage1, this.pageSize1);
+    }
+  }
+
+  goToPage1(page: number): void {
+    if (page >= 1 && page <= this.totalPages1) {
+      this.currentPage1 = page;
+      this.reloadNews(this.currentPage1, this.pageSize1);
+    }
+  }
+
+  editAnnouncement( news : Announcement ){
+    this.isModalOpen2 = true; 
+    this.selectedAnnouncementID = news.Announce_ID; 
+
+    this.EditNewsform.patchValue({
+      Announce_Title :  news.Announce_Title,
+      Announce_Detail : news.Announce_Detail,
+      Announce_Status : news.Announce_Status
+    });
+  }
+
+   
+  onEdit(){
+    if (this.EditNewsform.invalid) {
+      Swal.fire({
+        title: 'ข้อมูลไม่ครบถ้วน!',
+        text: 'กรุณากรอกข้อมูลให้ครบถ้วนก่อนทำการบันทึก',
+        icon: 'error'
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('Announce_Title', this.EditNewsform.get('Announce_Title')?.value);
+    formData.append('Announce_Detail', this.EditNewsform.get('Announce_Detail')?.value);
+    formData.append('Announce_Status', this.EditNewsform.get('Announce_Status')?.value);
+
+    if (this.selectedFile) {
+      formData.append('Announce_image', this.selectedFile);
+    }
+
+    this.http.put(`http://localhost:3500/editanoucement/${this.selectedAnnouncementID}`, formData).subscribe({
+      next: (response) => {
+        Swal.fire({
+          title: "สำเร็จ!",
+          text: "ข่าวสารได้ถูกประกาศออกไปแล้ว!",
+          icon: "success"
+        });
+        this.reloadNews(this.currentPage, this.pageSize);
+        this.closeModal2();
+      },
+      error: (error) => {
+        Swal.fire({
+          title: 'เกิดข้อผิดพลาด!',
+          text: 'ไม่สามารถแก้ไขข่าวสารได้ กรุณาลองใหม่อีกครั้ง',
+          icon: 'error'
+        });
+        console.error('Error ', error);
+      }
+    });
+  }
+
 
   loadLastpaidData(page: number, limit: number): void {
     this.BanService.getLast(page, limit).subscribe({
@@ -109,6 +208,8 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+
   
   onHouseSizeChange(event: any): void {
     const selectedSize = event.target.value;
@@ -272,9 +373,12 @@ SendBill(){
     this.isModalOpen1 = false;
     this.clearNewsFields(); 
   }
+  closeModal2() {
+    this.isModalOpen2 = false;
+    this.clearNewsFields(); 
+  }
 
-
-
+ 
 
   clearNewsFields() {
     this.newsTitle = '';
@@ -284,7 +388,7 @@ SendBill(){
   onFileChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/png'];
+      const allowedTypes = ['image/jpeg', 'image/png' , 'image/webp'];
       if (!allowedTypes.includes(file.type)) {
         alert('กรุณาอัปโหลดไฟล์ที่เป็น .jpeg หรือ .png เท่านั้น');
         return;
@@ -323,6 +427,7 @@ SendBill(){
           text: "ข่าวสารได้ถูกประกาศออกไปแล้ว!",
           icon: "success"
         });
+        this.reloadNews(this.currentPage1, this.pageSize1);
         this.closeModal();
       },
       error: (error) => {

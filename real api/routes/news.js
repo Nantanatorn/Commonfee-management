@@ -17,6 +17,8 @@ const storage = multer.diskStorage({
 
     router.get('/getannouce',newscontroll.getAllannouce);
     router.post('/addanoucement',upload.single('Announce_image'),newscontroll.AddAnoucement);
+    router.put('/editanoucement/:id',upload.single('Announce_image'),newscontroll.EditNews);
+    router.get('/getpageannouce',newscontroll.getPageannouce);
 
 
 module.exports = router;

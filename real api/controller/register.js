@@ -38,6 +38,22 @@ module.exports.enrollment = async (req, res) => {
             return res.status(400).json({ message: 'House already exists.' });
         }
 
+        const checkUsername = await pool.request()
+            .input('username', sql.VarChar, username)
+            .query('SELECT * FROM UserAccount WHERE username = @username');
+
+        if (checkUsername.recordset.length > 0) {
+            return res.status(400).json({ message: 'Username already exists.' });
+        }
+
+        const checkID = await pool.request()
+        .input('IDcard', sql.VarChar, IDcard)
+        .query('SELECT * FROM UserAccount WHERE IDcard = @IDcard');
+
+        if (checkID.recordset.length > 0) {
+        return res.status(400).json({ message: 'IDcard already exists.' });
+        }
+
         // Hash the password
         const hashedPassword = await bcrypt.hash('1234567890', 10); // Salt rounds = 10
         

@@ -122,6 +122,12 @@ export class BanDeeService {
     return this.httpClient.get<paymentHistory[]>(`${api_URL}/searchpayment`, { headers, params });
 }
 
+getNewsPage(page: number, limit: number): Observable<{ currentPage: number, totalPages: number, totalItems: number, data: Announcement[] }> {
+  return this.httpClient.get<{ currentPage: number, totalPages: number, totalItems: number, data: Announcement[] }>(
+    `${api_URL}/getpageannouce?page=${page}&limit=${limit}`
+  );
+}
+
 }
 
 

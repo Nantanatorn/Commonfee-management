@@ -157,8 +157,77 @@
   <div class="line" [chart]="lineCharts1"></div> 
 </div>
 
+<div *ngIf="Announcement | async as news">
+  <div *ngIf="news.length > 0; else noData">
+    <div class="product-card" *ngFor="let item of news">
+      <div class="photo">
+        <img [src]="'http://localhost:3500/' + item.Announce_image" alt="Photo" style="width: 500px; height: 20rem;">
+      </div>
+      <div class="details">
+        <p><strong>Date</strong>: {{ item.Adjusted_Announce_Date | date: 'dd MMM yyyy, HH:mm:ss'}}</p>
+        <p><strong>Title</strong>: {{ item.Announce_Title }}</p>
+        <p><strong>Detail</strong>: {{ item.Announce_Detail }}</p>
+      </div>
+      <div class="edit-btn">
+        <button class="btn btn-primary" (click)="editAnnouncement(item)">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<ng-template #noData>
+  <p>No announcements available.</p>
+</ng-template>
 
+<!-- Pagination Controls -->
+<div class="pagination-controls">
+  <button (click)="goToPreviousPage1()" [disabled]="currentPage1 === 1">Previous</button>
+  <span>Page {{ currentPage1 }} of {{ totalPages1 }}</span>
+  <button (click)="goToNextPage1()" [disabled]="currentPage1 === totalPages1">Next</button>
+</div>
+
+<div class="modal" *ngIf="isModalOpen2">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">เพิ่มข่าวสาร</h5>
+        <button type="button" class="close" (click)="closeModal2()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="EditNewsform" (ngSubmit)="onEdit()">
+          <div class="form-group">
+            <label for="Announce_Title">หัวข้อข่าวสาร</label>
+            <input type="text" id="Announce_Title" formControlName="Announce_Title" class="form-control" placeholder="กรอกหัวข้อข่าวสาร">
+          </div>
+        
+          <div class="form-group">
+            <label for="Announce_Detail">รายละเอียดข่าวสาร</label>
+            <textarea id="Announce_Detail" formControlName="Announce_Detail" class="form-control" placeholder="กรอกรายละเอียดข่าวสาร"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="Announce_Status">สถานะ</label>
+            <select id="Announce_Status" formControlName="Announce_Status" class="form-select"  aria-label="Default select example">
+              <option selected>Status</option>
+              <option value="Show">Show</option>
+              <option value="Hide">Hide</option>
+            </select>
+          </div>
+        
+          <div class="form-group">
+            <input id="Announce_image" type="file" class="form-control" (change)="onFileChange($event)" accept="image/*">
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal2()">ยกเลิก</button>
+            <button type="onEdit" class="btn btn-primary">บันทึก</button>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
 
 <!-- ทำ modal สำหรับประกาศข่าวสาร -->
 <div class="modal" *ngIf="isModalOpen">

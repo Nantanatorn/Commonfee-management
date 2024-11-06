@@ -14,6 +14,8 @@ export interface Announcement{
   Announce_Title : string,
   Announce_Detail : string,
   Announce_image : string,
+  Announce_Status : string,
+  Adjusted_Announce_Date : string
 }
 
 export interface Resident {

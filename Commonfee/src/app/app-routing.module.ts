@@ -33,9 +33,6 @@ const routes: Routes = [
   { path: 'report', component: ReportComponent },
   { path: 'about-us', component: AboutUsComponent },
   {path:'purchase',component:PurchaseComponent},
-  {path:'bookRoom',component:BookRoomComponent},
-  {path:'fitness',component:FitnessComponent},
-  {path:'historyBooking',component:HistoryBookingComponent},
   {path: 'editprofile',component:EditProfileComponent},
   {path: 'forgotpass',component:ForgotpassComponent},
   // admin routes
