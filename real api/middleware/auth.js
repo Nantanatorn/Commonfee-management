@@ -1,49 +1,40 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'your-secret-key'; // เปลี่ยนเป็นคีย์จริงของคุณ
+require('dotenv').config();
 
-// Middleware สำหรับตรวจสอบ JWT token
-exports.auth = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // 'Bearer <token>'
-    
-    if (token == null) return res.status(401).json({message:'no Token '}); // ไม่มี token
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET || JWT_SECRET.length < 16) {
+    throw new Error('JWT_SECRET is missing or too short (min 16 chars). Set it in .env');
+}
 
-    jwt.verify(token, 'jwtsecret', (err, decoded) => {
-        if (err) {
-            return res.status(403).json({message:'invaild token'});
-        }  // Token ไม่ถูกต้อง
-        console.log('Decoded JWT:', decoded); 
-        req.user = decoded.user;
-        console.log('Authenticated User:', req.user);
-        next(); 
-    });
-};
-// Middleware for role-based access control
-exports.checkRole = (role) => {
-    return (req, res, next) => {
-        console.log('Expected Role:', role); // Debugging
-        console.log('User Role:', req.user.role); // Debugging
+module.exports.JWT_SECRET = JWT_SECRET;
 
-        if (req.user.role !== role) {
-            console.log('User does not have the required role');
-            return res.status(403).json({ message: 'This is for admin only' });
-        }
-        next();
-    };
-};
-
-module.exports.verifyToken = (req, res, next) => {
+// ตรวจสอบ JWT token แล้วใส่ payload ลง req.user
+const verifyToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // 'Bearer <token>'
 
-    if (token == null) return res.status(401).json({ message: 'No Token' });
+    if (!token) return res.status(401).json({ message: 'No Token' });
 
-    jwt.verify(token, 'jwtsecret', (err, decoded) => {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(403).json({ message: 'Invalid token' });
         }
-
-        req.user = decoded.user; // สร้าง req.user จาก payload ใน token
+        req.user = decoded.user;
         next();
     });
 };
+
+// ตรวจสอบสิทธิ์ตาม role (ไม่สนตัวพิมพ์เล็ก/ใหญ่ เพราะข้อมูลมีทั้ง 'admin' และ 'Admin')
+const checkRole = (role) => (req, res, next) => {
+    const userRole = String(req.user?.role || '').toLowerCase();
+    if (userRole !== String(role).toLowerCase()) {
+        return res.status(403).json({ message: 'Permission denied' });
+    }
+    next();
+};
+
+module.exports.verifyToken = verifyToken;
+module.exports.auth = verifyToken; // ชื่อเดิม เผื่อมีโค้ดอื่นเรียกใช้
+module.exports.checkRole = checkRole;
+// ใช้ตัวนี้กับ route ที่เป็นของ admin เท่านั้น
+module.exports.adminOnly = [verifyToken, checkRole('admin')];

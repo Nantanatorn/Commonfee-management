@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Announcement, FeeRate, House, Income, Lastpaid, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PetitionAdmin, PetitionHistory, PeymentForAdmin, Receipt, Resident, ResidentStatus } from '../model/model';
+import { Announcement, FeeRate, House, Income, Lastpaid, MonthlyPaymentData, MonthlyPetitionData, paymentHistory, PendingPayment, PetitionAdmin, PetitionHistory, PeymentForAdmin, Receipt, Resident, ResidentStatus } from '../model/model';
 import { Userinfo } from '../model/user';
 
 const api_URL = 'http://localhost:3500'; 
@@ -52,10 +52,43 @@ export class BanDeeService {
     return this.httpClient.get<PeymentForAdmin[]>(`${api_URL}/getpaid`);
   }
 
-  generatePromptPayQr(phoneNumber: string, amount: number, payId: number): Observable<{ qrCodeUrl: string }> {
-    return this.httpClient.get<{ qrCodeUrl: string }>(
-      `${api_URL}/gpromptpay?phoneNumber=${phoneNumber}&amount=${amount}&payId=${payId}`
+  getPending(): Observable<PendingPayment[]> {
+    return this.httpClient.get<PendingPayment[]>(`${api_URL}/getpending`);
+  }
+
+  confirmPayment(payId: number): Observable<any> {
+    return this.httpClient.put(`${api_URL}/confirmpay/${payId}`, {});
+  }
+
+  rejectPayment(payId: number): Observable<any> {
+    return this.httpClient.put(`${api_URL}/rejectpay/${payId}`, {});
+  }
+
+  // เบอร์รับเงินและยอดเงินถูกกำหนดที่เซิร์ฟเวอร์ (จาก .env และตัวบิล) ส่งแค่เลขบิล
+  generatePromptPayQr(payId: number): Observable<{ qrCodeUrl: string, amount: number }> {
+    return this.httpClient.get<{ qrCodeUrl: string, amount: number }>(
+      `${api_URL}/gpromptpay`, { params: { payId } }
     );
+  }
+
+  // ลูกบ้านแจ้งชำระพร้อมแนบสลิป (multipart/form-data -- ห้ามตั้ง Content-Type เอง)
+  reportPayment(payId: number, slip: File): Observable<any> {
+    const form = new FormData();
+    form.append('slip', slip);
+    return this.httpClient.put(`${api_URL}/pay/${payId}`, form);
+  }
+
+  // รูปสลิป (ต้อง login: เจ้าของบิลหรือ admin)
+  getSlip(payId: number): Observable<Blob> {
+    return this.httpClient.get(`${api_URL}/slip/${payId}`, { responseType: 'blob' });
+  }
+
+  updateResident(rid: number, body: { User_Firstname: string, User_Lastname: string, email: string, phone: string }): Observable<{ message: string }> {
+    return this.httpClient.put<{ message: string }>(`${api_URL}/resident/${rid}`, body);
+  }
+
+  moveOutResident(rid: number): Observable<{ message: string }> {
+    return this.httpClient.put<{ message: string }>(`${api_URL}/resident/${rid}/moveout`, {});
   }
 
   sendBill(): Observable<any> { const token = localStorage.getItem('token'); const headers = { 'Authorization': `Bearer ${token}` };
@@ -76,8 +109,17 @@ export class BanDeeService {
     return this.httpClient.get<MonthlyPetitionData[]>(`${api_URL}/monthly-petition`);
   }
 
-  pageresident(page: number, limit: number): Observable<{ currentPage: number, totalPages: number, data: Resident[] }> {
-    return this.httpClient.get<{ currentPage: number, totalPages: number, data: Resident[] }>(`${api_URL}/pageresident?page=${page}&limit=${limit}`);
+  // รายชื่อลูกบ้านแบบแบ่งหน้า (search: ชื่อ นามสกุล บ้านเลขที่ อีเมล ชื่อผู้ใช้ เบอร์โทร เลขบัตรประชาชน)
+  pageresident(page: number, limit: number, search: string = ''): Observable<{ currentPage: number, totalPages: number, totalItems: number, data: Resident[] }> {
+    let params = new HttpParams().set('page', page).set('limit', limit);
+    if (search.trim()) {
+      params = params.set('search', search.trim());
+    }
+    return this.httpClient.get<{ currentPage: number, totalPages: number, totalItems: number, data: Resident[] }>(`${api_URL}/pageresident`, { params });
+  }
+
+  changeRate(body: { House_Size: string, Land_size: number, FeeRate: number, Fine: number }): Observable<any> {
+    return this.httpClient.put(`${api_URL}/changerate`, body);
   }
 
   getFeeByHouseSize(houseSize: string): Observable<FeeRate[]> {

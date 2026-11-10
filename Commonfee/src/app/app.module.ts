@@ -14,7 +14,8 @@ import { HeaderComponent } from './user/header/header.component';
 import { AboutUsComponent } from './user/about-us/about-us.component';
 import { ReportComponent } from './user/Residentreport/report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './service/auth.interceptor';
 import { PurchaseComponent } from './user/purchase/purchase.component';
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
@@ -68,7 +69,8 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
     
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

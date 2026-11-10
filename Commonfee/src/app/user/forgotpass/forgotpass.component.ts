@@ -17,6 +17,7 @@ export class ForgotpassComponent {
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router ) {
     this.changePassForm = this.fb.group({
       identifier: ['', Validators.required], // Identifier can be either email or username
+      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     }, { validator: this.checkPasswords });
@@ -40,13 +41,25 @@ export class ForgotpassComponent {
     return pass === confirmPass ? null : { notSame: true };
   }
 
+  // ขอรหัสยืนยัน 6 หลักทางอีเมล
+  requestCode(): void {
+    const identifier = this.changePassForm.get('identifier')?.value;
+    if (!identifier) {
+      Swal.fire({ title: 'ข้อมูลไม่ครบถ้วน!', text: 'กรุณากรอกชื่อผู้ใช้หรืออีเมลก่อน', icon: 'error' });
+      return;
+    }
+    this.http.post('http://localhost:3500/forgotpass/request', { identifier }).subscribe({
+      next: () => Swal.fire({ title: 'ส่งรหัสแล้ว', text: 'หากบัญชีนี้มีอยู่ ระบบได้ส่งรหัสยืนยันไปทางอีเมลแล้ว (ใช้ได้ 10 นาที)', icon: 'success' }),
+      error: (error) => Swal.fire({ title: 'เกิดข้อผิดพลาด!', text: error?.error?.message || 'กรุณาลองใหม่อีกครั้ง', icon: 'error' })
+    });
+  }
+
   onChange(): void {
     if (this.changePassForm.valid) {
-      const { identifier, password } = this.changePassForm.value;
-      const formData = { password };
+      const { identifier, code, password } = this.changePassForm.value;
+      const formData = { identifier, code, password };
 
-      
-      this.http.put(`http://localhost:3500/updatepass?identifier=${identifier}`, formData).subscribe({
+      this.http.put('http://localhost:3500/updatepass', formData).subscribe({
         next: (response) => {
           Swal.fire({
             title: "สำเร็จ!",

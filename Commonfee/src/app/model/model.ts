@@ -19,6 +19,7 @@ export interface Announcement{
 }
 
 export interface Resident {
+  R_ID: number
   IDcard: string
   R_Firstname: string
   R_Lastname: string
@@ -102,10 +103,28 @@ export interface PeymentForAdmin {
   Pay_Deadline: string
   Pay_Status: string
   Pay_Out : number
+  Pay_ID?: number
+  Pay_Date?: string
+  Pay_Month?: string
+}
+
+export interface PendingPayment {
+  Pay_ID: number
+  R_Firstname: string
+  R_Lastname: string
+  House_number: string
+  phone: string
+  Pay_Date: string
+  Pay_Amount: number
+  Pay_Fine: number
+  Pay_Deadline: string
+  Pay_Status: string
+  Has_Slip: number
 }
 
 export interface MonthlyPaymentData {
   Pay_Month: string
+  Pay_Year?: number
   Paid_Count: number
   Overdue_Count: number
 }

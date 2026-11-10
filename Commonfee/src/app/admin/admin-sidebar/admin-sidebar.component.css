@@ -1,236 +1,162 @@
-.main-content {
-  padding: 20px;
-  transition: margin-left 0.3s; 
-}
-
-
-
-.main-content.slide button{
-  left: 16rem;
-}
-
-
-.main-content button{
-  position: sticky;
-  left: 0;
-  margin-top: -1rem;
-  padding: 20px 25px; /* ขยายขนาดปุ่ม */
-  font-size: 18px; 
-  background-color: #0e010e; 
-  color: white; 
-  border: none;
-  height: 75px;
-  /*border-radius: 5px; */
-  cursor: pointer; 
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-  transition: left 0.3s; 
-  font-size: 22px;
-  z-index: 2000;
-}
-
-.main-content button:hover {
-  background-color: #1c0027; 
-  
-}
-.sidebar.open {
-  left: 0; /* แสดง sidebar เมื่อเปิด */
-}
-
+/* ==========================================================================
+   Admin sidebar — แถบ "สันสมุดบัญชี" สีกรมท่า (ทั้งสองโหมด) ทองเหลืองเป็นสีเน้น
+   จอ <= 1100px ย่อเป็นแถบไอคอน (CSS ล้วน)
+   ========================================================================== */
 .sidebar {
+  --sb-text: #c3ccdb;
+  --sb-text-hi: #ffffff;
+  --sb-line: rgba(255, 255, 255, 0.11);
+  --sb-hover: rgba(255, 255, 255, 0.06);
+  --sb-brass: #d9b26a;
+  --sb-brass-soft: rgba(217, 178, 106, 0.15);
+
   position: fixed;
-  height: 100%;
-  width: 250px;
-  top: 0;
-}
-
-.sidebar .text{
-  font-size: 16px;
-  font-weight: 500;
-}
-.sidebar .image{
-  min-width: 60px;
-  display: flex;
-  align-items: center;
-}
-.sidebar li{
-  height: 50px;
-  margin-top: 10px;
-  list-style: none;
-  display: flex;
-  align-items: center;
-}
-.sidebar li .icon{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 30px;
-  font-size: 20px;
-  margin-left: 45px;
-}
-.sidebar li .icon,
-.sidebar li .text{
-   color: #000000;
-   transition: all 0.2s ease;
-  }
-
-.sidebar header{
-  position: relative;
-}
-.sidebar .image-text img{
-  width: 40px;
-  border-radius: 6px;
-
-}
-.sidebar header .image-text{
-  display: flex;
-  align-items: center;
-}
-header .image-text .header-text{
-  display: flex;
-  flex-direction: column;
-}
-.header-text .name{
-  font-weight: 600;
-}
-.header-text .profession{
-  margin-top: -2px;
-}
-.sidebar header .toggle{
-  position: absolute;
-  top: 50%;
-  right: -25px;
-  transform: translateY(-50%);
-  height: 25px;
-  width: 25px;
-  background-color: #695CFE;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  color: #fff;
-  font-size:12px;
-}
-
-.sidebar li a{
-  height: 100%;
-  width: 100%;
-  display: flex;
-  
-  text-decoration: none;
-  border-radius: 6px;
-  transition: all 0.4s ease;
-}
-.sidebar li a:hover{
-  background-color: #695CFE;
-}
-.sidebar li a:hover .icon,
-.sidebar li a:hover .text{
-  color:#fff ;
-}
-.sidebar .menu-bar{
-  height: calc(100% - 100px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.toggle-container {
-  margin-left: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 200px;
-  padding: 10px;
-  background-color: #cdcdcf;
-  border-radius: 10px;
-}
-
-.moon-sun i {
-  font-size: 20px;
-  margin-right: 10px;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 20px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.slider {
-  position: absolute;
-  cursor: pointer;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #aaaaaa;
-  transition: .4s;
-  border-radius: 34px;
-  
+  z-index: 100;
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 14px 18px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--ad-navy);
+  color: var(--sb-text);
+  border-right: 1px solid rgba(255, 255, 255, 0.09);
+  font-family: var(--ad-font-body);
 }
 
-.slider:before {
-  position: absolute;
+/* ---------- โลโก้ (ไฟล์เดิมเป็นเส้นดำ -> กลับเป็นขาวบนกรมท่า) ---------- */
+.sidebar header { padding: 2px 6px 18px; border-bottom: 1px solid var(--sb-line); }
+.sidebar .image-text { display: flex; align-items: center; gap: 6px; }
+.sidebar .image { display: flex; align-items: center; }
+.sidebar .image img { display: block; width: 96px; height: auto; filter: invert(1) brightness(1.15); }
+.sidebar .header-text { display: flex; flex-direction: column; }
+.sidebar .header-text .name { font: 600 21px/1.3 var(--ad-font-head); color: var(--sb-brass); }
+
+/* ---------- เมนู ---------- */
+.sidebar .menu-bar {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 18px;
+}
+.sidebar .menu-links { display: flex; flex-direction: column; gap: 4px; }
+
+.sidebar li.nav-link { display: block; height: auto; margin: 0; list-style: none; }
+.sidebar li.nav-link a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: auto;
+  padding: 11px 14px;
+  border-radius: 6px;
+  color: var(--sb-text);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.sidebar li.nav-link a:hover { background: var(--sb-hover); color: var(--sb-text-hi); }
+.sidebar li.nav-link a:hover .icon,
+.sidebar li.nav-link a:hover .text { color: var(--sb-text-hi); }
+.sidebar li.nav-link a:focus-visible { outline: 2px solid var(--sb-brass); outline-offset: 2px; }
+
+.sidebar li.nav-link .icon {
+  flex: 0 0 24px;
+  width: 24px;
+  min-width: 24px;
+  margin: 0;
+  text-align: center;
+  font-size: 20px;
+  line-height: 1;
+  color: inherit;
+}
+.sidebar li.nav-link .text { font-size: 15px; color: inherit; }
+
+/* หน้าที่เปิดอยู่: พื้นทองจาง + แถบทองซ้าย */
+.sidebar li.nav-link.active a { background: var(--sb-brass-soft); color: var(--sb-brass); font-weight: 600; }
+.sidebar li.nav-link.active a .icon,
+.sidebar li.nav-link.active a .text { color: var(--sb-brass); }
+.sidebar li.nav-link.active a::before {
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 2px;
-  background-color: white;
-  transition: .4s;
+  position: absolute;
+  left: -14px;
+  top: 9px;
+  bottom: 9px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--sb-brass);
+}
+
+/* ---------- ส่วนล่าง ---------- */
+.sidebar .bottom-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--sb-line);
+}
+
+.sidebar .toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--sb-hover);
+  border: 1px solid var(--sb-line);
+  border-radius: 6px;
+  color: var(--sb-text);
+}
+.sidebar .moon-sun { display: flex; align-items: center; color: var(--sb-brass); }
+.sidebar .moon-sun i { margin: 0; font-size: 18px; }
+.sidebar .mode-text { flex: 1; font-size: 14px; font-weight: 500; color: var(--sb-text); }
+
+.sidebar .switch { position: relative; display: inline-block; flex: 0 0 42px; width: 42px; height: 24px; }
+.sidebar .switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
+.sidebar .slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+.sidebar .slider::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
 }
+.sidebar .switch input:checked + .slider { background: var(--sb-brass); }
+.sidebar .switch input:checked + .slider::before { transform: translateX(18px); }
+.sidebar .switch input:focus-visible + .slider { outline: 2px solid var(--sb-brass); outline-offset: 2px; }
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-  transform: translateX(20px);
-}
-body.light-mode {
-  background-color: #d9f4f9,;
-  color: #000000;
- 
-}
-
-body.light-mode .sidebar {
-  background-color: #ffffff;
-  color: #000000;
-  
-}
-
-/* Dark Mode */
-body.dark-mode {
-  /* background-color: #0e0727; */
-  background-color: #0e0727;
-  color: #ffffff;
-}
-
-body.dark-mode .sidebar {
-  background-color: #333333;
-  color: #ffffff;
-}
-body.dark-mode .dropdown {
-  color: #ffffff;
-}
-
-/* Light Mode */
-body.light-mode {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-body.light-mode .sidebar {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-body.light-mode .dropdown {
-  color: #000000;
+/* ---------- จอแคบ: แถบไอคอน ---------- */
+@media (max-width: 1100px) {
+  .sidebar { width: 76px; padding: 18px 10px; }
+  .sidebar header { padding: 2px 0 14px; display: flex; justify-content: center; }
+  .sidebar .image img { width: 52px; }
+  .sidebar .header-text,
+  .sidebar .nav-text,
+  .sidebar .mode-text,
+  .sidebar .moon-sun { display: none; }
+  .sidebar li.nav-link a { justify-content: center; padding: 12px 0; }
+  .sidebar li.nav-link.active a::before { left: -10px; }
+  .sidebar .toggle-container { justify-content: center; padding: 10px 0; }
 }

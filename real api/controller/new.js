@@ -1,14 +1,12 @@
 const config = require("../config");
 const express = require("express");
 const sql = require("mssql");
-const multer = require('multer');
+const { paging, positiveInt } = require("../middleware/validate");
 
 
 module.exports.getAllannouce = async (req , res) => {
-
-    const conn = await sql.connect(config);
-
     try{
+        const conn = await sql.connect(config);
         const result = await conn.request()
         .query("SELECT *,DATEADD(HOUR, -7, Announce_Date) AS Adjusted_Announce_Date from Announcement where Announce_Status = 'Show' ORDER BY Announce_ID DESC");
 
@@ -24,14 +22,19 @@ module.exports.getAllannouce = async (req , res) => {
 }   
 
 module.exports.AddAnoucement = async ( req , res ) => {
-
-    const conn = await sql.connect(config);
-
     try{
         const {  Announce_Title, Announce_Detail } = req.body;
         const imageFile = req.file;
 
-        const Announce_image = imageFile.path.replace(/\\/g, "/");
+        if (!Announce_Title || !Announce_Detail) {
+            return res.status(400).json({ message: 'Announce_Title and Announce_Detail are required' });
+        }
+        if (!imageFile) {
+            return res.status(400).json({ message: 'Announce_image is required' });
+        }
+
+        const conn = await sql.connect(config);
+        const Announce_image = `public/${imageFile.filename}`;
         const Announce_Status = 'Show';
             const Annouce = await conn.request()
             
@@ -55,16 +58,27 @@ module.exports.AddAnoucement = async ( req , res ) => {
 }
 
 module.exports.EditNews = async (req, res) => {
-    const conn = await sql.connect(config);
-
     try {
-        console.log('Request received for editing announcement:', req.params.id);
-        const { Announce_Title, Announce_Detail, Announce_Status } = req.body;
+        const announceId = positiveInt(req.params.id);
+        if (!announceId) {
+            return res.status(400).json({ message: 'Invalid announcement id' });
+        }
+        const { Announce_Title, Announce_Detail, Announce_Status } = req.body || {};
         const imageFile = req.file;
+
+        if (typeof Announce_Title !== 'string' || !Announce_Title.trim() ||
+            typeof Announce_Detail !== 'string' || !Announce_Detail.trim()) {
+            return res.status(400).json({ message: 'Announce_Title and Announce_Detail are required' });
+        }
+        if (!['Show', 'Hide'].includes(String(Announce_Status).trim())) {
+            return res.status(400).json({ message: "Announce_Status must be 'Show' or 'Hide'" });
+        }
+
+        const conn = await sql.connect(config);
 
         let Announce_image = null;
         if (imageFile) {
-            Announce_image = imageFile.path.replace(/\\/g, "/");
+            Announce_image = `public/${imageFile.filename}`;
             console.log('Image file received and processed:', Announce_image);
         } else {
             console.log('No new image file provided. Retaining existing image.');
@@ -86,10 +100,10 @@ module.exports.EditNews = async (req, res) => {
         console.log('SQL Query to be executed:', query);
 
         const request = conn.request()
-            .input('id', sql.Int, req.params.id)
+            .input('id', sql.Int, announceId)
             .input('Announce_Title', sql.NVarChar, Announce_Title)
             .input('Announce_Detail', sql.NVarChar, Announce_Detail)
-            .input('Announce_Status', sql.NChar, Announce_Status);
+            .input('Announce_Status', sql.NChar, String(Announce_Status).trim());
 
         if (Announce_image) {
             request.input('Announce_image', sql.NVarChar, Announce_image);
@@ -98,8 +112,11 @@ module.exports.EditNews = async (req, res) => {
         console.log('Executing SQL Query...');
         const Annouce = await request.query(query);
 
-        console.log('Announcement updated successfully:', Annouce.recordset);
-        res.status(200).json({ message: 'Announcement updated successfully.', data: Annouce.recordset });
+        if (Annouce.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Announcement not found' });
+        }
+
+        res.status(200).json({ message: 'Announcement updated successfully.' });
 
     } catch (err) {
         console.error('Error while editing announcement:', err);
@@ -111,11 +128,7 @@ module.exports.EditNews = async (req, res) => {
 module.exports.getPageannouce = async (req, res) => {
     try {
         // รับค่าของ page และ limit จาก query parameter (ถ้าไม่มีค่าจะใช้ค่าเริ่มต้น)
-        const page = parseInt(req.query.page) || 1; // หน้าปัจจุบัน (เริ่มต้นเป็น 1)
-        const limit = parseInt(req.query.limit) || 10; // จำนวนรายการต่อหน้า (เริ่มต้นเป็น 10)
-
-        // คำนวณ OFFSET เพื่อใช้ในการเลื่อนข้อมูล
-        const offset = (page - 1) * limit;
+        const { page, limit, offset } = paging(req.query, 10);
 
         // เชื่อมต่อฐานข้อมูล
         const conn = await sql.connect(config);

@@ -1,5 +1,6 @@
 import { BanDeeService } from './../../service/ban-dee.service';
 import { Component, OnInit } from '@angular/core';
+import { buildVillage } from './village-layout';
 import Swal from 'sweetalert2';
 import { Chart } from 'angular-highcharts';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -41,6 +42,25 @@ export class DashboardComponent implements OnInit {
   Announcement = new BehaviorSubject<Announcement[]>([]);
   selectedAnnouncementID: number | null = null;
 
+  // ===== ข้อมูลสำหรับการ์ดบน dashboard =====
+  unpaidList: PeymentForAdmin[] = [];
+
+  // กราฟแท่งคู่: ผู้จ่าย / ไม่จ่าย รายเดือน
+  payBars: { label: string; paid: number; overdue: number; paidPct: number; overduePct: number }[] = [];
+  payTicks: number[] = [];
+
+  // กราฟเส้น: รายได้รายเดือน (วาดด้วย SVG)
+  readonly lineBox = { w: 560, h: 250, l: 46, r: 18, t: 18, b: 30 };
+  incomePts: { x: number; y: number; label: string; value: number }[] = [];
+  incomeTicks: { y: number; label: string }[] = [];
+  incomeLine = '';
+  incomeArea = '';
+  hoverIdx = -1;
+
+  // สัดส่วนคำร้อง (วงแหวน)
+  readonly donutC = 2 * Math.PI * 52;
+  donut: { total: number; segs: { label: string; value: number; pct: number; color: string; dash: string; offset: number }[] } = { total: 0, segs: [] };
+
   currentPage1: number = 1;
   totalPages1: number = 1;
   pageSize1: number = 3;
@@ -58,8 +78,8 @@ export class DashboardComponent implements OnInit {
     });
     this.ChangeFee = this.fb.group({
       House_Size: ['', Validators.required],
-      Land_size: ['', [Validators.required, Validators.min(0)]], 
-      FeeRate: ['', [Validators.required, Validators.min(0)]],
+      Land_size: ['', [Validators.required, Validators.min(1)]], 
+      FeeRate: ['', [Validators.required, Validators.min(0.01)]],
       Fine: ['', [Validators.required, Validators.min(0)]],
     });
     this.EditNewsform = this.fb.group({
@@ -70,6 +90,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadUnpaid();
     this.loadResidentsData();
     this.fetchMonthlyPaymentData();
     this.loadHouseSizes(); 
@@ -299,15 +320,167 @@ export class DashboardComponent implements OnInit {
   }
   
   // ฟังก์ชันกำหนดสีของบ้าน
+  // ===== ผังหมู่บ้าน =====
+  readonly village = buildVillage();
+  tip = { show: false, flip: false, x: 0, y: 0, text: '' };
+
+  showTip(ev: MouseEvent, houseNo: number): void {
+    const host = (ev.currentTarget as Element).closest('.village-layout') as HTMLElement | null;
+    const r = host ? host.getBoundingClientRect() : { left: 0, top: 0, width: 0 };
+    const x = ev.clientX - r.left;
+    this.tip = {
+      show: true,
+      flip: r.width > 0 && x > r.width * 0.6,
+      x: x + (x > r.width * 0.6 ? -14 : 14),
+      y: ev.clientY - r.top + 16,
+      text: this.getResidentInfo(houseNo)
+    };
+  }
+
+  hideTip(): void {
+    this.tip = { ...this.tip, show: false };
+  }
+
+  // ===== ตัวเลขสรุป (นับเป็นจำนวนหลัง) =====
+  get totalHouses(): number {
+    return this.village.lots.length;
+  }
+
+  get livingCount(): number {
+    return new Set(this.residents.filter(r => r.hasResident).map(r => r.houseNo)).size;
+  }
+
+  get overdueHouseCount(): number {
+    return new Set(this.residents.filter(r => r.hasResident && r.isOverdue).map(r => r.houseNo)).size;
+  }
+
+  get paidHouseCount(): number {
+    return this.livingCount - this.overdueHouseCount;
+  }
+
+  private pct(part: number, whole: number): number {
+    return whole ? Math.round((part / whole) * 100) : 0;
+  }
+  get occupancyPct(): number { return this.pct(this.livingCount, this.totalHouses); }
+  get paidPct(): number { return this.pct(this.paidHouseCount, this.livingCount); }
+  get overduePct(): number { return this.pct(this.overdueHouseCount, this.livingCount); }
+
+  // ===== รายการค้างชำระ (การ์ดด้านข้าง) =====
+  loadUnpaid(): void {
+    this.BanService.getUnpaid().subscribe({
+      next: (list) => { this.unpaidList = list; },
+      error: (error) => console.error('Error loading unpaid list:', error),
+    });
+  }
+
+  get unpaidTop(): PeymentForAdmin[] {
+    return this.unpaidList.slice(0, 8);
+  }
+
+  get overdueTotal(): number {
+    return this.unpaidList.reduce((sum, u) => sum + (Number(u.Pay_Amount) || 0), 0);
+  }
+
+  // ===== ช่วยคำนวณแกนกราฟ =====
+  private niceStep(raw: number): number {
+    if (!(raw > 0)) return 1;
+    const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+    const n = raw / pow;
+    const m = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
+    return m * pow;
+  }
+
+  private fmtK(v: number): string {
+    return v >= 1000 ? `${+(v / 1000).toFixed(1)}k` : String(v);
+  }
+
+  // ===== กราฟแท่งคู่: ผู้จ่าย / ไม่จ่าย =====
+  private buildPayBars(data: MonthlyPaymentData[]): void {
+    const max = Math.max(0, ...data.map(d => Math.max(d.Paid_Count, d.Overdue_Count)));
+    const step = this.niceStep(max / 4);
+    const top = step * 4;
+    this.payTicks = [4, 3, 2, 1, 0].map(i => i * step);
+    this.payBars = data.map(d => ({
+      label: d.Pay_Month,
+      paid: d.Paid_Count,
+      overdue: d.Overdue_Count,
+      paidPct: (d.Paid_Count / top) * 100,
+      overduePct: (d.Overdue_Count / top) * 100,
+    }));
+  }
+
+  // ===== กราฟเส้น: รายได้ =====
+  private buildIncomeLine(data: Income[]): void {
+    const { w, h, l, r, t, b } = this.lineBox;
+    const innerW = w - l - r;
+    const innerH = h - t - b;
+    const vals = data.map(d => Number(d.TotalAmount) || 0);
+    const step = this.niceStep(Math.max(0, ...vals) / 4);
+    const top = step * 4;
+    const n = data.length;
+
+    this.incomePts = data.map((d, i) => ({
+      x: l + (n > 1 ? (innerW * i) / (n - 1) : innerW / 2),
+      y: t + innerH * (1 - vals[i] / top),
+      label: d.Month,
+      value: vals[i],
+    }));
+    this.incomeTicks = [4, 3, 2, 1, 0].map(i => ({ y: t + innerH * (1 - i / 4), label: this.fmtK(i * step) }));
+    this.incomeLine = this.incomePts.map((p, i) => `${i ? 'L' : 'M'}${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+    this.incomeArea = n
+      ? `${this.incomeLine} L${this.incomePts[n - 1].x.toFixed(1)} ${t + innerH} L${this.incomePts[0].x.toFixed(1)} ${t + innerH} Z`
+      : '';
+    this.hoverIdx = n - 1;
+  }
+
+  get hoverPt() {
+    return this.incomePts[this.hoverIdx];
+  }
+
+  get sumIncome(): number {
+    return this.incomePts.reduce((sum, p) => sum + p.value, 0);
+  }
+
+  // แท่งกราฟเส้นที่ใกล้เมาส์ที่สุด (แปลงพิกัดเมาส์เป็นพิกัด viewBox)
+  onLineMove(ev: MouseEvent): void {
+    if (!this.incomePts.length) return;
+    const rect = (ev.currentTarget as SVGElement).getBoundingClientRect();
+    const x = ((ev.clientX - rect.left) / rect.width) * this.lineBox.w;
+    let best = 0;
+    this.incomePts.forEach((p, i) => {
+      if (Math.abs(p.x - x) < Math.abs(this.incomePts[best].x - x)) best = i;
+    });
+    this.hoverIdx = best;
+  }
+
+  // ===== สัดส่วนคำร้อง (วงแหวน) =====
+  buildDonut(repair: number, normal: number): void {
+    const total = repair + normal;
+    const parts = [
+      { label: 'แจ้งซ่อม', value: repair, color: '#c9993f' },
+      { label: 'ทั่วไป', value: normal, color: '#6f86d6' },
+    ];
+    let acc = 0;
+    const segs = parts.map(p => {
+      const frac = total ? p.value / total : 0;
+      const len = this.donutC * frac;
+      const seg = { label: p.label, value: p.value, pct: Math.round(frac * 100), color: p.color,
+        dash: `${Math.max(len - 6, 0)} ${this.donutC}`, offset: -acc };
+      acc += len;
+      return seg;
+    });
+    this.donut = { total, segs };
+  }
+
   getHouseColor(houseNo: number): string {
     const resident = this.residents.find(r => r.houseNo === houseNo);
   
     if (!resident || !resident.hasResident) {
       return '#ffffff'; // สีขาวสำหรับบ้านที่ไม่มีคนอยู่
     } else if (this.residents.some(r => r.houseNo === houseNo && r.isOverdue)) {
-      return '#ff0000'; // สีแดงหากมีบ้านที่ยังมียอดค้างชำระ
+      return '#ee6055'; // สีแดงหากมีบ้านที่ยังมียอดค้างชำระ
     } else {
-      return '#40ff00'; // สีเขียวสำหรับบ้านที่ชำระเงินครบแล้วหรือไม่มีข้อมูลการชำระ (NULL)
+      return '#4cc38a'; // สีเขียวสำหรับบ้านที่ชำระเงินครบแล้วหรือไม่มีข้อมูลการชำระ (NULL)
     }
   }
   
@@ -497,6 +670,7 @@ SendBill(){
   }
   
   getIncome(data: Income[]): void {
+    this.buildIncomeLine(data);
     const Income = data.map((item) => item.TotalAmount);
     const Month = data.map((item) => item.Month);
   
@@ -504,13 +678,13 @@ SendBill(){
       chart: {
         type: 'line',
         style: {
-          fontFamily: 'Noto Sans Thai, sans-serif',
+          fontFamily: 'IBM Plex Sans Thai, sans-serif',
         }
       },
       title: {
         text: 'รายได้จากการค่าส่วนกลาง',
         style: {
-          fontFamily: 'Noto Sans Thai, sans-serif',
+          fontFamily: 'IBM Plex Sans Thai, sans-serif',
         }
       },
       credits: {
@@ -521,7 +695,7 @@ SendBill(){
         title: {
           text: 'เดือน',
           style: {
-            fontFamily: 'Noto Sans Thai, sans-serif',
+            fontFamily: 'IBM Plex Sans Thai, sans-serif',
           }
         },
         min: 0
@@ -530,7 +704,7 @@ SendBill(){
         title: {
           text: 'จำนวนเงิน(บาท)',
           style: {
-            fontFamily: 'Noto Sans Thai, sans-serif',
+            fontFamily: 'IBM Plex Sans Thai, sans-serif',
           }
         },
         min: 0,
@@ -549,12 +723,13 @@ SendBill(){
     const categories = data.map((item) => item.Pay_Month);
     const paidData = data.map((item) => item.Paid_Count);
     const overdueData = data.map((item) => item.Overdue_Count);
+    this.buildPayBars(data);
 
     this.lineCharts = new Chart({
       chart: {
         type: 'line',
         style: {
-          fontFamily: 'Noto Sans Thai, sans-serif',
+          fontFamily: 'IBM Plex Sans Thai, sans-serif',
         },
       },
       title: {
@@ -578,10 +753,12 @@ SendBill(){
         {
           name: 'คนจ่าย',
           data: paidData,
+          color: '#22c55e',
         } as any,
         {
           name: 'คนไม่จ่าย',
           data: overdueData,
+          color: '#ef4444',
         } as any,
       ],
     });
@@ -599,6 +776,7 @@ SendBill(){
                 { name: 'ทั่วไป', y: totalNormal, color: '#65e1f7' },
             ];
 
+            this.buildDonut(totalRepair, totalNormal);
             this.updatePieChart(pieChartData);
         },
         (error) => {
@@ -613,7 +791,7 @@ SendBill(){
         type: 'pie',
         plotShadow: false,
         style: {
-          fontFamily: 'Noto Sans Thai, sans-serif',
+          fontFamily: 'IBM Plex Sans Thai, sans-serif',
         },
       },
       credits: {

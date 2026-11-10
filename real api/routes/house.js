@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const housecontroll = require('../controller/house');
-require('dotenv').config();
+const { adminOnly } = require('../middleware/auth');
 
-    router.post('/house',housecontroll.Addhouse)
-    router.get('/gethouse',housecontroll.GetEmptyHouse)
-    router.get('/housestatus',housecontroll.GetHouseWithResident)
+router.post('/house', adminOnly, housecontroll.Addhouse);
+router.get('/gethouse', adminOnly, housecontroll.GetEmptyHouse);
+router.get('/housestatus', adminOnly, housecontroll.GetHouseWithResident);
 
 module.exports = router;

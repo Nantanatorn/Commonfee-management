@@ -1,103 +1,89 @@
-.filter{
-  border: 2px solid black;
-  border-radius: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50px;
-  width:1000px;
-  text-align: center;
-  box-shadow: 5px 5px 10px rgba(38, 0, 255, 0.312);
+/* หน้าร้องเรียน — ฟอร์มซ้าย ตารางสถานะขวา (เดสก์ท็อป) (ตัวแปร --rs-* จาก styles.css) */
+.report-page {
+  display: grid;
+  grid-template-columns: 400px minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 12px 32px 96px;
 }
+@media (max-width: 1000px) { .report-page { grid-template-columns: minmax(0, 1fr); } }
 
-.headfilter{
-  padding-top: 2rem;
-}
-
-.filtercontrol{
-  display: flex;
-  justify-content: space-between;
-  margin: 2rem;
-}
-
-.formyear,.formmonth{
+/* ---------- ฟอร์ม ---------- */
+.report-form {
   width: 100%;
-  border-radius: 10px;
+  max-width: none;
+  margin: 0;
+  padding: 28px;
+  background: var(--rs-surface);
+  color: var(--rs-ink);
+  border: 1px solid var(--rs-rule);
+  border-radius: 12px;
+  box-shadow: none;
+  font-family: var(--rs-font-body);
 }
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 5px 5px 10px rgba(38, 0, 255, 0.312);
-  }
-  
-  h3 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .status-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .status-table th, .status-table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    text-align: center;
-  }
-  
-  .status-table th {
-    font-weight: bold;
-  }
-  
-  .finish {
-    color: green;
-    font-weight: bold;
-  }
-  
-  .ongoing {
-    color: orange;
-    font-weight: bold;
-  }
-  .report-form {
-    width: 100%;
-    max-width: 900px; /* Adjust to fit in the screen */
-    margin: 0 auto;
-    background-color: #9a8fff;
-    padding: 50px;
-    border-radius: 12px;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: "Noto Sans Thai", sans-serif;
-    margin-bottom: 50px;
+.report-form h3 { margin: 0 0 22px; text-align: left; font: 600 22px/1.4 var(--rs-font-head); color: var(--rs-ink); }
+.form-group { display: flex; flex-direction: column; margin-bottom: 18px; }
+.form-group label { margin-bottom: 6px; font-size: 14px; font-weight: 600; color: var(--rs-ink); }
+.form-control, .form-select {
+  padding: 10px 12px;
+  border: 1px solid var(--rs-rule-strong);
+  border-radius: 8px;
+  background-color: var(--rs-input);
+  color: var(--rs-ink);
+  font: 400 15px/1.5 var(--rs-font-body);
+  box-shadow: none;
 }
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    margin-bottom: 5px;
-    font-size: 1.1em;
-  }
-  
-  .form-control {
-    padding: 10px;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    background-color: #e0e0e0;
-  }
-  
-  .form-control:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  textarea.form-control {
-    resize: none; /* Disable resizing of textarea */
-  }
-  
+.form-control:focus, .form-select:focus { outline: none; border-color: var(--rs-blue); box-shadow: 0 0 0 3px var(--rs-blue-soft); }
+.form-control.is-invalid { border-color: var(--rs-bad); background-image: none; }
+.invalid-feedback { margin-top: 6px; font-size: 13px; color: var(--rs-bad); }
+textarea.form-control { min-height: 140px; resize: vertical; }
+
+.btn-ghost, .btn-main {
+  height: 42px;
+  padding: 0 22px;
+  border-radius: 8px;
+  font: 600 15px var(--rs-font-body);
+  cursor: pointer;
+}
+.btn-ghost { border: 1px solid var(--rs-rule-strong); background: transparent; color: var(--rs-ink); }
+.btn-ghost:hover { border-color: var(--rs-blue); color: var(--rs-blue); }
+.btn-main { border: 1px solid var(--rs-blue); background: var(--rs-blue); color: var(--rs-on-blue); }
+.btn-main:hover { background: var(--rs-blue-hover); border-color: var(--rs-blue-hover); }
+
+/* ---------- ตารางสถานะ ---------- */
+.status-panel { min-width: 0; }
+.status-panel h3 { margin: 0 0 12px; text-align: left; font: 600 22px/1.4 var(--rs-font-head); color: var(--rs-ink); }
+.status-table { width: 100%; margin: 0; border-collapse: collapse; }
+.status-table th {
+  padding: 12px 14px 10px;
+  white-space: nowrap;
+  border: 0;
+  border-bottom: 2px solid var(--rs-ink);
+  color: var(--rs-muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+}
+.status-table td {
+  padding: 14px;
+  border: 0;
+  border-bottom: 1px solid var(--rs-rule);
+  color: var(--rs-ink);
+  font-size: 15px;
+  text-align: left;
+  vertical-align: top;
+}
+.status-table tbody tr:hover td { background: var(--rs-blue-soft); }
+
+.finish, .ongoing {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.finish { background: var(--rs-ok-soft); color: var(--rs-ok); }
+.ongoing { background: var(--rs-warn-soft); color: var(--rs-warn); }

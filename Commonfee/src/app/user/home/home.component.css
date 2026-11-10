@@ -1,24 +1,47 @@
-.card-text{
-    font-size: 1.5em;
-    text-align: left;
-    margin-left: 20px;
-}
+/* หน้าแรก — ภาพหลักเตี้ยลงและกลืนกับธีม, ประกาศเป็นแถวคั่นเส้น (ตัวแปร --rs-* จาก styles.css) */
 
-.card-title {
-    font-size: 2em; /* เพิ่มขนาดฟอนต์หัวข้อ /
-    text-align: center;
+/* ข้อความ "home works!" เดิมอยู่หลัง header อยู่แล้ว: คงไว้ใน DOM แต่ไม่ให้เห็น และกันที่ให้เท่าความสูง header */
+.home-note { height: 68px; margin: 0; overflow: hidden; color: transparent; }
 
+/* ---------- ภาพหลัก ---------- */
+.hero { position: relative; height: 340px; overflow: hidden; background: #0e223a; }
+.hero-img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.8); }
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(14, 34, 58, 0.82) 0%, rgba(14, 34, 58, 0.2) 55%, rgba(14, 34, 58, 0.35) 100%);
 }
+.hero-copy {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 40px;
+  width: min(976px, calc(100% - 64px));
+  transform: translateX(-50%);
+  text-align: left;
+}
+.hero-copy h1 { margin: 0; font: 600 44px/1.25 var(--rs-font-head); color: #fff; }
+.hero-copy p { margin: 8px 0 0; font-size: 18px; color: rgba(255, 255, 255, 0.86); }
 
+/* ---------- ข่าวสาร ---------- */
+.news { max-width: 1040px; padding: 48px 32px 96px; }
+.news h2 { margin: 0; font: 600 32px/1.3 var(--rs-font-head); color: var(--rs-ink); }
+.news h2 .bi { color: var(--rs-blue); font-size: 0.8em; }
+.news hr { margin: 16px 0 0; border: 0; border-top: 1px solid var(--rs-rule); opacity: 1; }
+.news .row { margin: 0; }
+.news .row > * { padding: 0; }
 
-.card-footer {
-    font-size: 1em; / ขนาดฟอนต์ของ footer */
-}
-.inf{
-    color: red;
+.information { margin: 22px 0 4px; text-align: left; font: 500 18px/1.4 var(--rs-font-head); color: var(--rs-muted); }
+.inf { color: var(--rs-muted); }
 
-}
-.information{
-    text-align: center;
-    margin-left: 250px;
-}
+.notice-wrap { margin: 0; }
+.notice { padding: 26px 0; border-bottom: 1px solid var(--rs-rule); }
+.notice .row { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 28px; align-items: start; }
+.notice .row > * { width: auto; max-width: none; }
+.notice img { display: block; width: 100%; height: 130px; object-fit: cover; border-radius: 6px; background: var(--rs-rule); }
+.notice .card-body { padding: 0; }
+
+.card-text { margin: 0; max-width: 68ch; font-size: 16px; text-align: left; color: var(--rs-ink); }
+.card-text small { font-size: 14px; color: var(--rs-muted) !important; }
+.card-title { margin: 2px 0 8px; text-align: left; font: 600 22px/1.4 var(--rs-font-head); color: var(--rs-ink); }

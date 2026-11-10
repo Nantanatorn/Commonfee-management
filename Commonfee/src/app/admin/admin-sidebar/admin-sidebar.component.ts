@@ -68,7 +68,7 @@ export class AdminSidebarComponent implements OnInit{
     }).then((result) => {
       if (result.isConfirmed) {
         // ลบข้อมูลหรือ token เพื่อทำการ logout (ถ้ามี)
-        localStorage.removeItem('userToken'); 
+        localStorage.removeItem('token');
         
         // นำทางไปยังหน้า login
         // นำทางไปยังหน้า login

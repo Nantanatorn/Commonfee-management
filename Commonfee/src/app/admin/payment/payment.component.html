@@ -1,124 +1,159 @@
 <app-admin-sidebar></app-admin-sidebar>
-<div class="container">
-    <div class="header">
-        <h1>Payment</h1>
-        <img src="line.png" alt="error" width="200">
-    </div>
-</div>
-<div class="charts">
-<div class="line" [chart]="lineCharts"></div>
-</div>
-<div class="history">
-    <div class="row">
-        <div class="col-8">
-            <h4>ประวัติชำระเงินรายบุคคล</h4>
-            <div class="filter">
-                <div class="filtercontrol">
-                    <div class="form">
-                        <label for="month">เดือน </label>
-                        <select name="month" id="month" class="formmonth" >
-                            <option value="1">มกราคม</option>
-                            <option value="2">กุมภาพันธ์</option>
-                            <option value="3">มีนาคม</option>
-                            <option value="4">เมษายน</option>
-                            <option value="5">พฤษภาคม</option>
-                            <option value="6">มิถุนายน</option>
-                            <option value="7">กรกฎาคม</option>
-                            <option value="8">สิงหาคม</option>
-                            <option value="9">กันยายน</option>
-                            <option value="10">ตุลาคม</option>
-                            <option value="11">พฤศจิกายน</option>
-                            <option value="12">ธันวาคม</option>
-                          </select>
-                      </div>
+<div class="ad-page">
+    <header class="ad-head">
+        <h1 class="ad-title">Payment</h1>
+    </header>
+
+    <div class="ad-stack">
+        <section class="ad-card charts">
+            <div class="line" [chart]="lineCharts"></div>
+        </section>
+
+        <section class="ad-card history">
+            <div class="history-layout">
+                <div class="history-main">
+                    <h4 class="ad-card-title">ประวัติชำระเงินรายบุคคล</h4>
+                    <div class="filter">
+                        <label class="ad-label" for="month">เดือน </label>
+                        <select name="month" id="month" class="ad-select formmonth" [(ngModel)]="selectedMonth">
+                            <option [ngValue]="0">ทุกเดือน</option>
+                            <option [ngValue]="1">มกราคม</option>
+                            <option [ngValue]="2">กุมภาพันธ์</option>
+                            <option [ngValue]="3">มีนาคม</option>
+                            <option [ngValue]="4">เมษายน</option>
+                            <option [ngValue]="5">พฤษภาคม</option>
+                            <option [ngValue]="6">มิถุนายน</option>
+                            <option [ngValue]="7">กรกฎาคม</option>
+                            <option [ngValue]="8">สิงหาคม</option>
+                            <option [ngValue]="9">กันยายน</option>
+                            <option [ngValue]="10">ตุลาคม</option>
+                            <option [ngValue]="11">พฤศจิกายน</option>
+                            <option [ngValue]="12">ธันวาคม</option>
+                        </select>
+                    </div>
+                    <div class="ad-table-wrap ad-scroll">
+                        <table class="ad-table">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อ</th>
+                                    <th>นามสกุล</th>
+                                    <th>เลขที่บ้าน</th>
+                                    <th>วันที่ชำระ</th>
+                                    <th>จำนวนเงิน</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let row of historyRows">
+                                    <td>{{ row.R_Firstname }}</td>
+                                    <td>{{ row.R_Lastname }}</td>
+                                    <td>{{ row.House_number }}</td>
+                                    <td class="ad-num">{{ row.Pay_Date | date: 'dd/MM/yyyy' }}</td>
+                                    <td class="ad-num">{{ row.Pay_Amount | number }}.-</td>
+                                </tr>
+                                <tr *ngIf="historyRows.length === 0">
+                                    <td colspan="5">ไม่มีรายการชำระในเดือนที่เลือก</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="history-actions">
+                    <button type="button" class="ad-btn">แจ้งเตือน</button>
+                    <button type="button" class="ad-btn" (click)="changeFee()">แก้ไขอัตราชำระ</button>
+                    <button type="button" class="ad-btn ad-btn-primary" (click)="SendBill()">เก็บค่าส่วนกลาง</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="ad-card paid">
+            <h4 class="ad-card-title">รายการแจ้งชำระเงิน รอตรวจสอบ</h4>
+            <div class="ad-table-wrap">
+                <table class="ad-table">
+                    <thead>
+                        <tr>
+                            <th>ชื่อ - สกุล </th>
+                            <th>เลขที่บ้าน</th>
+                            <th>เบอร์ติดต่อ</th>
+                            <th>ค่าส่วนกลาง</th>
+                            <th>ค่าปรับ</th>
+                            <th>สลิป</th>
+                            <th>ดำเนินการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of pending | async">
+                            <td class="ad-nowrap">{{ p.R_Firstname }} {{ p.R_Lastname }}</td>
+                            <td>{{ p.House_number }}</td>
+                            <td class="ad-num">{{ p.phone }}</td>
+                            <td class="ad-num">{{ p.Pay_Amount }}</td>
+                            <td class="ad-num">{{ p.Pay_Fine }}</td>
+                            <td>
+                                <button type="button" class="ad-btn ad-btn-sm" *ngIf="p.Has_Slip" (click)="viewSlip(p)">ดูสลิป</button>
+                                <span class="ad-muted" *ngIf="!p.Has_Slip">ไม่มี</span>
+                            </td>
+                            <td class="row-actions">
+                                <button type="button" class="ad-btn ad-btn-sm ad-btn-primary" (click)="confirmPayment(p)">ยืนยันรับเงิน</button>
+                                <button type="button" class="ad-btn ad-btn-sm ad-btn-danger" (click)="rejectPayment(p)">ปฏิเสธ</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="ad-grid-2 lists">
+            <section class="ad-card">
+                <h4 class="ad-card-title">รายการคนที่ชำระแล้ว</h4>
+                <div class="ad-table-wrap ad-scroll">
+                    <table class="ad-table">
+                        <thead>
+                            <tr>
+                                <th>ชื่อ - สกุล </th>
+                                <th>เลขที่บ้าน</th>
+                                <th>เบอร์ติดต่อ</th>
+                                <th>จำนวนเงิน</th>
+                                <th>สถานะชำระ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let paid of paidList">
+                                <td class="ad-nowrap">{{ paid.R_Firstname }} {{ paid.R_Lastname }}</td>
+                                <td>{{ paid.House_number}}</td>
+                                <td class="ad-num">{{ paid.phone}}</td>
+                                <td class="ad-num">{{ paid.Pay_Amount}}</td>
+                                <td><span class="ad-badge ok">{{ paid.Pay_Status}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="ad-card">
+                <h4 class="ad-card-title">รายการคนที่ค้างชำระ</h4>
+                <div class="ad-table-wrap ad-scroll">
+                    <table class="ad-table">
+                        <thead>
+                            <tr>
+                                <th>ชื่อ - สกุล </th>
+                                <th>เลขที่บ้าน</th>
+                                <th>เบอร์ติดต่อ</th>
+                                <th>ค้างทั้งหมด (เดือน)</th>
+                                <th>จำนวนเงินทั้งหมด</th>
+                                <th>วันครบกำหนดชำระ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let Unpaid of Unpaid | async">
+                                <td class="ad-nowrap">{{ Unpaid.R_Firstname }} {{ Unpaid.R_Lastname }}</td>
+                                <td>{{ Unpaid.House_number}}</td>
+                                <td class="ad-num">{{ Unpaid.phone}}</td>
+                                <td class="ad-num">{{ Unpaid.Pay_Out}}</td>
+                                <td class="ad-num">{{ Unpaid.Pay_Amount}}</td>
+                                <td class="ad-num">{{ Unpaid.Pay_Deadline | date: 'MM/dd/yyyy'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
     </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>ชื่อ</th>
-                    <th>นามสกุล</th>
-                    <th>เลขที่บ้าน</th>
-                    <th>ขนาดบ้าน</th>
-                    <th>จำนวนเงิน</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>อิง</td>
-                    <td>เน่า</td>
-                    <td>123/456</td>
-                    <td>70 ตร.ม</td>
-                    <td>1000.-</td>
-                </tr>
-            </tbody>
-        </table>
-    
-        </div>
-        <div class="col-4">
-        <div class="col">
-            <button type="button" class="btn btn-light ">แจ้งเตือน</button>
-        </div>
-        <div class="col">
-            <button type="button" class="btn btn-light" (click)="changeFee()">แก้ไขอัตราชำระ</button>
-        </div>
-        <div class="col">
-            <button type="button" class="btn btn-light" (click)="SendBill()">เก็บค่าส่วนกลาง</button>
-        </div>
-        </div>
-        </div>
-    </div>
-<div class="paid">
-    <div class="row">
-    <div class="col-6">
-        <h4>รายการคนที่ชำระแล้ว</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>ชื่อ - สกุล </th>
-                <th>เลขที่บ้าน</th>
-                <th>เบอร์ติดต่อ</th>
-                <th>จำนวนเงิน</th>
-                <th>สถานะชำระ</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let paid of paid | async">
-                <td>{{ paid.R_Firstname }} {{ paid.R_Lastname }}</td>
-                <td>{{ paid.House_number}}</td>
-                <td>{{ paid.phone}}</td>
-                <td>{{ paid.Pay_Amount}}</td>
-                <td>{{ paid.Pay_Status}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div class="col-6">
-    <h4>รายการคนที่ค้างชำระ</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>ชื่อ - สกุล </th>
-                <th>เลขที่บ้าน</th>
-                <th>เบอร์ติดต่อ</th>
-                <th>ค้างทั้งหมด (เดือน)</th>
-                <th>จำนวนเงินทั้งหมด</th>
-                <th>วันครบกำหนดชำระ</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let Unpaid of Unpaid | async">
-                <td>{{ Unpaid.R_Firstname }} {{ Unpaid.R_Lastname }}</td>
-                <td>{{ Unpaid.House_number}}</td>
-                <td>{{ Unpaid.phone}}</td>
-                <td>{{ Unpaid.Pay_Out}}</td>
-                <td>{{ Unpaid.Pay_Amount}}</td>
-                <td>{{ Unpaid.Pay_Deadline | date: 'MM/dd/yyyy'}}</td>
-                
-            </tr>
-        </tbody>
-    </table>
-</div>
-</div>
 </div>

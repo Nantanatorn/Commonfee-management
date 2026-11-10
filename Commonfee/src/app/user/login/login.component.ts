@@ -22,12 +22,11 @@ export class LoginComponent implements OnInit{
   constructor(private http: HttpClient, private router: Router ,private authService: AuthService) { }
   ngOnInit(): void {
      // ตรวจสอบว่า login ไว้หรือยัง
-     const token = localStorage.getItem('token');
-     if (token) {
+     if (this.authService.isAuthenticated()) {
        this.userRole = this.authService.getRole();
-       if (this.userRole === 'admin') {
-         this.router.navigate(['/AdminHome']);
-       } else if (this.userRole === 'Resident') {
+       if (this.authService.hasRole('admin')) {
+         this.router.navigate(['/dashboard']);
+       } else if (this.authService.hasRole('resident')) {
          this.router.navigate(['/home']);
        }
      }
@@ -54,9 +53,9 @@ export class LoginComponent implements OnInit{
             console.log('User Role:', this.userRole);
 
             // Navigate based on the user's role
-            if (this.userRole === 'admin') {
+            if (this.authService.hasRole('admin')) {
               this.router.navigate(['/dashboard']);
-            } else if (this.userRole === 'Resident') {
+            } else if (this.authService.hasRole('resident')) {
               this.router.navigate(['/home']);
             }
           } else {

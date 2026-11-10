@@ -1,26 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const paymentcon =require('../controller/payments')
-const { verifyToken } = require('../middleware/auth');
+const paymentcon = require('../controller/payments');
+const { verifyToken, adminOnly } = require('../middleware/auth');
+const { handleSlipUpload } = require('../middleware/upload');
 
-require('dotenv').config();
+// ลูกบ้าน (ต้อง login)
+router.get('/paymenthistory', verifyToken, paymentcon.PaymentHistory);
+router.get('/searchpayment', verifyToken, paymentcon.SearchPaymentHistory);
+router.put('/pay/:payId', verifyToken, handleSlipUpload('slip'), paymentcon.Payment);
+router.get('/slip/:payId', verifyToken, paymentcon.getSlip);
+router.get('/getreceipt/:payId', verifyToken, paymentcon.getReceipt);
 
-    router.get('/paymenthistory', verifyToken, paymentcon.PaymentHistory);
-    router.get('/getpaid',paymentcon.getpaidhistory);
-    router.get('/getunPaid',paymentcon.getUnpaidhistory);
-    router.get('/monthly-payment',paymentcon.getMonthly);
-    router.get('/Fee',paymentcon.Fee);
-    router.get('/AllFee',paymentcon.GetAllFee);
-    router.put('/pay/:payId', verifyToken, paymentcon.Payment);
-    router.post('/sendBill',verifyToken,paymentcon.FeeBill);
-    router.put('/changerate',paymentcon.ChangePayrate);
-    router.get('/getreceipt/:payId',paymentcon.getReceipt);
-    router.get('/getincome',paymentcon.GetIncome);
-    router.get('/paidhistory',paymentcon.LastPaid);
-    router.get('/searchpayment',verifyToken,paymentcon.SearchPaymentHistory);
-    
+// อัตราค่าส่วนกลาง (ข้อมูลสาธารณะ ใช้แสดงผล)
+router.get('/Fee', paymentcon.Fee);
+router.get('/AllFee', paymentcon.GetAllFee);
 
+// admin เท่านั้น
+router.get('/getpaid', adminOnly, paymentcon.getpaidhistory);
+router.get('/getunPaid', adminOnly, paymentcon.getUnpaidhistory);
+router.get('/getpending', adminOnly, paymentcon.getPendingPayments);
+router.put('/confirmpay/:payId', adminOnly, paymentcon.ConfirmPayment);
+router.put('/rejectpay/:payId', adminOnly, paymentcon.RejectPayment);
+router.get('/monthly-payment', adminOnly, paymentcon.getMonthly);
+router.post('/sendBill', adminOnly, paymentcon.FeeBill);
+router.put('/changerate', adminOnly, paymentcon.ChangePayrate);
+router.get('/getincome', adminOnly, paymentcon.GetIncome);
+router.get('/paidhistory', adminOnly, paymentcon.LastPaid);
 
-
-
-module.exports = router;   
+module.exports = router;

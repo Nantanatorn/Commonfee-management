@@ -1,277 +1,323 @@
-
-.container .header{
-  font-family: "Dekko", cursive;
-  text-align: center;
-}
-.village-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 10px;
-  
-}
-/* .layout{
-  width: 500px;
-  height: 100px;
-} */
-.container{
-  align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-.road {
-  color: white;
-  text-align: center;
-  padding: 5px;
-  font-weight: bold;
-}
- 
-.house-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap; /* ทำให้กล่องสามารถขึ้นบรรทัดใหม่ได้ */
-
-}
-.house:hover {
-  background-color: #f0f0f0; /* สีเมื่อ hover */
+/* ==========================================================================
+   Dashboard — การ์ดโทนเข้ม + สีทอง (โหมดสว่างทำตามปุ่มสลับธีมของ sidebar)
+   ========================================================================== */
+:host {
+  display: block;
+  /* ตัวแปรเดิมของหน้านี้ ผูกกับชุดสีกลาง (--ad-*) ใน styles.css */
+  --page: var(--ad-page);
+  --card: var(--ad-card);
+  --text: var(--ad-text);
+  --muted: var(--ad-muted);
+  --line: var(--ad-line);
+  --grid: var(--ad-line-strong);
+  --gold: var(--ad-gold);
+  --gold-ink: var(--ad-gold-ink);
+  --gold-dark: color-mix(in srgb, var(--ad-gold) 70%, #000);
+  --gold-light: color-mix(in srgb, var(--ad-gold) 55%, #fff);
+  --gold-soft: var(--ad-gold-soft);
+  --icon-bg: var(--ad-hover);
+  --icon-fg: var(--ad-text);
+  --bad: var(--ad-bad);
+  --tip-bg: #f6f1e4;
+  --tip-fg: #17202e;
 }
 
-.house[title] {
-  position: relative;
+/* พื้นหลังเต็มพื้นที่ (ชดเชย padding-top 60px ของ .adminContent) */
+.dash {
+  margin-top: -60px;
+  min-height: 100vh;
+  padding: 32px 40px 64px;
+  background: var(--page);
+  color: var(--text);
+  font-family: var(--ad-font-body);
 }
 
-/* Tooltip ที่จะปรากฏ */
-.house[title]::before {
-  content: attr(title);
-  position: absolute;
-  top: -50px; /* จัดตำแหน่งให้ tooltip อยู่เหนือบล็อกบ้าน */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 14px;
-  white-space: nowrap;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 10;
+/* ---------- หัวหน้า ---------- */
+.dash-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 24px; }
+.dash-head h1 { margin: 0; font: 600 40px/1.25 var(--ad-font-head); }
+.head-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.btn-ghost, .btn-gold {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px; border-radius: 6px; font-family: inherit; font-size: 14px; white-space: nowrap; cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.btn-ghost { border: 1px solid var(--ad-line-strong); background: var(--card); color: var(--text); font-weight: 600; }
+.btn-ghost:hover { border-color: var(--gold); background: var(--ad-hover); }
+.btn-gold { border: 1px solid transparent; background: var(--gold); color: var(--ad-on-gold); font-weight: 600; }
+.btn-gold:hover { background: var(--ad-gold-hover); }
+
+/* ---------- การ์ด ---------- */
+.tile {
+  min-width: 0; padding: 22px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: var(--card); color: var(--text);   /* Bootstrap มี .card ที่ตั้งสีเอง จึงใช้ชื่อ .tile */
+  box-shadow: none;
+}
+.tile-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.tile-head h2 { margin: 0; font: 600 20px/1.4 var(--ad-font-head); }
+.tile-head-sm { margin-bottom: 12px; }
+.tile-head-sm h2 { font-size: 18px; }
+.tile-head-col { flex-direction: column; align-items: flex-start; gap: 4px; }
+.muted-sm { font-size: 12px; color: var(--muted); }
+.empty { margin: 22px 0; text-align: center; font-size: 14px; color: var(--muted); }
+
+.icon-btn {
+  display: inline-grid; place-items: center; width: 32px; height: 32px; padding: 0;
+  border: 1px solid var(--ad-line-strong); border-radius: 6px; background: transparent; color: var(--text); font-size: 13px; cursor: pointer;
+}
+.icon-btn:hover:not(:disabled) { border-color: var(--gold); color: var(--gold-ink); }
+.icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ---------- แถบตัวเลข (สมุดบัญชี: ตัวเลขเรียงแถวเดียว คั่นเส้นตั้ง) ---------- */
+.stats {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-bottom: 22px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--card);
+}
+.stats .stat { padding: 20px 26px; border: 0; border-radius: 0; background: transparent; }
+.stats .stat + .stat { border-left: 1px solid var(--line); }
+.stat-label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.stat-label i { color: var(--text); font-size: 15px; }
+.stat-row { display: flex; align-items: baseline; gap: 14px; margin: 8px 0 6px; }
+.stat-num { font: 600 40px/1 var(--ad-font-head); }
+.trend { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--gold-ink); }
+.trend-bad { color: var(--bad); }
+.stat-sub { font-size: 13px; color: var(--muted); }
+
+/* ---------- กราฟ ---------- */
+.charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-bottom: 22px; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); }
+.sw { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 3px; }
+.sw-dark { background: var(--gold); }
+.sw-light { background: var(--gold-light); }
+
+/* กราฟแท่งคู่ */
+.gbars { display: flex; gap: 12px; padding-top: 8px; }
+.y-axis {
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-width: 34px; height: 234px; margin-top: -7px; line-height: 14px;
+  font-size: 12px; color: var(--muted); text-align: right;
+}
+.plot-area { position: relative; display: flex; flex: 1; min-width: 0; height: 250px; }
+.h-lines {
+  position: absolute; top: 0; left: 0; right: 0; height: 220px;
+  display: flex; flex-direction: column; justify-content: space-between; pointer-events: none;
+}
+.h-lines i { display: block; height: 0; border-top: 1px solid var(--grid); }
+.group { position: relative; display: flex; flex: 1; flex-direction: column; align-items: center; min-width: 0; }
+.pair { display: flex; align-items: flex-end; justify-content: center; gap: 5px; width: 100%; height: 220px; }
+.gbar { display: block; width: 14px; min-height: 2px; border-radius: 4px 4px 0 0; transition: height 0.35s ease; }
+.gbar-dark { background: var(--gold); }
+.gbar-light { background: var(--gold-light); }
+.gbar:hover { filter: brightness(1.15); }
+.g-label { margin-top: 8px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+/* กราฟเส้น */
+.line-chart { display: block; width: 100%; height: auto; cursor: crosshair; }
+.grid-line { stroke: var(--grid); stroke-width: 1; }
+.axis-text { fill: var(--muted); font-size: 11px; }
+.line { fill: none; stroke: var(--gold-light); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.area { fill: var(--gold-soft); stroke: none; }
+.dot-pt { fill: var(--gold-light); }
+.cross { stroke: var(--text); stroke-width: 2; }
+.dot-hover { fill: var(--gold-light); stroke: var(--card); stroke-width: 2; }
+.tip-box { fill: var(--tip-bg); }
+.tip-title { fill: var(--tip-fg); font-size: 11px; font-weight: 700; }
+.tip-text { fill: var(--tip-fg); font-size: 10.5px; }
+
+/* ---------- แผนผัง + คอลัมน์ข้าง ---------- */
+.row-map, .row-bottom { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; margin-bottom: 22px; }
+.map-tile {
+  display: flex; flex-direction: column; padding: 24px;
+  background: var(--ad-navy); border-color: rgba(255, 255, 255, 0.07); border-radius: 14px; color: #e9eef6;
+}
+.map-tile .tile-head h2 { color: #fff; }
+.map-tile .legend { color: #c3ccdb; }
+.map-tile .dot { border-color: rgba(255, 255, 255, 0.5); }
+.map-tile .village-layout { margin-block: 0; } /* ผังชิดบนของกระดาน (กระดานยืดตามความสูงคอลัมน์ข้าง) */
+/* คอลัมน์ขวาสูงเท่ากระดานผังเสมอ: contain: size ทำให้ความสูงของเนื้อหาไม่ไปดันแถว
+   การ์ดค้างชำระยืดเต็มพื้นที่ที่เหลือและเลื่อนในกรอบ ส่วนการ์ดคำร้องเรียนอยู่ล่างสุด */
+.side-stack { display: flex; flex-direction: column; gap: 22px; min-width: 0; contain: size; min-height: 480px; }
+.side-stack .unpaid-tile { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
+.side-stack .unpaid-tile .act-list {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; margin-right: -8px; padding-right: 8px;
+  scrollbar-width: thin; scrollbar-color: var(--ad-line-strong) transparent;
+}
+.side-stack .complaint-tile { flex: 0 0 auto; }
+
+.badge-count { padding: 2px 10px; border-radius: 4px; background: var(--gold-soft); color: var(--gold-ink); font-size: 13px; font-weight: 600; }
+
+.act-list { margin: 0; padding: 0; list-style: none; }
+.act-list li { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.act-icon { display: grid; place-items: center; width: 28px; height: 28px; flex: none; border-radius: 6px; background: var(--icon-bg); color: var(--icon-fg); font-size: 14px; }
+.thumb { width: 40px; height: 40px; flex: none; border-radius: 8px; object-fit: cover; background: var(--icon-bg); }
+.act-name { display: flex; flex: 1; flex-direction: column; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; line-height: 1.35; }
+.act-name small { font-size: 11px; color: var(--muted); }
+.act-amt { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* วงแหวนคำร้อง */
+.donut-wrap { display: flex; align-items: center; gap: 16px; }
+.donut { width: 118px; height: 118px; flex: none; }
+.donut-track { stroke: var(--grid); opacity: 0.5; }
+.donut-total { fill: var(--text); font-size: 26px; font-weight: 700; text-anchor: middle; }
+.donut-sub { fill: var(--muted); font-size: 9px; text-anchor: middle; }
+.donut-legend { margin: 0; padding: 0; list-style: none; flex: 1; font-size: 13px; }
+.donut-legend li { display: flex; align-items: center; gap: 8px; padding: 5px 0; }
+.donut-legend strong { margin-left: auto; }
+
+/* ---------- ประวัติการชำระ ---------- */
+.history { margin: 0; padding: 0; list-style: none; }
+.history li {
+  display: grid; grid-template-columns: 44px minmax(0, 1.6fr) 110px 120px 80px; align-items: center; gap: 14px;
+  padding: 14px 0; font-size: 13px;
+}
+.history li + li { border-top: 1px solid var(--line); }
+.avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--gold-dark); color: #fff; font-weight: 700; }
+.h-name { display: flex; flex-direction: column; min-width: 0; line-height: 1.35; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.h-name small { font-size: 11px; font-weight: 400; color: var(--muted); }
+.h-amt { font-variant-numeric: tabular-nums; }
+.h-status { color: var(--ad-ok); font-weight: 600; text-align: right; }
+.pager { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 10px; }
+
+/* ---------- ผังหมู่บ้าน ---------- */
+.dot { display: inline-block; width: 11px; height: 11px; margin-right: 6px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.4); vertical-align: -1px; }
+.donut-legend .dot { margin-right: 0; border: 0; }
+
+.village-layout { position: relative; }
+.village-map { display: block; width: 100%; height: auto; border-radius: 8px; font-family: inherit; }
+.map-bg { fill: #e6eae1; }
+:host-context(body.dark-mode) .map-bg { fill: #cfd6cb; }
+.public-road { fill: #6b7280; }
+.public-label { fill: #fff; font-size: 13px; font-weight: bold; text-anchor: middle; dominant-baseline: central; }
+
+.area-box { stroke: rgba(0, 0, 0, 0.18); stroke-width: 1; }
+.pond { fill: #8ecae6; stroke: #5aa9cf; stroke-width: 2; }
+.area-label { font-size: 11px; font-weight: bold; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+
+.road-casing { fill: none; stroke: #8d95a1; stroke-width: 28; stroke-linejoin: round; }
+.road-fill   { fill: none; stroke: #c9ced6; stroke-width: 24; stroke-linejoin: round; }
+.road-dash   { fill: none; stroke: #fff; stroke-width: 1.5; stroke-dasharray: 8 7; stroke-linejoin: round; }
+.culdesac    { fill: #c9ced6; stroke: #8d95a1; stroke-width: 2; }
+.road-label  {
+  fill: #222; font-size: 11px; font-weight: bold; text-anchor: middle;
+  paint-order: stroke; stroke: #c9ced6; stroke-width: 4px; pointer-events: none;
 }
 
-.house:hover::before {
-  visibility: visible;
-  opacity: 1;
+.tree { fill: #3f8f4a; stroke: #2e6b37; stroke-width: 0.6; }
+
+.lot { cursor: pointer; }
+.plot  { fill: #f4f0e4; stroke: #b3a98f; stroke-width: 0.8; }
+.drive { fill: #b8bcc4; }
+.home  { stroke: #333; stroke-width: 1; transition: filter 0.15s ease; }
+.ridge { stroke: rgba(0, 0, 0, 0.28); stroke-width: 1; pointer-events: none; }
+.lot:hover .home { stroke-width: 2.2; filter: brightness(0.92); }
+.lot-num { font-weight: 700; fill: #111; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+
+.gate-post { fill: #5d4037; }
+.compass { fill: #fff; stroke: #555; stroke-width: 1.2; }
+.compass-needle { fill: #c62828; }
+.compass-n { font-size: 11px; font-weight: bold; fill: #333; text-anchor: middle; }
+
+/* Tooltip ของผังบ้าน */
+.tip {
+  position: absolute; z-index: 50; padding: 8px 12px; border-radius: 6px;
+  background: rgba(0, 0, 0, 0.88); color: #fff; font-size: 13px; white-space: nowrap; pointer-events: none;
+}
+.tip.flip { transform: translateX(-100%); }
+
+/* ---------- จอแคบ ---------- */
+@media (max-width: 1200px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats .stat:nth-child(odd) { border-left: 0; }
+  .stats .stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
+  .charts, .row-map, .row-bottom { grid-template-columns: minmax(0, 1fr); }
+  .side-stack { contain: none; min-height: 0; }
+  .side-stack .unpaid-tile { flex: 0 0 auto; }
+  .side-stack .unpaid-tile .act-list { overflow: visible; margin-right: 0; padding-right: 0; }
 }
 
-/* ลูกศรของ tooltip */
-.house[title]::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.house:hover::after {
-  visibility: visible;
-  opacity: 1;
-}
-/*  Tooltip end */
-.house {
-  
-  border: 2px solid #ff7043;
-  padding: 10px;
-  flex: 1;
-  text-align: center;
-  font-size: 14px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: black;
-}
-.bg{
-  background: #676767;
-  border-radius: 20px;
-  width: 100%;
-  margin-left: 20px;
-}
-.new-row {
-  flex-basis: 100%; /* บังคับให้เริ่มต้นที่บรรทัดใหม่ */
-}
-
-.six{
-  margin-right: 20px;
-}
-.eighteen{
-  margin-right: 20px;
-}
-.thirty{
-  margin-right: 20px;
-}
-/* .thirty-nine{
-  margin-right: 100px;
-} */
-
-.showvalue{
-  display: flex;
-}
-.reviewdetail{
-  text-align: center;
-  height: 475px;
-  border: 2px solid black;
-  border-radius: 10px;
-  box-shadow: 5px 5px 10px rgba(89, 24, 174, 0.3);
-}
-.showdetail{
-  text-align: center;
-  height: 100px;
-  border: 2px solid black;
-  border-radius: 10px;
-  margin: 2rem;
-  box-shadow: 5px 5px 10px rgba(89, 24, 174, 0.3);
-}
-
-.showdetail h5{
-  margin-top: 1rem;
-}
+/* ==========================================================================
+   Modal — โครงสร้างและคลาสเดิม (.modal / .modal-dialog / Bootstrap form) แต่ใช้โทนสีกลางของ admin
+   ========================================================================== */
 .modal {
   position: fixed;
-  color: #000;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* พื้นหลังโปร่งแสง */
+  inset: 0;
+  z-index: 1050;
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  z-index: 1050; /* ให้ modal อยู่ด้านบนสุด */
-}
-
-.modal-dialog {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  width: 90%;
-  max-width: 500px; /* กำหนดขนาดสูงสุดของ modal */
-}
-
-.modal-content {
   padding: 20px;
+  background: rgba(12, 9, 32, 0.55);
+  backdrop-filter: blur(3px);
+  color: var(--ad-text);
+  font-family: var(--ad-font-body);
 }
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
+.modal-dialog {
+  width: min(520px, 100%);
+  max-height: 100%;
+  margin: 0;
+  overflow-y: auto;
+  background: var(--ad-card);
+  border: 1px solid var(--ad-line);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
 }
-
-.modal-title {
-  font-size: 1.2rem;
-}
-
+.modal-content { padding: 26px 28px; background: transparent; border: 0; border-radius: 0; color: inherit; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 0 0 14px; border: 0; }
+.modal-title { margin: 0; font: 600 20px/1.4 var(--ad-font-head); }
 .close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ad-muted);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.close:hover { background: var(--ad-hover); color: var(--ad-text); }
+.modal-body { padding: 0; margin-top: 4px; }
+.modal .form-group { margin-bottom: 16px; }
+.modal label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--ad-muted); }
+.modal .form-control,
+.modal .form-select {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 14px;
+  background-color: var(--ad-input);
+  color: var(--ad-text);
+  border: 1px solid var(--ad-line-strong);
+  border-radius: 6px;
+  font: 400 14px/1.4 var(--ad-font-body);
+  box-shadow: none;
+}
+.modal .form-control::file-selector-button {
+  margin: -9px 12px -9px -14px;
+  padding: 9px 14px;
+  border: 0;
+  border-right: 1px solid var(--ad-line-strong);
+  background: var(--ad-hover);
+  color: var(--ad-text);
+  font: 600 13px var(--ad-font-body);
   cursor: pointer;
 }
-
-.modal-body {
-  margin-top: 10px;
+.modal textarea.form-control { min-height: 110px; resize: vertical; }
+.modal .form-control::placeholder { color: var(--ad-muted); opacity: 1; }
+.modal .form-control:focus,
+.modal .form-select:focus { outline: none; border-color: var(--ad-gold); box-shadow: 0 0 0 3px var(--ad-gold-soft); }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 6px 0 0; border: 0; }
+.modal .btn {
+  min-height: 40px;
+  padding: 9px 18px;
+  border: 1px solid var(--ad-line-strong);
+  border-radius: 6px;
+  font: 600 14px/1.2 var(--ad-font-body);
 }
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-.charts{
-  display: flex;
-  margin: 20px;
-}
-.pie{
-  flex: 1;
-  box-shadow:10px 10px 5px #aaa;
-  margin-right: 20px;
-}
-.line{
-  flex: 1;
-  box-shadow:10px 10px 5px #aaa;
-  color: #fda95b;
-}
-table, th, td {
-  border: none;
-  background: none;
-}
-.nB{
-  background-color: #ac7bc6;
-  color: #fff;  
-
-}
-.nB:hover{
-  background-color: #ac7bc6;
-  color: #fff;  
-}
-
-.loading-spinner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.spinner-border {
-  width: 10rem;
-  height: 10rem;
-  margin-bottom: 10px;
-}
-
-.product-card {
-  
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 20px auto;
-  height: 25rem;
-  width: 100rem;
-  border-radius: 10px;
-}
-
-.photo {
-  width: 500px;
-  height: 20rem;
-  background-color: #f3f3f3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  margin-left: 75px;
-}
-
-.details {
-  flex-grow: 1;
-  margin-left: 75px;
-  text-align: left;
-}
-
-.edit-btn {
-  margin-right: 10px;
-}
+.modal .btn-primary { background: var(--ad-gold); border-color: var(--ad-gold); color: var(--ad-on-gold); }
+.modal .btn-primary:hover { background: var(--ad-gold-hover); border-color: var(--ad-gold-hover); color: var(--ad-on-gold); }
+.modal .btn-secondary { background: transparent; color: var(--ad-text); }
+.modal .btn-secondary:hover { background: var(--ad-hover); border-color: var(--ad-gold); color: var(--ad-text); }

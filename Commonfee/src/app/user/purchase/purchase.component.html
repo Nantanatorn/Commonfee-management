@@ -59,7 +59,7 @@
     <tbody>
       <tr *ngFor="let payment of paymentHistory$ | async">
           <td>{{ payment.Pay_Date| date: 'dd MMM yyyy'}}</td>
-          <td>{{ payment.House_number }}</td>
+          <td><span class="house-plate">{{ payment.House_number }}</span></td>
           <td>{{ payment.Land_size }} ตร.ว.</td>
           <td>{{ payment.Pay_Fine}} บาท</td>
           <td>{{ payment.Pay_Amount  }} บาท</td>
@@ -67,23 +67,26 @@
            <!-- <td>{{ payment.Pay_Status}}</td>  -->
           <td>
             <!-- ปุ่มชำระเงิน -->
-            <button *ngIf="payment.Pay_Status.trim() !== 'Paid'" (click)="onGenerateQR(payment)">ชำระเงิน</button>
-            <button *ngIf="payment.Pay_Status.trim() === 'Paid'" disabled>ชำระแล้ว</button>
+            <button class="btn-pay" *ngIf="payment.Pay_Status.trim() === 'Overdue'" (click)="onGenerateQR(payment)">ชำระเงิน</button>
+            <button class="st st-pending" *ngIf="payment.Pay_Status.trim() === 'Pending'" disabled>รอตรวจสอบ</button>
+            <button class="st st-paid" *ngIf="payment.Pay_Status.trim() === 'Paid'" disabled>ชำระแล้ว</button>
           </td>
           <td>
-              <button *ngIf="payment.Pay_Status.trim() !== 'Paid'" disabled >Print</button>
-              <button *ngIf="payment.Pay_Status.trim() === 'Paid'" (click)="generatePDF(payment.Pay_ID)">Print</button>
+              <button class="btn-print" *ngIf="payment.Pay_Status.trim() !== 'Paid'" disabled >Print</button>
+              <button class="btn-print" *ngIf="payment.Pay_Status.trim() === 'Paid'" (click)="generatePDF(payment.Pay_ID)">Print</button>
           </td>
       </tr>
     </tbody>
   </table>
 
   <!-- ส่วนสำหรับแสดง QR Code และปุ่ม Manual Scan -->
-  <div *ngIf="myAngularxQrCode && selectedPayment && selectedPayment.Pay_Status !== 'Paid'">
+  <div class="qr-panel" *ngIf="myAngularxQrCode && selectedPayment && selectedPayment.Pay_Status.trim() === 'Overdue'">
     <p>ชำระเงินวันที่ {{ selectedPayment.Pay_Date | date: 'MM/dd/yyyy' }} หากต้องการชำระเงินแสกนคิวอาร์โค้ด หรือ กดปุ่มชำระเงิน</p>
     <img [src]="myAngularxQrCode" alt="PromptPay QR Code" />
-    <div class="manual-payment mt-3">
-        <button (click)="onManualScan()">ชำระเงิน</button>
+    <div class="manual-payment">
+        <p>โอนเงินแล้ว กรุณาแนบรูปสลิปเพื่อแจ้งชำระ (jpg, png, webp, gif ไม่เกิน 5MB)</p>
+        <input type="file" accept="image/*" (change)="onSlipSelected($event)" />
+        <button (click)="onManualScan()" [disabled]="!slipFile">แจ้งชำระเงินแล้ว</button>
     </div>
   </div> 
 

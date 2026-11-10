@@ -21,7 +21,7 @@ export class PurchaseComponent implements OnInit {
   myAngularxQrCode: string = '';
   isQrScanned: boolean = false;
   paymentHistory$: BehaviorSubject<paymentHistory[]> = new BehaviorSubject<paymentHistory[]>([]); // เปลี่ยนเป็น BehaviorSubject
-  phoneNumber: string = '0906323838';
+  slipFile: File | null = null; // สลิปที่ลูกบ้านเลือกแนบ
   selectedPayment: paymentHistory | null = null;
   isPaid: boolean;
   total: number;
@@ -52,7 +52,8 @@ export class PurchaseComponent implements OnInit {
     this.selectedPayment = payment;
     this.total = payment.Pay_Amount + payment.Pay_Fine;
     // สร้าง QR Code สำหรับรายการนี้
-    this.banDeeService.generatePromptPayQr(this.phoneNumber, this.total, payment.Pay_ID).subscribe({
+    this.slipFile = null;
+    this.banDeeService.generatePromptPayQr(payment.Pay_ID).subscribe({
       next: (data) => {
         this.myAngularxQrCode = data.qrCodeUrl;
         console.log('QR Code URL:', this.myAngularxQrCode);
@@ -63,7 +64,27 @@ export class PurchaseComponent implements OnInit {
     });
   }
 
+  onSlipSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files.length ? input.files[0] : null;
+    if (file && (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024)) {
+      Swal.fire({ title: 'ไฟล์ไม่ถูกต้อง', text: 'แนบได้เฉพาะไฟล์รูปภาพขนาดไม่เกิน 5MB', icon: 'warning' });
+      input.value = '';
+      this.slipFile = null;
+      return;
+    }
+    this.slipFile = file;
+  }
+
   onManualScan() {
+    if (!this.slipFile) {
+      Swal.fire({
+        title: 'กรุณาแนบสลิป',
+        text: 'แนบรูปสลิปการโอนเงินก่อนกดแจ้งชำระเงิน',
+        icon: 'warning',
+      });
+      return;
+    }
     // ใช้ Pay_ID จากรายการที่เลือก
     if (this.selectedPayment) {
       console.log('Using Pay ID from Selected Record:', this.selectedPayment.Pay_ID);
@@ -88,21 +109,23 @@ export class PurchaseComponent implements OnInit {
       return;
     }
   
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    this.http.put(`http://localhost:3500/pay/${payId}`, {}, { headers }).subscribe({
+    this.banDeeService.reportPayment(Number(payId), this.slipFile as File).subscribe({
       next: () => {
         Swal.fire({
-          title: 'ชำระเงินสำเร็จ!',
-          text: 'ขอบคุณที่ชำระเงินค่าส่วนกลาง',
+          title: 'แจ้งชำระเงินแล้ว',
+          text: 'ระบบได้รับแจ้งการชำระเงินแล้ว กรุณารอผู้ดูแลตรวจสอบและยืนยัน จึงจะสามารถพิมพ์ใบเสร็จได้',
           icon: 'success',
         });
+        this.selectedPayment = null;
+        this.myAngularxQrCode = '';
+        this.slipFile = null;
         this.refreshPaymentHistory();
       },
       error: (err) => {
         console.error('Error updating payment status:', err);
         Swal.fire({
           title: 'เกิดข้อผิดพลาด!',
-          text: 'ไม่สามารถชำระเงินได้ กรุณาลองใหม่อีกครั้ง',
+          text: err?.error?.message || 'ไม่สามารถแจ้งชำระเงินได้ กรุณาลองใหม่อีกครั้ง',
           icon: 'error',
         });
       },

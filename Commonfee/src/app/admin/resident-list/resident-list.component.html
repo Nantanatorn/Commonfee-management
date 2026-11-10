@@ -1,151 +1,185 @@
 <app-admin-sidebar></app-admin-sidebar>
-<div class="container">
-    <div class="header">
-        <h1>Resident List</h1>
-        <img src="line.png" alt="error" width="200">
-    </div>
-</div>
-<!-- <div class="resident">
-    <table class="table">
+<div class="ad-page">
+  <header class="ad-head">
+    <h1 class="ad-title">Resident List</h1>
+  </header>
+
+  <div class="ad-card toolbar">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="ค้นหาจากบ้านเลขที่ ชื่อ และ รหัสบัตรประชาชน " class="ad-input search-input" (keyup.enter)="searchresident()"/>
+    <button class="ad-btn search-btn" (click)="searchresident()">ค้นหา</button>
+    <button (click)="openModal()" class="ad-btn ad-btn-primary btn-register">ลงทะเบียน</button>
+  </div>
+
+  <div class="ad-card res-table-card">
+    <div class="ad-table-wrap">
+      <table class="ad-table res-table">
         <thead>
-            <tr>
-                <th>เลขบัตรประชาชน</th>
-                <th>ชื่อ</th>
-                <th>นามสกุล</th>
-                <th>บ้านเลขที่</th>
-                <th>เบอร์โทรศัพท์</th>
-            </tr>
+          <tr>
+            <th></th>
+            <th>ชื่อผู้ใช้</th>
+            <th>ชื่อ-สกุล</th>
+            <th>รหัสบัตรประชาชน</th>
+            <th>อีเมลล์</th>
+            <th>เบอร์โทรติดต่อ</th>
+            <th>บ้านเลขที่</th>
+            <th>วันเข้าอาศัย</th>
+            <th>สถานะ</th>
+            <th>จัดการ</th>
+          </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1101125479568</td>
-                <td>นันทนาธร</td>
-                <td>ซื่อตรง</td>
-                <td>123/456</td>
-                <td>1234567890</td>
-            </tr>
+          <tr *ngFor="let resident of residents$ | async" [class.row-moved]="!isLiving(resident)">
+            <td class="col-avatar"><img class="avatar" [src]="'http://localhost:3500/' + resident.User_image " alt="Profile" /></td>
+            <td class="ad-nowrap">{{ resident.username}}</td>
+            <td class="ad-nowrap">{{ resident.R_Firstname }}  {{ resident.R_Lastname }}</td>
+            <td class="ad-num">{{ resident.IDcard }}</td>
+            <td class="col-email" [title]="resident.email">{{ resident.email }}</td>
+            <td class="ad-num">{{ resident.phone   }}</td>
+            <td class="ad-nowrap">{{ resident.House_number }}</td>
+            <td class="ad-num ad-nowrap">{{ resident.EntryDate | date: 'MM/dd/yyyy'}}</td>
+            <td><span class="ad-badge" [ngClass]="isLiving(resident) ? 'ok' : 'warn'">{{ resident.status }}</span></td>
+            <td class="col-actions">
+              <ng-container *ngIf="isLiving(resident)">
+                <button type="button" class="ad-btn ad-btn-sm btn-edit" (click)="openEdit(resident)">แก้ไข</button>
+                <button type="button" class="ad-btn ad-btn-sm ad-btn-danger btn-moveout" (click)="moveOut(resident)">ย้ายออก</button>
+              </ng-container>
+            </td>
+          </tr>
         </tbody>
-    </table>
-</div> -->
-<div class="search-container">
-  <input type="text" [(ngModel)]="searchQuery" placeholder="ค้นหาจากบ้านเลขที่ ชื่อ และ รหัสบัตรประชาชน " class="search-input" (keyup.enter)="searchresident()"/>
-  <button class="search-btn" (click)="searchresident()">ค้นหา</button>
-  <button (click)="openModal()" class="btn-register">ลงทะเบียน</button>
-</div>
-<div class="profile-cards-container mt-5">
-    <div class="profile-card " *ngFor="let resident of residents$ | async">
-      <div class="profile-image">
-        <img [src]="'http://localhost:3500/' + resident.User_image " alt="Profile" />
-      </div>
-      <div class="profile-details">
-        <p>ชื่อผู้ใช้ : {{ resident.username}}</p>
-        <p>ชื่อ-สกุล : {{ resident.R_Firstname }}  {{ resident.R_Lastname }}</p>
-        <p>รหัสบัตรประชาชน : {{ resident.IDcard }}</p>
-        <p>อีเมลล์ : {{ resident.email }}</p>
-        <p>เบอร์โทรติดต่อ : {{ resident.phone   }}</p>
-        <p>บ้านเลขที่ : {{ resident.House_number }}</p>
-        <p>วันเข้าอาศัย : {{ resident.EntryDate | date: 'MM/dd/yyyy'}}</p>
-        <p>สถานะ : {{ resident.status }}</p>
-      </div>
+      </table>
     </div>
-</div>
-<div class="pagination">
-   <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
-  <button>Page {{ currentPage }} of {{ totalPages }}</button>
-  <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
-</div>
-    <!-- ทำ modal สำหรับการลงทะเบียนลูกบ้าน -->
-    <div class="modal" [class.show]="isModalOpen">
-        <div class="modal-content">
-          <span class="close" (click)="closeModal()">&times;</span>
-          <h2>ลงทะเบียนผู้อยู่อาศัย</h2>
-      
-          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-            <div class="form-grid">
-             
-              <div class="form-group">
-                <label for="User_Firstname">ชื่อ:</label>
-                <input
-                  type="text"
-                  id="User_Firstname"
-                  formControlName="User_Firstname"
-                  class="form-control"
-                  placeholder="กรอกชื่อ"
-                  maxlength="50" 
-                />
-              </div>
-          
-              <div class="form-group">
-                <label for="User_Lastname">นามสกุล:</label>
-                <input
-                  type="text"
-                  id="User_Lastname"
-                  formControlName="User_Lastname"
-                  class="form-control"
-                  placeholder="กรอกนามสกุล"
-                  maxlength="50" 
-                />
-              </div>
+  </div>
+  <p *ngIf="(residents$ | async)?.length === 0" class="res-empty">ไม่พบลูกบ้านที่ตรงกับคำค้นหา</p>
 
-              <div class="form-group">
-                <label for="username">ชื่อผู้ใช้ :</label>
-                <input
-                  type="text"
-                  id="username"
-                  formControlName="username"
-                  class="form-control"
-                  placeholder="กรอกชื่อผู้ใช้"
-                  maxlength="50" 
-                />
-              </div>
-              
-              <div class="form-group">
-                <label for="IDcard">เลขบัตรประชาชน:</label>
-                <input
-                  type="text"
-                  id="IDcard"
-                  formControlName="IDcard"
-                  class="form-control"
-                  placeholder="กรอกเลขบัตรประชาชน"
-                  maxlength="13" 
-                />
-              </div>
-          
-              <div class="form-group">
-                <label for="House_number">บ้านเลขที่:</label>
-                <select id="House_number" formControlName="House_number" class="form-select" aria-label="Default select example">
-                  <option value=""  selected>Select House</option>
-                  <option *ngFor="let house of House$ | async" [value]="house.House_number">
-                    {{ house.House_number }}
-                  </option>
-                </select>
-              </div>
-          
-              <div class="form-group">
-                <label for="phone">เบอร์โทร:</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  formControlName="phone"
-                  class="form-control"
-                  placeholder="กรอกเบอร์โทร"
-                  maxlength="10" 
-                />
-              </div>
-              <div class="form-group">
-                <label for="email">อีเมลล์:</label>
-                <input
-                  type="Email"
-                  id="email"
-                  formControlName="email"
-                  class="form-control"
-                  placeholder="กรอกอีเมลล์"
-                  maxlength="50" 
-                />
-              </div>
-            </div>
-            <button type="submit" class="btn-submit">บันทึก</button>
-          </form>
-          
+  <div class="pagination">
+    <button class="ad-btn ad-btn-sm" (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
+    <button class="ad-btn ad-btn-sm page-indicator">Page {{ currentPage }} of {{ totalPages }}</button>
+    <button class="ad-btn ad-btn-sm" (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+</div>
+
+<!-- ทำ modal สำหรับการลงทะเบียนลูกบ้าน -->
+<div class="ad-modal" [class.is-open]="isModalOpen">
+  <div class="ad-modal-card">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2>ลงทะเบียนผู้อยู่อาศัย</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="ad-label" for="User_Firstname">ชื่อ:</label>
+          <input
+            type="text"
+            id="User_Firstname"
+            formControlName="User_Firstname"
+            class="ad-input"
+            placeholder="กรอกชื่อ"
+            maxlength="50"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="ad-label" for="User_Lastname">นามสกุล:</label>
+          <input
+            type="text"
+            id="User_Lastname"
+            formControlName="User_Lastname"
+            class="ad-input"
+            placeholder="กรอกนามสกุล"
+            maxlength="50"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="ad-label" for="username">ชื่อผู้ใช้ :</label>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            class="ad-input"
+            placeholder="กรอกชื่อผู้ใช้"
+            maxlength="50"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="ad-label" for="IDcard">เลขบัตรประชาชน:</label>
+          <input
+            type="text"
+            id="IDcard"
+            formControlName="IDcard"
+            class="ad-input"
+            placeholder="กรอกเลขบัตรประชาชน"
+            maxlength="13"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="ad-label" for="House_number">บ้านเลขที่:</label>
+          <select id="House_number" formControlName="House_number" class="ad-select" aria-label="Default select example">
+            <option value=""  selected>Select House</option>
+            <option *ngFor="let house of House$ | async" [value]="house.House_number">
+              {{ house.House_number }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="ad-label" for="phone">เบอร์โทร:</label>
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            class="ad-input"
+            placeholder="กรอกเบอร์โทร"
+            maxlength="10"
+          />
+        </div>
+        <div class="form-group">
+          <label class="ad-label" for="email">อีเมลล์:</label>
+          <input
+            type="Email"
+            id="email"
+            formControlName="email"
+            class="ad-input"
+            placeholder="กรอกอีเมลล์"
+            maxlength="50"
+          />
         </div>
       </div>
+      <button type="submit" class="ad-btn ad-btn-primary btn-submit">บันทึก</button>
+    </form>
+
+  </div>
+</div>
+
+<!-- modal แก้ไขข้อมูลลูกบ้าน -->
+<div class="ad-modal" [class.is-open]="isEditOpen">
+  <div class="ad-modal-card">
+    <span class="close" (click)="closeEdit()">&times;</span>
+    <h2>แก้ไขข้อมูลลูกบ้าน</h2>
+
+    <form [formGroup]="editForm" (ngSubmit)="saveEdit()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="ad-label" for="edit_first">ชื่อ:</label>
+          <input type="text" id="edit_first" formControlName="User_Firstname" class="ad-input" maxlength="50" />
+        </div>
+        <div class="form-group">
+          <label class="ad-label" for="edit_last">นามสกุล:</label>
+          <input type="text" id="edit_last" formControlName="User_Lastname" class="ad-input" maxlength="50" />
+        </div>
+        <div class="form-group">
+          <label class="ad-label" for="edit_phone">เบอร์โทร:</label>
+          <input type="tel" id="edit_phone" formControlName="phone" class="ad-input" maxlength="10" />
+        </div>
+        <div class="form-group">
+          <label class="ad-label" for="edit_email">อีเมล:</label>
+          <input type="email" id="edit_email" formControlName="email" class="ad-input" maxlength="100" />
+        </div>
+      </div>
+      <button type="submit" class="ad-btn ad-btn-primary btn-submit">บันทึก</button>
+    </form>
+  </div>
+</div>

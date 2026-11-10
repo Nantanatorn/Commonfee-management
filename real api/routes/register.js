@@ -1,10 +1,10 @@
 const express = require('express');
-require('dotenv').config();
-
-const registerCon=require('../controller/register')
+const registerCon = require('../controller/register');
+const { adminOnly } = require('../middleware/auth');
 const router = express.Router();
 
-router.post('/register',registerCon.enrollment);
+router.post('/register', adminOnly, registerCon.enrollment);
+router.post('/forgotpass/request', registerCon.requestReset);
 router.put('/updatepass', registerCon.changepass);
 
 module.exports = router;

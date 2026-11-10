@@ -59,12 +59,20 @@ export class ComplainRepairComponent {
     this.lineCharts = new Chart({
       chart: {
         type: 'line',
+        height: 320,
+        backgroundColor: 'transparent',
         style: {
-          fontFamily: 'Noto Sans Thai, sans-serif',
+          fontFamily: 'IBM Plex Sans Thai, sans-serif',
         },
+      },
+      colors: ['#d9a441', '#6f86d6'],
+      plotOptions: {
+        series: { lineWidth: 3, marker: { radius: 4, symbol: 'circle' } },
       },
       title: {
         text: 'แสดงคำร้องในแต่ละเดือน',
+        align: 'left',
+        style: { fontSize: '17px', fontWeight: '600' },
       },
       credits: {
         enabled: false,

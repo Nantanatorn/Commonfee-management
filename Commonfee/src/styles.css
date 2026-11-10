@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@400..800&family=Dekko&family=Jost:ital@0;1&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Pridi:wght@400;500;600&display=swap");
 
 .noto-sans-thai-main {
     font-family: "Noto Sans Thai", sans-serif;
@@ -26,18 +25,6 @@
   .login-content {
     padding-top: 0;  /* ไม่มี padding-top ในหน้า login */
   }
-  .sidebar {
-    position: fixed; /* ทำให้ Sidebar คงที่ */
-    top: 0px;
-    left: 0;
-    width: 250px;
-    height: 100vh;
-    background-color: #333333;
-    transition: width 0.3s ease;
-    overflow: hidden;
-    border: .5px solid black;
-    
-  }
   .switch {
     position: relative;
     display: inline-block;
@@ -49,90 +36,6 @@
     opacity: 0;
     width: 0;
     height: 0;
-  }
-
-  
-  .sidebar .text {
-    font-size: 16px;
-    font-weight: 500;
-  }
-  
-  .sidebar .image {
-    min-width: 60px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .sidebar li {
-    height: 50px;
-    margin-top: 10px;
-    list-style: none;
-    display: flex;
-    align-items: center;
-  }
-  
-  .sidebar li .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 30px;
-    font-size: 20px;
-    left: 0;
-  }
-  
-  .sidebar li .icon,
-  .sidebar li .text {
-    transition: all 0.2s ease;
-  }
-  
-  .sidebar header {
-    position: relative;
-  }
-  
-  .sidebar .image-text img {
-    width: 40px;
-    border-radius: 6px;
-  }
-  
-  .sidebar header .image-text {
-    display: flex;
-    align-items: center;
-  }
-  
-  header .image-text .header-text{
-    display: flex;
-    flex-direction: column;
-  }
-  .header-text .name{
-    font-weight: 600;
-  }
-  .header-text .profession{
-    margin-top: -2px;
-  }
-  
-
-  .sidebar li a{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: all 0.4s ease;
-    color: #000000;
-  }
-  .sidebar li a:hover{
-    background-color: #695CFE;
-  }
-  .sidebar li a:hover .icon,
-  .sidebar li a:hover .text{
-    color:#fff ;
-  }
-  .sidebar .menu-bar{
-    height: calc(100% - 130px);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
   /* Toggle Switch */
   .toggle-container {
@@ -183,12 +86,6 @@
     color: #000000;
    
   }
- 
-  body.light-mode .sidebar {
-    background-color: #ffffff;
-    color: #000000;
-    
-  }
 
   
   /* Dark Mode */
@@ -197,20 +94,10 @@
     background-color: #0e0727;
     color: #ffffff;
   }
-  
-  body.dark-mode .sidebar {
-    background-color: #333333;
-    color: #ffffff;
-  }
 
   
   /* Light Mode */
   body.light-mode {
-    background-color: #ffffff;
-    color: #000000;
-  }
-  
-  body.light-mode .sidebar {
     background-color: #ffffff;
     color: #000000;
   }
@@ -226,4 +113,272 @@ body.dark-mode table,
 body.dark-mode th, 
 body.dark-mode td {
   color: #ffffff; /* สีตัวอักษรสีขาวสำหรับโหมดมืด */
+}
+
+/* ==========================================================================
+   Admin UI kit  (ฝั่ง admin — แนว "สมุดบัญชี": กรมท่า + ทองเหลือง บนกระดานน้ำเงินเทา)
+   คลาสขึ้นต้นด้วย ad- จึงไม่ชนกับ Bootstrap/หน้าลูกบ้าน ตัวแปรสีกำหนดที่ body เมื่อมี .adminContent
+   - ตัวอักษร: Pridi (ชื่อหน้า/หัวข้อ/ตัวเลขสรุป) คู่ IBM Plex Sans Thai (เมนู ตาราง ฟอร์ม)
+   - โครงสร้างมี 2 แบบเท่านั้น: "แผ่น" (เส้นบาง มุม 6px ไม่มีเงา) และ "กระดานผัง" (กรมท่า)
+   ========================================================================== */
+body:has(.adminContent) {
+  --ad-font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+  --ad-font-head: "Pridi", "Noto Serif Thai", serif;
+
+  --ad-navy: #0f1b33;          /* แถบเมนูข้าง / กระดานผัง */
+  --ad-page: #eef1f5;          /* กระดาษ */
+  --ad-card: #ffffff;
+  --ad-text: #17202e;
+  --ad-muted: #5b6677;
+  --ad-line: #d3d9e2;
+  --ad-line-strong: #b4bdc9;
+  --ad-hover: rgba(15, 27, 51, 0.045);
+  --ad-input: #ffffff;
+  --ad-gold: #b7893b;          /* ทองเหลือง: สีเน้นเดียว */
+  --ad-gold-hover: #a67a2f;
+  --ad-gold-ink: #7d5a14;
+  --ad-gold-soft: rgba(183, 137, 59, 0.16);
+  --ad-on-gold: #0f1b33;
+  --ad-ok: #1f7a4d;
+  --ad-ok-soft: rgba(31, 122, 77, 0.12);
+  --ad-bad: #b23a32;           /* สีกระเบื้องหลังคา */
+  --ad-bad-soft: rgba(178, 58, 50, 0.10);
+  --ad-warn: #8a5300;
+  --ad-warn-soft: rgba(138, 83, 0, 0.12);
+  --ad-info: #2a55a8;
+  --ad-info-soft: rgba(42, 85, 168, 0.11);
+  --ad-muted-soft: rgba(15, 27, 51, 0.08);
+  --ad-shadow: 0 24px 60px rgba(15, 27, 51, 0.28);   /* เฉพาะของที่ลอยจริง: modal / ป๊อปอัป */
+  --ad-radius: 6px;
+}
+body.dark-mode:has(.adminContent) {
+  color-scheme: dark;
+  --ad-navy: #0a1222;
+  --ad-page: #0b1426;
+  --ad-card: #13203a;
+  --ad-text: #e9eef6;
+  --ad-muted: #a9b4c6;
+  --ad-line: rgba(255, 255, 255, 0.10);
+  --ad-line-strong: rgba(255, 255, 255, 0.22);
+  --ad-hover: rgba(255, 255, 255, 0.055);
+  --ad-input: rgba(255, 255, 255, 0.06);
+  --ad-gold: #d9b26a;
+  --ad-gold-hover: #e4c283;
+  --ad-gold-ink: #d9b26a;
+  --ad-gold-soft: rgba(217, 178, 106, 0.18);
+  --ad-on-gold: #0f1b33;
+  --ad-ok: #6fe0a6;
+  --ad-ok-soft: rgba(111, 224, 166, 0.14);
+  --ad-bad: #ff9c92;
+  --ad-bad-soft: rgba(255, 156, 146, 0.14);
+  --ad-warn: #f3bd5c;
+  --ad-warn-soft: rgba(243, 189, 92, 0.15);
+  --ad-info: #9bbcff;
+  --ad-info-soft: rgba(155, 188, 255, 0.15);
+  --ad-muted-soft: rgba(255, 255, 255, 0.10);
+  --ad-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+/* จอแคบ: sidebar ย่อเป็นแถบไอคอน (ดู admin-sidebar.component.css) */
+@media (max-width: 1100px) {
+  .adminContent { margin-left: 76px; }
+}
+
+/* ---------- พื้นหน้า ---------- */
+.ad-page {
+  margin-top: -60px; /* ชดเชย padding-top: 60px ของ .adminContent ให้พื้นหลังเต็มจอ */
+  min-height: 100vh;
+  padding: 32px 40px 64px;
+  background: var(--ad-page);
+  color: var(--ad-text);
+  font-family: var(--ad-font-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.ad-page *, .ad-page *::before, .ad-page *::after { box-sizing: border-box; }
+.ad-page h1, .ad-page h2, .ad-page h3, .ad-page h4 { margin: 0; color: inherit; font-family: var(--ad-font-head); }
+@media (max-width: 640px) { .ad-page { padding: 20px 16px 40px; } }
+
+.ad-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 26px; }
+.ad-title { font: 600 40px/1.25 var(--ad-font-head); text-align: left; color: var(--ad-text); }
+.ad-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ad-stack { display: grid; gap: 22px; }
+.ad-stack > *, .ad-grid-2 > * { min-width: 0; } /* ตารางกว้างต้องเลื่อนในแผ่น ไม่ดันหน้าให้ล้นจอ */
+.ad-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+@media (max-width: 1100px) { .ad-grid-2 { grid-template-columns: 1fr; } }
+
+/* ---------- แผ่น (แทนการ์ดลอย) ---------- */
+.ad-card {
+  background: var(--ad-card);
+  color: var(--ad-text);
+  border: 1px solid var(--ad-line);
+  border-radius: var(--ad-radius);
+  box-shadow: none;
+  padding: 24px 26px;
+}
+.ad-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.ad-card-title { margin: 0; font: 600 20px/1.4 var(--ad-font-head); text-align: left; }
+
+/* ---------- ปุ่ม ---------- */
+.ad-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: auto; min-height: 40px; padding: 9px 18px; white-space: nowrap;
+  border-radius: var(--ad-radius); border: 1px solid var(--ad-line-strong);
+  background: var(--ad-card); color: var(--ad-text);
+  font: 600 14px/1.2 var(--ad-font-body);
+  cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.ad-btn:hover { background: var(--ad-hover); border-color: var(--ad-gold); }
+.ad-btn:active { transform: translateY(1px); }
+.ad-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ad-btn-primary { background: var(--ad-gold); border-color: var(--ad-gold); color: var(--ad-on-gold); }
+.ad-btn-primary:hover { background: var(--ad-gold-hover); border-color: var(--ad-gold-hover); }
+.ad-btn-danger { color: var(--ad-bad); border-color: color-mix(in srgb, var(--ad-bad) 45%, transparent); }
+.ad-btn-danger:hover { background: var(--ad-bad-soft); border-color: var(--ad-bad); }
+.ad-btn-sm { min-height: 34px; padding: 6px 12px; font-size: 13px; }
+
+/* ---------- ฟอร์ม ---------- */
+.ad-input, .ad-select {
+  width: 100%; min-height: 42px; padding: 9px 14px;
+  border-radius: var(--ad-radius); border: 1px solid var(--ad-line-strong);
+  background: var(--ad-input); color: var(--ad-text);
+  font: 400 14px/1.4 var(--ad-font-body);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.ad-input::placeholder { color: var(--ad-muted); opacity: 1; }
+.ad-input:focus, .ad-select:focus { outline: none; border-color: var(--ad-gold); box-shadow: 0 0 0 3px var(--ad-gold-soft); }
+.ad-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--ad-muted); }
+
+/* ---------- ตาราง (สมุดบัญชี: เส้นหนาใต้หัวตาราง เส้นบางคั่นแถว) ---------- */
+.ad-table-wrap { overflow-x: auto; }
+.ad-page .ad-table { width: 100%; border-collapse: collapse; font-size: 14px; background: transparent; margin: 0; font-variant-numeric: tabular-nums; }
+.ad-page .ad-table th {
+  padding: 10px 12px; text-align: left; white-space: nowrap;
+  font-size: 13px; font-weight: 600; color: var(--ad-muted);
+  border: 0; border-bottom: 2px solid var(--ad-text); background: transparent;
+}
+.ad-page .ad-table td {
+  padding: 12px; text-align: left; vertical-align: middle;
+  color: var(--ad-text); border: 0; border-bottom: 1px solid var(--ad-line); background: transparent;
+}
+.ad-page .ad-table tbody tr:hover td { background: var(--ad-hover); }
+.ad-page .ad-table tbody tr:last-child td { border-bottom: 0; }
+.ad-nowrap { white-space: nowrap; }
+.ad-num { font-variant-numeric: tabular-nums; }
+.ad-scroll { max-height: 440px; overflow: auto; }
+.ad-page .ad-scroll .ad-table th { position: sticky; top: 0; z-index: 1; background: var(--ad-card); }
+
+/* ---------- สถานะ: ตัวหนังสือสี (ใช้คำเป็นตัวบอก ไม่พึ่งสีอย่างเดียว) ---------- */
+.ad-badge { display: inline; padding: 0; background: none; font-size: 14px; font-weight: 600; line-height: 1.5; white-space: nowrap; color: var(--ad-muted); }
+.ad-badge.ok   { color: var(--ad-ok); }
+.ad-badge.bad  { color: var(--ad-bad); }
+.ad-badge.warn { color: var(--ad-warn); }
+.ad-badge.info { color: var(--ad-info); }
+
+/* ---------- กราฟ Highcharts ให้ตามธีม ---------- */
+.ad-page .highcharts-background { fill: transparent !important; }
+.ad-page .highcharts-container text,
+.ad-page .highcharts-container .highcharts-axis-labels text,
+.ad-page .highcharts-container .highcharts-axis-title { fill: var(--ad-muted) !important; color: var(--ad-muted) !important; }
+.ad-page .highcharts-container .highcharts-title { fill: var(--ad-text) !important; color: var(--ad-text) !important; font-weight: 600; }
+.ad-page .highcharts-container .highcharts-legend-item text { fill: var(--ad-text) !important; color: var(--ad-text) !important; }
+.ad-page .highcharts-grid-line { stroke: var(--ad-line) !important; }
+.ad-page .highcharts-axis-line, .ad-page .highcharts-tick { stroke: var(--ad-line-strong) !important; }
+
+/* ---------- โฟกัสด้วยคีย์บอร์ด ---------- */
+.ad-page :focus-visible { outline: 2px solid var(--ad-gold); outline-offset: 2px; }
+.ad-page .ad-input:focus-visible, .ad-page .ad-select:focus-visible { outline: none; }
+
+/* ---------- SweetAlert (เฉพาะตอนอยู่หน้า admin) ---------- */
+body:has(.adminContent) .swal2-popup {
+  background: var(--ad-card); color: var(--ad-text);
+  border: 1px solid var(--ad-line); border-radius: 14px; box-shadow: var(--ad-shadow);
+  font-family: var(--ad-font-body);
+}
+body:has(.adminContent) .swal2-title { color: var(--ad-text); font-family: var(--ad-font-head); font-weight: 600; }
+body:has(.adminContent) .swal2-html-container { color: var(--ad-muted); }
+body:has(.adminContent) .swal2-styled { border-radius: var(--ad-radius); font-weight: 600; font-family: inherit; box-shadow: none !important; }
+body:has(.adminContent) .swal2-styled.swal2-confirm { background: var(--ad-gold) !important; color: var(--ad-on-gold) !important; }
+body:has(.adminContent) .swal2-styled.swal2-cancel { background: transparent !important; color: var(--ad-text) !important; border: 1px solid var(--ad-line-strong) !important; }
+body:has(.adminContent) .swal2-input, body:has(.adminContent) .swal2-select {
+  background: var(--ad-input); color: var(--ad-text); border: 1px solid var(--ad-line-strong); border-radius: var(--ad-radius); box-shadow: none;
+}
+body:has(.adminContent) .swal2-validation-message { background: var(--ad-bad-soft); color: var(--ad-bad); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ad-page *, .sidebar * { transition: none !important; animation: none !important; }
+}
+
+/* ==========================================================================
+   Resident UI — ฝั่งลูกบ้าน (ตัวแปร --rs-*; ไม่ใช้กับหน้า admin ซึ่งใช้ --ad-*)
+   แนวคิด: กระดาษเย็นๆ + หมึก, สีน้ำเงินเคลือบใช้ที่ "ป้ายเลขที่บ้าน" และปุ่มหลักเท่านั้น
+   ตัวอักษร: Pridi (หัวข้อ/ชื่อประกาศ) คู่ IBM Plex Sans Thai (เนื้อหา/ตัวเลข)
+   ========================================================================== */
+:root {
+  --rs-page: #f2f5f8;
+  --rs-surface: #ffffff;
+  --rs-ink: #16212e;
+  --rs-muted: #586575;
+  --rs-rule: #d3dae3;
+  --rs-rule-strong: #b7c1cd;
+  --rs-blue: #1b4f8a;
+  --rs-blue-hover: #163f6f;
+  --rs-on-blue: #ffffff;
+  --rs-blue-soft: rgba(27, 79, 138, 0.09);
+  --rs-plate: #1b4f8a;
+  --rs-input: #ffffff;
+  --rs-ok: #1e7a4f;
+  --rs-ok-soft: rgba(30, 122, 79, 0.11);
+  --rs-bad: #b3372f;
+  --rs-warn: #8a5a00;
+  --rs-warn-soft: rgba(138, 90, 0, 0.12);
+  --rs-shadow: 0 12px 32px rgba(22, 33, 46, 0.14);
+  --rs-font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+  --rs-font-head: "Pridi", "Noto Serif Thai", serif;
+}
+body.dark-mode {
+  --rs-page: #0e1620;
+  --rs-surface: #17222f;
+  --rs-ink: #e8eef5;
+  --rs-muted: #a5b2c2;
+  --rs-rule: #2a3849;
+  --rs-rule-strong: #3c4d61;
+  --rs-blue: #6fa3e0;
+  --rs-blue-hover: #8db6e8;
+  --rs-on-blue: #0e1620;
+  --rs-blue-soft: rgba(111, 163, 224, 0.14);
+  --rs-input: #101a26;
+  --rs-ok: #6fd3a0;
+  --rs-ok-soft: rgba(111, 211, 160, 0.14);
+  --rs-bad: #ff9a92;
+  --rs-warn: #f0bc5e;
+  --rs-warn-soft: rgba(240, 188, 94, 0.15);
+  --rs-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+body:not(:has(.adminContent)) {
+  background: var(--rs-page);
+  color: var(--rs-ink);
+  font-family: var(--rs-font-body);
+  line-height: 1.65;
+}
+body:not(:has(.adminContent)) :focus-visible { outline: 2px solid var(--rs-blue); outline-offset: 2px; }
+
+/* SweetAlert ฝั่งลูกบ้าน */
+body:not(:has(.adminContent)) .swal2-popup {
+  background: var(--rs-surface);
+  color: var(--rs-ink);
+  border: 1px solid var(--rs-rule);
+  border-radius: 14px;
+  box-shadow: var(--rs-shadow);
+  font-family: var(--rs-font-body);
+}
+body:not(:has(.adminContent)) .swal2-title { font-family: var(--rs-font-head); font-weight: 600; color: var(--rs-ink); }
+body:not(:has(.adminContent)) .swal2-html-container { color: var(--rs-muted); }
+body:not(:has(.adminContent)) .swal2-styled { border-radius: 8px; font-weight: 600; font-family: inherit; box-shadow: none !important; }
+body:not(:has(.adminContent)) .swal2-styled.swal2-confirm { background: var(--rs-blue) !important; color: var(--rs-on-blue) !important; }
+body:not(:has(.adminContent)) .swal2-styled.swal2-cancel { background: transparent !important; color: var(--rs-ink) !important; border: 1px solid var(--rs-rule-strong) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(:has(.adminContent)) * { transition: none !important; animation: none !important; }
 }

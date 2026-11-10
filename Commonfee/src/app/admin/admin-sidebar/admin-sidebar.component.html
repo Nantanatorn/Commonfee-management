@@ -4,7 +4,7 @@
     <header>
       <div class="image-text">
         <span class="image">
-          <img src="logoblack.png" alt="logo" style="width:100px; margin-top: 20px;margin-left: 20px;">&nbsp;
+          <img src="logoblack.png" alt="logo">
         </span>
         <div class="text header-text">
           <span class="name">BanDee</span>
@@ -14,19 +14,25 @@
     <div class="menu-bar">
       <div class="menu">
         <div class="menu-links">
-          <li class="nav-link">
+          <li class="nav-link" routerLinkActive="active">
             <a routerLink="/dashboard">
               <i class="bi bi-house-heart-fill icon"></i>
               <span class="text nav-text">dashboard</span>
             </a>
           </li>
-          <li class="nav-link">
+          <li class="nav-link" routerLinkActive="active">
             <a routerLink="/residentList">
               <i class="bi bi-person-vcard icon"></i>
               <span class="text nav-text">resident-list</span>
             </a>
           </li>
-          <li class="nav-link">
+          <li class="nav-link" routerLinkActive="active">
+            <a routerLink="/payment">
+              <i class="bi bi-cash-coin icon"></i>
+              <span class="text nav-text">payment</span>
+            </a>
+          </li>
+          <li class="nav-link" routerLinkActive="active">
             <a routerLink="/complainRepair">
               <i class="bi bi-tools icon"></i>
               <span class="text nav-text">complain/repair</span>
@@ -38,7 +44,7 @@
       <div class="bottom-content">
         <li class="nav-link">
           <a (click)="logout()" aria-label="Logout">
-            <i class="bi bi-box-arrow-left icon" style="margin-left: 30px;"></i>
+            <i class="bi bi-box-arrow-left icon"></i>
             <span class="text nav-text">Logout</span>
           </a>
         </li>

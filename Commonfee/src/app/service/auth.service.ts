@@ -13,9 +13,19 @@ export class AuthService {
   public pictureBehaviorSubject = new BehaviorSubject<string | null >(null);
   public picture = this.pictureBehaviorSubject.asObservable();
 
+  // ตอนรันฝั่งเซิร์ฟเวอร์ (SSR) อาจไม่มี localStorage (เช่น Node 22+ ที่ไม่ได้ตั้ง --localstorage-file) จึงต้องกันไว้
+  private get storage(): Pick<Storage, 'getItem' | 'setItem' | 'removeItem'> {
+    try {
+      if (typeof localStorage !== 'undefined' && typeof localStorage.getItem === 'function') {
+        return localStorage;
+      }
+    } catch { /* เข้าถึง storage ไม่ได้ */ }
+    return { getItem: (): string | null => null, setItem: (): void => {}, removeItem: (): void => {} };
+  }
+
   constructor(private router: Router) {
 
-    const token =localStorage.getItem('token');
+    const token =this.storage.getItem('token');
     if(token){
       const payload =this.decodeToken(token);
       const firstname = payload?.user?.firstname || null;
@@ -27,7 +37,7 @@ export class AuthService {
   }
 
   login(token:string):void{
-    localStorage.setItem('token',token);
+    this.storage.setItem('token',token);
     const payload =this.decodeToken(token);
     const username =payload?.user?.username || null;
     this.usernameSubject.next(username);
@@ -35,20 +45,37 @@ export class AuthService {
 
   // Simulate user logout
   logout(): void {
-    localStorage.removeItem('token');
+    this.storage.removeItem('token');
     this.usernameSubject.next(null);
     this.router.navigate(['/']); // Redirect to home or login page
   }
 
-  // Check if the user is authenticated
+  // Check if the user is authenticated (มี token และยังไม่หมดอายุ)
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token'); // Return true if there is a token
+    const token = this.storage.getItem('token');
+    if (!token) return false;
+
+    const payload = this.decodeToken(token);
+    if (!payload) return false;
+    // exp เป็นวินาที; ถ้า token ไม่มี exp ให้ถือว่าใช้ได้
+    return typeof payload.exp !== 'number' || payload.exp * 1000 > Date.now();
+  }
+
+  // เช็ก role แบบไม่สนตัวพิมพ์เล็ก/ใหญ่ (ข้อมูลมีทั้ง 'admin' และ 'Admin')
+  hasRole(role: string): boolean {
+    return String(this.getRole() || '').toLowerCase() === role.toLowerCase();
+  }
+
+  // ล้าง token (ใช้เมื่อหมดอายุ/ใช้ไม่ได้) โดยไม่ redirect
+  clearToken(): void {
+    this.storage.removeItem('token');
+    this.usernameSubject.next(null);
   }
 
   // Get the role of the user from the payload in localStorage
   getRole(): string | null {
    
-    const token =localStorage.getItem('token');
+    const token =this.storage.getItem('token');
     if(token){
       const payload =this.decodeToken(token);
       return payload?.user?.role||null;
@@ -56,7 +83,7 @@ export class AuthService {
     return null;
   }
   getUsername():string |null{
-    const token=localStorage.getItem('token');
+    const token=this.storage.getItem('token');
     if(token){
       const payload =this.decodeToken(token);
       return payload?.user?.username||null;
@@ -64,21 +91,21 @@ export class AuthService {
     return null;
   }
   getUserID(){
-    const token=localStorage.getItem('token');
+    const token=this.storage.getItem('token');
     if(token){
       const payload =this.decodeToken(token);
       return payload?.user?.User_ID || null;
     }
   }
   getFirstname(){
-    const token=localStorage.getItem('token');
+    const token=this.storage.getItem('token');
     if(token){
       const payload =this.decodeToken(token);
       return payload?.user?.User_Firstname || null;
     }
   }
   getUserImage(){
-    const token=localStorage.getItem('token');
+    const token=this.storage.getItem('token');
     if(token){
       const payload =this.decodeToken(token);
       return payload?.user?.User_image || null;

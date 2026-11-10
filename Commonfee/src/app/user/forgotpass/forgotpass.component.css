@@ -1,72 +1,110 @@
-
+/* ฟอร์มสาธารณะ (เข้าสู่ระบบ / ลืมรหัสผ่าน) — พื้นกระดาษ + กล่องฟอร์มเดียวตรงกลาง (ตัวแปร --rs-* จาก styles.css) */
 .form-container {
-    background:linear-gradient(45deg,#f4e7fb,#f3dcdc,#f5bcba,#e3aadd) ;
-    background-size: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    min-height: 100vh;
-    padding: 4% 0;
-    position: relative;
-    background-size: cover;
-  }
-  .form-container form {
-    background:linear-gradient(90deg, #c972bc,rgb(255, 209, 168));
-      border: 2px solid rgba(128, 128, 128, 0.6);
-      backdrop-filter: rgb(147, 147, 147);
-      box-shadow: gray ;
-      border-radius: 20px;
-      padding: 2rem;
-      width: 450px;
-      height: auto;
-      box-shadow: 5px 5px 10px rgba(255, 0, 0, 0.312);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 48px 16px;
+  background: var(--rs-page);
+  font-family: var(--rs-font-body);
+}
+.form-container form {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 40px 36px;
+  background: var(--rs-surface);
+  border: 1px solid var(--rs-rule);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(22, 33, 46, 0.05), 0 12px 32px rgba(22, 33, 46, 0.08);
+  color: var(--rs-ink);
+}
+.form-container form h3 { margin: 0; text-align: left; font: 600 26px/1.35 var(--rs-font-head); color: var(--rs-ink); }
+.form-container form hr { margin: 18px 0 8px; border: 0; border-top: 1px solid var(--rs-rule); opacity: 1; }
 
-  .bi-eye-slash-fill.btn{
-        border: none;
-        position: absolute;
-        outline: none;
-        box-shadow: none;
-      }    
-      
-  }
-  .form-container form .box{
-    background-color: #D9D9D9;
-    border-radius: 5px;
-    border-color: rgba(255, 255, 255, 0.185);
-    width: 320px;
-    height: 30px;
-    margin-top: 40px;
-  }
-  .form-container .login-register{
-    text-align: center;
-  }
-  .form-container form .btn{
-    padding: 5px;
-    width: 320px;
-    height: 30px;
-    align-items: center;
-    font-size: 16px ;
-    text-align: center;
-  }
-  .form-container button {
-    background-color: #fdabbf;
-    color: #fff;
-    margin-top: 40px;
-    width: 200px;
-    height: 40px;
-    margin-left: 30px;
-    border: 0cap;
-  }
-  .form-container button:hover{
-    background-color: #ffffff;
-    color: #686868;
-  }
-  .text-center{
-    color: #D9D9D9;
-  }
-  a{
-    text-decoration: none;
-    color: black;
-  }
-  
+.input-field { position: relative; display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+.input-field .bi { color: var(--rs-muted); font-size: 20px !important; line-height: 1; }
+/* ไอคอนซ้ายกว้างเท่ากันทุกแถว ช่องกรอกจึงเริ่มที่เส้นเดียวกัน */
+.input-field > span.bi:first-child { flex: 0 0 24px; width: 24px; text-align: center; font-size: 0 !important; line-height: 0; }
+.input-field > span.bi:first-child::before { display: block; font-size: 20px; line-height: 44px; }
+.form-container form .box {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  padding: 0 12px;
+  border: 1px solid var(--rs-rule-strong);
+  border-radius: 8px;
+  background: var(--rs-input);
+  color: var(--rs-ink);
+  font: 400 15px var(--rs-font-body);
+}
+.form-container form .box::placeholder { color: var(--rs-muted); opacity: 1; }
+.form-container form .box:focus { outline: none; border-color: var(--rs-blue); box-shadow: 0 0 0 3px var(--rs-blue-soft); }
+/* ลูกตาแสดงรหัสผ่านอยู่ "ในช่องกรอก" (ทุกช่องจึงกว้างเท่ากัน) */
+.input-field span[class*="bi-eye"] {
+  position: absolute;
+  right: 12px;
+  top: 22px;
+  transform: translateY(-50%);
+  color: var(--rs-muted);
+  cursor: pointer;
+}
+.input-field span[class*="bi-eye"]:hover { color: var(--rs-ink); }
+.input-field:has(span[class*="bi-eye"]) .box { padding-right: 44px; }
+
+/* ค่าที่เบราว์เซอร์เติมให้ (autofill) ให้กลมกลืนกับธีม ไม่เป็นสีฟ้าอ่อนของเบราว์เซอร์ */
+.form-container form .box:-webkit-autofill,
+.form-container form .box:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--rs-ink);
+  caret-color: var(--rs-ink);
+  box-shadow: 0 0 0 100px var(--rs-input) inset;
+}
+
+.form-container form .btn,
+.form-container button {
+  display: block;
+  width: 100%;
+  height: 46px;
+  margin: 26px 0 0;
+  padding: 0 20px;
+  border: 1px solid var(--rs-blue);
+  border-radius: 8px;
+  background: var(--rs-blue);
+  color: var(--rs-on-blue);
+  font: 600 16px var(--rs-font-body);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.form-container form .btn:hover,
+.form-container button:hover { background: var(--rs-blue-hover); border-color: var(--rs-blue-hover); color: var(--rs-on-blue); }
+.form-container form .btn-alt { margin-top: 14px; background: transparent; color: var(--rs-blue); }
+.form-container form .btn-alt:hover { background: var(--rs-blue-soft); color: var(--rs-blue); border-color: var(--rs-blue); }
+
+.error-message, .error { margin-top: 12px; font-size: 14px; color: var(--rs-bad); }
+.text-center, .form-container .q { color: var(--rs-muted); text-align: left !important; font-size: 14px; }
+a, #forget { color: var(--rs-blue); font-weight: 600; text-decoration: none; }
+a:hover, #forget:hover { text-decoration: underline; }
+
+/* ปุ่ม "ขอรหัสยืนยัน" อยู่ด้านขวา "ในช่องกรอก" (แบบเดียวกับลูกตา) -> ช่องกรอกทุกช่องกว้างเท่ากัน */
+.form-container form { max-width: 480px; }
+.form-container form .request-row { position: relative; margin-top: 18px; }
+.form-container form .request-row .input-field { margin-top: 0; }
+.form-container form .request-row .box { padding-right: 170px; }
+.form-container form .request-row .btn-alt {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: auto;
+  height: 32px;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--rs-blue-soft);
+  color: var(--rs-blue);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.form-container form .request-row .btn-alt:hover { background: var(--rs-blue); color: var(--rs-on-blue); border: 0; }

@@ -77,9 +77,9 @@ export class HeaderComponent implements OnInit {
     const navbar = document.querySelector('.navbar') as HTMLElement;
     if (navbar) {
       if (this.isDarkMode) {
-        navbar.style.background = 'linear-gradient(120deg, #5b2c6f, #000)';
+        navbar.style.background = ''; // สีมาจาก CSS (ตัวแปร --rs-*)
       } else {
-        navbar.style.background = 'linear-gradient(145deg, #9a8fff, #c68ef8, #fb90cd)';
+        navbar.style.background = ''; // สีมาจาก CSS (ตัวแปร --rs-*)
       }
     }
   }
@@ -108,10 +108,10 @@ export class HeaderComponent implements OnInit {
     if (profilePopup) {
       if (this.isDarkMode) {
         // เปลี่ยนเป็นสีโหมดมืด
-        profilePopup.style.background = 'linear-gradient(120deg, #5b2c6f, #000)';
+        profilePopup.style.background = ''; // สีมาจาก CSS (ตัวแปร --rs-*)
       } else {
         // เปลี่ยนเป็นสีโหมดสว่าง
-        profilePopup.style.background = 'linear-gradient(145deg, #9a8fff, #c68ef8, #fb90cd)';
+        profilePopup.style.background = ''; // สีมาจาก CSS (ตัวแปร --rs-*)
       }
     } else {
       console.error("Element 'profilePopup' not found in DOM when updating background");

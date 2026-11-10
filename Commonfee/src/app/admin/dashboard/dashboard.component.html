@@ -1,196 +1,288 @@
 <app-admin-sidebar></app-admin-sidebar>
-<div class="container">
-  <div class="header">
-      <h1>dashboard</h1>
-      <img src="line.png" alt="error" width="200">
-  </div>
-</div>
-<!-- แสดงเงินเข้า -->
-<div class="showvalue">
-  <div class="col">
-      <div class="showdetail">
-          <h5>แก้ไขอัตราชำระ</h5>
-          <button type="button" class="btn nB" (click)="openModal1()">แก้ไขอัตราชำระ</button>
+
+<div class="dash">
+  <!-- ===== หัวหน้า ===== -->
+  <header class="dash-head">
+    <h1>ภาพรวม</h1>
+    <div class="head-actions">
+      <button type="button" class="btn-ghost" (click)="openModal1()"><i class="bi bi-sliders"></i> แก้ไขอัตราชำระ</button>
+      <button type="button" class="btn-ghost" (click)="openModal()"><i class="bi bi-megaphone"></i> ประกาศข่าวสาร</button>
+      <button type="button" class="btn-ghost" (click)="sendWarning()"><i class="bi bi-bell"></i> แจ้งเตือนค้างชำระ</button>
+      <button type="button" class="btn-gold" (click)="SendBill()"><i class="bi bi-receipt"></i> เก็บค่าส่วนกลาง</button>
+    </div>
+  </header>
+
+  <!-- ===== การ์ดตัวเลข ===== -->
+  <section class="stats">
+    <div class="tile stat">
+      <div class="stat-label"><i class="bi bi-houses"></i> บ้านทั้งหมด</div>
+      <div class="stat-row">
+        <span class="stat-num">{{ totalHouses }}</span>
       </div>
-  </div>
-  <div class="col">
-      <div class="showdetail">
-        <h5>เรียกเก็บค่าส่วนกลาง</h5>
-        <button type="button" class="btn nB" (click)="SendBill()">เก็บค่าส่วนกลาง</button>
+      <div class="stat-sub">หลังในโครงการ</div>
+    </div>
+    <div class="tile stat">
+      <div class="stat-label"><i class="bi bi-people"></i> มีผู้อยู่อาศัย</div>
+      <div class="stat-row">
+        <span class="stat-num">{{ livingCount }}</span>
+        <span class="trend"><i class="bi bi-graph-up-arrow"></i> {{ occupancyPct }}%</span>
       </div>
-  </div>
-  <div class="col">
-      <div class="showdetail">
-          <h5>แจ้งเตือนค้างชำระ</h5>
-          <button type="button" class="btn nB" (click)="sendWarning()" >แจ้งเตือน</button>
+      <div class="stat-sub">ว่าง {{ totalHouses - livingCount }} หลัง</div>
+    </div>
+    <div class="tile stat">
+      <div class="stat-label"><i class="bi bi-check-circle"></i> ชำระแล้ว</div>
+      <div class="stat-row">
+        <span class="stat-num">{{ paidHouseCount }}</span>
+        <span class="trend"><i class="bi bi-graph-up-arrow"></i> {{ paidPct }}%</span>
       </div>
-  </div>
-  <div class="col">
-      <div class="showdetail">
-          <h5>แจ้งข่าวสาร</h5>
-          <button type="button" class="btn nB" (click)="openModal()">ประกาศข่าวสาร</button>
+      <div class="stat-sub">ของบ้านที่มีผู้อยู่อาศัย</div>
+    </div>
+    <div class="tile stat">
+      <div class="stat-label"><i class="bi bi-exclamation-triangle"></i> ค้างชำระ</div>
+      <div class="stat-row">
+        <span class="stat-num">{{ overdueHouseCount }}</span>
+        <span class="trend trend-bad"><i class="bi bi-graph-down-arrow"></i> {{ overduePct }}%</span>
+      </div>
+      <div class="stat-sub">ยอดรวม ฿{{ overdueTotal | number: '1.0-0' }}</div>
+    </div>
+  </section>
+
+
+  <!-- ===== แผนผัง + ค้างชำระ / คำร้อง ===== -->
+  <section class="row-map">
+    <div class="tile map-tile">
+      <div class="tile-head">
+        <h2>แผนผังหมู่บ้าน</h2>
+        <div class="legend">
+          <span><i class="dot" style="background:#4cc38a"></i>ชำระแล้ว</span>
+          <span><i class="dot" style="background:#ee6055"></i>ค้างชำระ</span>
+          <span><i class="dot" style="background:#ffffff"></i>ว่าง</span>
         </div>
-  </div>
-</div>
+      </div>
 
-<!-- แสดงการโหลด -->
-<!-- <div *ngIf="isLoading" class="loading-spinner">
-  <div class="spinner-border" role="status">
-    <span class="sr-only">Loading...</span>
-  </div>
-  <p>กำลังดำเนินการ กรุณารอสักครู่...</p>
-</div> -->
+      <div class="village-layout">
+        <svg class="village-map" [attr.viewBox]="'0 0 ' + village.width + ' ' + village.height"
+             preserveAspectRatio="xMidYMid meet" role="img" aria-label="แผนผังหมู่บ้าน">
+          <rect class="map-bg" x="0" y="0" [attr.width]="village.width" [attr.height]="village.height"/>
 
- <!-- แสดงแผนผังหมู่บ้าน -->
-<div class="layout">
-  <div class="row">
- <div class="col-8">
-<div class="bg">
-    <div class="village-layout">
-        <img src="logo.png" alt="logo error" [width]="100">
-      <div class="roadNew">
-        <div class="road">ถนนหลัก</div>
-      </div>
-      <div class="house-row">
-        <div class="house one" [ngStyle]="{'background-color': getHouseColor(1)}" [attr.title]="getResidentInfo(1)">1</div>
-        <div class="house two" [ngStyle]="{'background-color': getHouseColor(2)}" [attr.title]="getResidentInfo(2)">2</div>
-        <div class="house three" [ngStyle]="{'background-color': getHouseColor(3)}" [attr.title]="getResidentInfo(3)">3</div>
-        <div class="house four" [ngStyle]="{'background-color': getHouseColor(4)}" [attr.title]="getResidentInfo(4)">4</div>
-        <div class="house five" [ngStyle]="{'background-color': getHouseColor(5)}" [attr.title]="getResidentInfo(5)">5</div>
-        <div class="house six" [ngStyle]="{'background-color': getHouseColor(6)}" [attr.title]="getResidentInfo(6)">6</div>
-        <div class="house seven" [ngStyle]="{'background-color': getHouseColor(7)}" [attr.title]="getResidentInfo(7)">7</div>
-        <div class="house eight" [ngStyle]="{'background-color': getHouseColor(8)}" [attr.title]="getResidentInfo(8)">8</div>
-        <div class="house nine" [ngStyle]="{'background-color': getHouseColor(9)}" [attr.title]="getResidentInfo(9)">9</div>
-        <div class="house ten" [ngStyle]="{'background-color': getHouseColor(10)}" [attr.title]="getResidentInfo(10)">10</div>
-        <div class="house eleven" [ngStyle]="{'background-color': getHouseColor(11)}" [attr.title]="getResidentInfo(11)">11</div>
-        <div class="house twelve" [ngStyle]="{'background-color': getHouseColor(12)}" [attr.title]="getResidentInfo(12)">12</div>
-      </div>
-      
-      <div class="roadNew">
-        <div class="road">ถนน A</div>
-      </div>
-  
-      <div class="house-row">
-        
-        <div class="house thirteen" [ngStyle]="{'background-color': getHouseColor(13)}" [attr.title]="getResidentInfo(13)">13</div>
-        <div class="house fourteen" [ngStyle]="{'background-color': getHouseColor(14)}" [attr.title]="getResidentInfo(14)">14</div>
-        <div class="house fifteen" [ngStyle]="{'background-color': getHouseColor(15)}" [attr.title]="getResidentInfo(15)">15</div>
-        <div class="house sixteen" [ngStyle]="{'background-color': getHouseColor(16)}" [attr.title]="getResidentInfo(16)">16</div>
-        <div class="house seventeen" [ngStyle]="{'background-color': getHouseColor(17)}" [attr.title]="getResidentInfo(17)">17</div>
-        <div class="house eighteen" [ngStyle]="{'background-color': getHouseColor(18)}" [attr.title]="getResidentInfo(18)">18</div>
-        <div class="house nineteen" [ngStyle]="{'background-color': getHouseColor(19)}" [attr.title]="getResidentInfo(19)">19</div>
-        <div class="house twenty" [ngStyle]="{'background-color': getHouseColor(20)}" [attr.title]="getResidentInfo(20)">20</div>
-        <div class="house twenty-one" [ngStyle]="{'background-color': getHouseColor(21)}" [attr.title]="getResidentInfo(21)">21</div>
-        <div class="house twenty-two" [ngStyle]="{'background-color': getHouseColor(22)}" [attr.title]="getResidentInfo(22)">22</div>
-        <div class="house twenty-three" [ngStyle]="{'background-color': getHouseColor(23)}" [attr.title]="getResidentInfo(23)">23</div>
-        <div class="house twenty-four" [ngStyle]="{'background-color': getHouseColor(24)}" [attr.title]="getResidentInfo(24)">24</div>
-        
-        <div class="new-row"></div> <!-- ขึ้นบรรทัดใหม่ที่นี่ -->
-        <div class="house twenty-five" [ngStyle]="{'background-color': getHouseColor(25)}" [attr.title]="getResidentInfo(25)">25</div>
-        <div class="house twenty-six" [ngStyle]="{'background-color': getHouseColor(26)}" [attr.title]="getResidentInfo(26)">26</div>
-        <div class="house twenty-seven" [ngStyle]="{'background-color': getHouseColor(27)}" [attr.title]="getResidentInfo(27)">27</div>
-        <div class="house twenty-eight" [ngStyle]="{'background-color': getHouseColor(28)}" [attr.title]="getResidentInfo(28)">28</div>
-        <div class="house twenty-nine" [ngStyle]="{'background-color': getHouseColor(29)}" [attr.title]="getResidentInfo(29)">29</div>
-        <div class="house thirty" [ngStyle]="{'background-color': getHouseColor(30)}" [attr.title]="getResidentInfo(30)">30</div>
-        <div class="house thirty-one" [ngStyle]="{'background-color': getHouseColor(31)}" [attr.title]="getResidentInfo(31)">31</div>
-        <div class="house thirty-two" [ngStyle]="{'background-color': getHouseColor(32)}" [attr.title]="getResidentInfo(32)">32</div>
-        <div class="house thirty-three" [ngStyle]="{'background-color': getHouseColor(33)}" [attr.title]="getResidentInfo(33)">33</div>
-        <div class="house thirty-four" [ngStyle]="{'background-color': getHouseColor(34)}" [attr.title]="getResidentInfo(34)">34</div>
-        <div class="house thirty-five" [ngStyle]="{'background-color': getHouseColor(35)}" [attr.title]="getResidentInfo(35)">35</div>
-        <div class="house thirty-six" [ngStyle]="{'background-color': getHouseColor(36)}" [attr.title]="getResidentInfo(36)">36</div>
-      </div>
-  
-      <div class="roadNew">
-        <div class="road">ถนน B</div>
-      </div>
-      <div class="house-row">
-        <div class="house thirty-seven" [ngStyle]="{'background-color': getHouseColor(37)}" [attr.title]="getResidentInfo(37)">37</div>
-            <div class="house thirty-eight" [ngStyle]="{'background-color': getHouseColor(38)}" [attr.title]="getResidentInfo(38)">38</div>
-            <div class="house thirty-nine" [ngStyle]="{'background-color': getHouseColor(39)}" [attr.title]="getResidentInfo(39)">39</div>
-            <div class="house forty" [ngStyle]="{'background-color': getHouseColor(40)}" [attr.title]="getResidentInfo(40)">40</div>
-            <div class="house forty-one" [ngStyle]="{'background-color': getHouseColor(41)}" [attr.title]="getResidentInfo(41)">41</div>
-            <div class="house forty-two" [ngStyle]="{'background-color': getHouseColor(42)}" [attr.title]="getResidentInfo(42)">42</div>
+          <!-- ถนนสาธารณะด้านหน้าโครงการ -->
+          <rect class="public-road" x="0" y="12" [attr.width]="village.width" height="30"/>
+          <text class="public-label" [attr.x]="village.width / 2" y="31">ถนนสาธารณะ</text>
+
+          <!-- พื้นที่ส่วนกลาง -->
+          <g *ngFor="let a of village.areas">
+            <rect [attr.x]="a.x" [attr.y]="a.y" [attr.width]="a.w" [attr.height]="a.h"
+                  [attr.rx]="a.rx" [attr.fill]="a.fill" class="area-box"/>
+          </g>
+          <ellipse *ngFor="let p of village.ponds" class="pond"
+                   [attr.cx]="p.cx" [attr.cy]="p.cy" [attr.rx]="p.rx" [attr.ry]="p.ry"/>
+          <ng-container *ngFor="let a of village.areas">
+            <text *ngIf="a.label" class="area-label" [attr.fill]="a.color"
+                  [attr.x]="a.x + a.w / 2" [attr.y]="a.y + a.h / 2">{{ a.label }}</text>
+          </ng-container>
+          <text class="area-label" x="600" y="212" fill="#0d3b66">สวนสาธารณะ</text>
+          <text class="area-label" x="300" y="226" fill="#1b4d24">สวนหย่อม</text>
+
+          <!-- ถนน -->
+          <path *ngFor="let r of village.roads" class="road-casing" [attr.d]="r"/>
+          <circle *ngFor="let c of village.culdesac" class="culdesac"
+                  [attr.cx]="c.cx" [attr.cy]="c.cy" [attr.r]="c.r"/>
+          <path *ngFor="let r of village.roads" class="road-fill" [attr.d]="r"/>
+          <path *ngFor="let r of village.roads" class="road-dash" [attr.d]="r"/>
+
+          <!-- ชื่อถนน -->
+          <text class="road-label" transform="translate(120 230) rotate(-90)">ถนนหลัก</text>
+          <text class="road-label" x="540" y="384">ถนน A</text>
+          <text class="road-label" x="560" y="484">ถนน B</text>
+          <text class="road-label" transform="translate(420 345) rotate(-90)">ซอยกลาง</text>
+
+          <!-- ต้นไม้ -->
+          <circle *ngFor="let t of village.trees" class="tree" [attr.cx]="t.x" [attr.cy]="t.y" [attr.r]="t.r"/>
+
+          <!-- แปลงบ้าน -->
+          <g *ngFor="let l of village.lots" class="lot" [attr.transform]="l.transform"
+             (mouseenter)="showTip($event, l.n)" (mousemove)="showTip($event, l.n)" (mouseleave)="hideTip()">
+            <rect class="plot" [attr.x]="l.plot.x" [attr.y]="l.plot.y" [attr.width]="l.plot.w" [attr.height]="l.plot.h" rx="2"/>
+            <rect class="drive" [attr.x]="l.drive.x" [attr.y]="l.drive.y" [attr.width]="l.drive.w" [attr.height]="l.drive.h"/>
+            <rect class="home" [attr.x]="l.home.x" [attr.y]="l.home.y" [attr.width]="l.home.w" [attr.height]="l.home.h"
+                  [attr.fill]="getHouseColor(l.n)" rx="2"/>
+            <line class="ridge" [attr.x1]="l.ridge.x1" [attr.y1]="l.ridge.y1" [attr.x2]="l.ridge.x2" [attr.y2]="l.ridge.y2"/>
+            <text class="lot-num" [attr.transform]="l.labelTransform" [attr.font-size]="l.fontSize">{{ l.n }}</text>
+          </g>
+
+          <!-- ประตูทางเข้า -->
+          <rect class="gate-post" x="106" y="38" width="6" height="12"/>
+          <rect class="gate-post" x="128" y="38" width="6" height="12"/>
+
+          <!-- ทิศเหนือ -->
+          <g transform="translate(804 100)">
+            <circle r="14" class="compass"/>
+            <path d="M0 -11 L5 4 L0 1 L-5 4 Z" class="compass-needle"/>
+            <text class="compass-n" y="-18">N</text>
+          </g>
+        </svg>
+
+        <div class="tip" *ngIf="tip.show" [class.flip]="tip.flip" [style.left.px]="tip.x" [style.top.px]="tip.y">{{ tip.text }}</div>
       </div>
     </div>
-  </div>
-</div>
-    <div class="col-4">
-      <div class="reviewdetail">
-      <h5 class="mt-3">แสดงเงินเข้าล่าสุด</h5>
-      <table class="table">
-        <thead >
-          <tr>
-            <th>รหัสชำระ</th>
-            <th>วันที่</th>
-            <th>ชื่อ - สกุล </th>
-            <th>จำนวนเงิน</th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let Last of LastpaidS$ | async">
-            <td>{{ Last.Paid_ID }}</td>
-            <td> {{ Last.Adjusted_Paid_Date | date: 'dd MMM yyyy, HH:mm:ss' }}</td>
-            <td>{{ Last.R_Firstname}} {{ Last.R_Lastname}}</td>
-            <td>{{ Last.Paid_Amount}}</td>
-            
-          </tr>
-        </tbody>
-      </table>
-      <div class="pagination">
-        <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
-       <button>Page {{ currentPage }} of {{ totalPages }}</button>
-       <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
-     </div>
-    </div>
-    </div>
-  </div>
-</div>
 
-
-<div class="charts"> 
-  <div class="line" [chart]="lineCharts"></div>
-</div>
-
-<div class="charts"> 
-  <div class="pie" [chart]="pieChart"></div>
-  <div class="line" [chart]="lineCharts1"></div> 
-</div>
-
-<div *ngIf="Announcement | async as news">
-  <div *ngIf="news.length > 0; else noData">
-    <div class="product-card" *ngFor="let item of news">
-      <div class="photo">
-        <img [src]="'http://localhost:3500/' + item.Announce_image" alt="Photo" style="width: 500px; height: 20rem;">
+    <div class="side-stack">
+      <!-- รายการค้างชำระ (เทียบ Activities) -->
+      <div class="tile unpaid-tile">
+        <div class="tile-head tile-head-sm">
+          <h2>รายการค้างชำระ</h2>
+          <span class="badge-count">{{ unpaidList.length }}</span>
+        </div>
+        <ul class="act-list" *ngIf="unpaidTop.length > 0; else noUnpaid">
+          <li *ngFor="let u of unpaidTop">
+            <span class="act-icon"><i class="bi bi-house-exclamation"></i></span>
+            <span class="act-name">{{ u.R_Firstname }} {{ u.R_Lastname }}<small>บ้าน {{ u.House_number }}</small></span>
+            <span class="act-amt">฿{{ u.Pay_Amount | number: '1.0-0' }}</span>
+          </li>
+        </ul>
+        <ng-template #noUnpaid><p class="empty">ไม่มีรายการค้างชำระ</p></ng-template>
       </div>
-      <div class="details">
-        <p><strong>Date</strong>: {{ item.Adjusted_Announce_Date | date: 'dd MMM yyyy, HH:mm:ss'}}</p>
-        <p><strong>Title</strong>: {{ item.Announce_Title }}</p>
-        <p><strong>Detail</strong>: {{ item.Announce_Detail }}</p>
-      </div>
-      <div class="edit-btn">
-        <button class="btn btn-primary" (click)="editAnnouncement(item)">Edit</button>
+
+      <!-- สัดส่วนคำร้องเรียน -->
+      <div class="tile complaint-tile">
+        <div class="tile-head tile-head-sm"><h2>คำร้องเรียน</h2></div>
+        <div class="donut-wrap">
+          <svg class="donut" viewBox="0 0 140 140" role="img" aria-label="สัดส่วนคำร้องเรียน">
+            <circle class="donut-track" cx="70" cy="70" r="52" fill="none" stroke-width="14"/>
+            <circle *ngFor="let s of donut.segs" cx="70" cy="70" r="52" fill="none" stroke-width="14"
+                    [attr.stroke]="s.color" [attr.stroke-dasharray]="s.dash" [attr.stroke-dashoffset]="s.offset"
+                    transform="rotate(-90 70 70)"/>
+            <text x="70" y="68" class="donut-total">{{ donut.total }}</text>
+            <text x="70" y="86" class="donut-sub">ทั้งหมด</text>
+          </svg>
+          <ul class="donut-legend">
+            <li *ngFor="let s of donut.segs">
+              <i class="dot" [style.background]="s.color"></i>{{ s.label }}
+              <strong>{{ s.value }}</strong>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<ng-template #noData>
-  <p>No announcements available.</p>
-</ng-template>
+  <!-- ===== กราฟ 2 ใบ ===== -->
+  <section class="charts">
+    <!-- กราฟแท่งคู่ -->
+    <div class="tile">
+      <div class="tile-head">
+        <h2>ผู้จ่ายและไม่จ่ายรายเดือน</h2>
+        <div class="legend">
+          <span><i class="sw sw-dark"></i>ผู้จ่าย</span>
+          <span><i class="sw sw-light"></i>ไม่จ่าย</span>
+        </div>
+      </div>
+      <div class="gbars" *ngIf="payBars.length > 0; else noPay">
+        <div class="y-axis"><span *ngFor="let t of payTicks">{{ t }}</span></div>
+        <div class="plot-area">
+          <div class="h-lines"><i *ngFor="let t of payTicks"></i></div>
+          <div class="group" *ngFor="let b of payBars">
+            <div class="pair">
+              <span class="gbar gbar-dark" [style.height.%]="b.paidPct" [attr.title]="'ผู้จ่าย ' + b.paid"></span>
+              <span class="gbar gbar-light" [style.height.%]="b.overduePct" [attr.title]="'ไม่จ่าย ' + b.overdue"></span>
+            </div>
+            <span class="g-label">{{ b.label }}</span>
+          </div>
+        </div>
+      </div>
+      <ng-template #noPay><p class="empty">ยังไม่มีข้อมูล</p></ng-template>
+    </div>
 
-<!-- Pagination Controls -->
-<div class="pagination-controls">
-  <button (click)="goToPreviousPage1()" [disabled]="currentPage1 === 1">Previous</button>
-  <span>Page {{ currentPage1 }} of {{ totalPages1 }}</span>
-  <button (click)="goToNextPage1()" [disabled]="currentPage1 === totalPages1">Next</button>
+    <!-- กราฟเส้นรายได้ -->
+    <div class="tile">
+      <div class="tile-head">
+        <h2>รายได้ค่าส่วนกลาง</h2>
+        <span class="muted-sm">รวม ฿{{ sumIncome | number: '1.0-0' }}</span>
+      </div>
+      <svg class="line-chart" *ngIf="incomePts.length > 0; else noIncome"
+           [attr.viewBox]="'0 0 ' + lineBox.w + ' ' + lineBox.h" role="img" aria-label="กราฟรายได้รายเดือน"
+           (mousemove)="onLineMove($event)">
+        <!-- เส้นตาราง + แกน Y -->
+        <g *ngFor="let t of incomeTicks">
+          <line class="grid-line" [attr.x1]="lineBox.l" [attr.x2]="lineBox.w - lineBox.r" [attr.y1]="t.y" [attr.y2]="t.y"/>
+          <text class="axis-text" [attr.x]="lineBox.l - 10" [attr.y]="t.y + 4" text-anchor="end">{{ t.label }}</text>
+        </g>
+        <!-- แกน X -->
+        <text *ngFor="let p of incomePts" class="axis-text" [attr.x]="p.x" [attr.y]="lineBox.h - 8" text-anchor="middle">{{ p.label }}</text>
+
+        <path class="area" [attr.d]="incomeArea"/>
+        <path class="line" [attr.d]="incomeLine"/>
+        <circle *ngFor="let p of incomePts" class="dot-pt" [attr.cx]="p.x" [attr.cy]="p.y" r="3.5"/>
+
+        <!-- เส้นอ้างอิงและ tooltip -->
+        <g *ngIf="hoverPt as h">
+          <line class="cross" [attr.x1]="h.x" [attr.x2]="h.x" [attr.y1]="lineBox.t" [attr.y2]="lineBox.h - lineBox.b"/>
+          <circle class="dot-hover" [attr.cx]="h.x" [attr.cy]="h.y" r="6"/>
+          <g [attr.transform]="'translate(' + (h.x > lineBox.w * 0.6 ? h.x - 142 : h.x + 14) + ' ' + (h.y < 80 ? h.y + 8 : h.y - 56) + ')'">
+            <rect class="tip-box" width="128" height="46" rx="6"/>
+            <text class="tip-title" x="10" y="18">{{ h.label }}</text>
+            <text class="tip-text" x="10" y="35">รายได้: ฿{{ h.value | number: '1.0-0' }}</text>
+          </g>
+        </g>
+      </svg>
+      <ng-template #noIncome><p class="empty">ยังไม่มีข้อมูลรายได้</p></ng-template>
+    </div>
+  </section>
+
+  <!-- ===== ประวัติการชำระเงิน + ข่าว ===== -->
+  <section class="row-bottom">
+    <div class="tile">
+      <div class="tile-head tile-head-col">
+        <h2>ประวัติการชำระเงิน</h2>
+        <span class="muted-sm">รายการเงินเข้าล่าสุด</span>
+      </div>
+      <ul class="history">
+        <li *ngFor="let Last of LastpaidS$ | async">
+          <span class="avatar">{{ Last.R_Firstname?.charAt(0) }}</span>
+          <span class="h-name">{{ Last.R_Firstname }} {{ Last.R_Lastname }}<small>รหัสชำระ #{{ Last.Paid_ID }}</small></span>
+          <span class="h-date">{{ Last.Adjusted_Paid_Date | date: 'dd-MM-yyyy' }}</span>
+          <span class="h-amt">฿{{ Last.Paid_Amount | number: '1.2-2' }}</span>
+          <span class="h-status">ชำระแล้ว</span>
+        </li>
+      </ul>
+      <div class="pager">
+        <button type="button" class="icon-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1" aria-label="ก่อนหน้า"><i class="bi bi-chevron-left"></i></button>
+        <span class="muted-sm">หน้า {{ currentPage }} / {{ totalPages }}</span>
+        <button type="button" class="icon-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages" aria-label="ถัดไป"><i class="bi bi-chevron-right"></i></button>
+      </div>
+    </div>
+
+    <div class="tile">
+      <div class="tile-head tile-head-sm">
+        <h2>ข่าวประกาศ</h2>
+        <button type="button" class="icon-btn" (click)="openModal()" aria-label="เพิ่มข่าว"><i class="bi bi-plus-lg"></i></button>
+      </div>
+
+      <div *ngIf="Announcement | async as news">
+        <ul class="act-list" *ngIf="news.length > 0; else noData">
+          <li *ngFor="let item of news">
+            <img class="thumb" [src]="'http://localhost:3500/' + item.Announce_image" alt="Photo">
+            <span class="act-name">{{ item.Announce_Title }}<small>{{ item.Adjusted_Announce_Date | date: 'dd MMM yyyy' }}</small></span>
+            <button type="button" class="icon-btn" (click)="editAnnouncement(item)" aria-label="แก้ไขข่าว"><i class="bi bi-pencil"></i></button>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noData><p class="empty">ยังไม่มีข่าวประกาศ</p></ng-template>
+
+      <div class="pager">
+        <button type="button" class="icon-btn" (click)="goToPreviousPage1()" [disabled]="currentPage1 === 1" aria-label="ก่อนหน้า"><i class="bi bi-chevron-left"></i></button>
+        <span class="muted-sm">{{ currentPage1 }} / {{ totalPages1 }}</span>
+        <button type="button" class="icon-btn" (click)="goToNextPage1()" [disabled]="currentPage1 === totalPages1" aria-label="ถัดไป"><i class="bi bi-chevron-right"></i></button>
+      </div>
+    </div>
+  </section>
 </div>
 
 <div class="modal" *ngIf="isModalOpen2">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">เพิ่มข่าวสาร</h5>
+        <h5 class="modal-title">แก้ไขข่าวสาร</h5>
         <button type="button" class="close" (click)="closeModal2()">&times;</button>
       </div>
       <div class="modal-body">
@@ -199,7 +291,7 @@
             <label for="Announce_Title">หัวข้อข่าวสาร</label>
             <input type="text" id="Announce_Title" formControlName="Announce_Title" class="form-control" placeholder="กรอกหัวข้อข่าวสาร">
           </div>
-        
+
           <div class="form-group">
             <label for="Announce_Detail">รายละเอียดข่าวสาร</label>
             <textarea id="Announce_Detail" formControlName="Announce_Detail" class="form-control" placeholder="กรอกรายละเอียดข่าวสาร"></textarea>
@@ -213,18 +305,18 @@
               <option value="Hide">Hide</option>
             </select>
           </div>
-        
+
           <div class="form-group">
             <input id="Announce_image" type="file" class="form-control" (change)="onFileChange($event)" accept="image/*">
           </div>
-          
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="closeModal2()">ยกเลิก</button>
-            <button type="onEdit" class="btn btn-primary">บันทึก</button>
+            <button type="submit" class="btn btn-primary">บันทึก</button>
           </div>
         </form>
       </div>
-      
+
     </div>
   </div>
 </div>
@@ -243,23 +335,23 @@
             <label for="Announce_Title">หัวข้อข่าวสาร</label>
             <input type="text" id="Announce_Title" formControlName="Announce_Title" class="form-control" placeholder="กรอกหัวข้อข่าวสาร">
           </div>
-        
+
           <div class="form-group">
             <label for="Announce_Detail">รายละเอียดข่าวสาร</label>
             <textarea id="Announce_Detail" formControlName="Announce_Detail" class="form-control" placeholder="กรอกรายละเอียดข่าวสาร"></textarea>
           </div>
-        
+
           <div class="form-group">
             <input id="Announce_image" type="file" class="form-control" (change)="onFileChange($event)" accept="image/*">
           </div>
-          
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="closeModal()">ยกเลิก</button>
             <button type="submit" class="btn btn-primary">บันทึก</button>
           </div>
         </form>
       </div>
-      
+
     </div>
   </div>
 </div>
@@ -281,7 +373,7 @@
               <option *ngFor="let size of houseSizes" [value]="size.House_Size">{{ size.House_Size }}</option>
             </select>
           </div>
-        
+
           <div class="form-group">
             <label for="Land_size">พื้นที่บ้าน</label>
             <input id="Land_size" formControlName="Land_size" class="form-control" placeholder="ขนาดพื้นที่บ้าน" readonly>
@@ -291,7 +383,7 @@
             <label for="FeeRate">อัตราชำระ ต่อตารางวา</label>
             <input id="FeeRate" formControlName="FeeRate" class="form-control" placeholder="อัตราค่าชำระ">
           </div>
-          
+
           <div class="form-group">
             <label for="Fine">ค่าปรับ</label>
             <input id="Fine" formControlName="Fine" class="form-control" placeholder="อัตราค่าชำระ">
@@ -299,11 +391,11 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="closeModal1()">ยกเลิก</button>
-            <button type="changeFee" class="btn btn-primary">บันทึก</button>
+            <button type="submit" class="btn btn-primary">บันทึก</button>
           </div>
         </form>
       </div>
-      
+
     </div>
   </div>
 </div>

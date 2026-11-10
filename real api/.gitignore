@@ -33,3 +33,6 @@ yarn.lock
 
 # Test coverage
 coverage/
+
+# ไฟล์ที่ต้องล็อกอินจึงเข้าถึงได้ (สลิปการชำระเงิน)
+private/

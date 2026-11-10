@@ -1,42 +1,48 @@
 <app-admin-sidebar></app-admin-sidebar>
-<div class="container">
-    <div class="header">
-        <h1>Complain & Repair</h1>
-        <img src="line.png" alt="error" width="200">
-    </div>
-</div>
-<div class="line" [chart]="lineCharts"> </div>
-<div class="report">
-    <h3>บันทึกคำร้องเรียน</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>วันที่แจ้ง</th>
-                <th>ชื่อ - สกุล</th>
-                <th>เบอร์ติดต่อ</th>
-                <th>บ้านเลขที่</th>
-                <th>หัวข้อ</th>
-                <th>รายละเอียด</th>
-                <th>ประเภท</th>
-                <th>สถานะ</th>
-                <th>เปลี่ยนสถานะ</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let pet of petitionadmin | async">
-                <td>{{ pet.petition_Date | date: 'MM/dd/yyyy'}}</td>
-                <td>{{ pet.R_Firstname }} {{ pet.R_Lastname }}</td>
-                <td>{{ pet.phone }}</td>
-                <td>{{ pet.House_number}}</td>
-                <td>{{ pet.petition_Title}}</td>
-                <td>{{ pet.petition_detail}}</td>
-                <td>{{ pet.petition_Type}}</td>
-                <td>{{ pet.petition_status}}</td>
-                
-                 <td><button (click)="updatePetitionStatus(pet.petition_ID)">ปรับสถานะ</button></td> 
+<div class="ad-page">
+    <header class="ad-head">
+        <h1 class="ad-title">Complain & Repair</h1>
+    </header>
 
-            </tr>
-        </tbody>
-    </table>
+    <div class="ad-stack">
+        <section class="ad-card">
+            <div class="line" [chart]="lineCharts"> </div>
+        </section>
+
+        <section class="ad-card report">
+            <div class="ad-card-head">
+                <h3 class="ad-card-title">บันทึกคำร้องเรียน</h3>
+            </div>
+            <div class="ad-table-wrap">
+                <table class="ad-table">
+                    <thead>
+                        <tr>
+                            <th>วันที่แจ้ง</th>
+                            <th>ชื่อ - สกุล</th>
+                            <th>เบอร์ติดต่อ</th>
+                            <th>บ้านเลขที่</th>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                            <th>ประเภท</th>
+                            <th>สถานะ</th>
+                            <th>เปลี่ยนสถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pet of petitionadmin | async">
+                            <td class="ad-nowrap ad-num">{{ pet.petition_Date | date: 'MM/dd/yyyy'}}</td>
+                            <td class="ad-nowrap">{{ pet.R_Firstname }} {{ pet.R_Lastname }}</td>
+                            <td class="ad-nowrap ad-num">{{ pet.phone }}</td>
+                            <td class="ad-nowrap">{{ pet.House_number}}</td>
+                            <td class="col-title">{{ pet.petition_Title}}</td>
+                            <td class="col-detail">{{ pet.petition_detail}}</td>
+                            <td><span class="ad-badge">{{ pet.petition_Type}}</span></td>
+                            <td><span class="ad-badge" [ngClass]="pet.petition_status?.trim() === 'Finish' ? 'ok' : 'warn'">{{ pet.petition_status}}</span></td>
+                            <td><button class="ad-btn ad-btn-sm" (click)="updatePetitionStatus(pet.petition_ID)">ปรับสถานะ</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 </div>

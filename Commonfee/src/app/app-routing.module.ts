@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { loginGuard, roleGuard } from '../auth.guard';
 
 //user components
 import { RegisterComponent } from './user/register/register.component';
@@ -7,15 +8,10 @@ import { LoginComponent } from './user/login/login.component';
 import { ReportComponent } from './user/Residentreport/report.component';
 import { AboutUsComponent } from './user/about-us/about-us.component';
 import { PurchaseComponent } from './user/purchase/purchase.component';
-import { BookRoomComponent } from './user/Not use/book-room/book-room.component';
-import { FitnessComponent } from './user/Not use/fitness/fitness.component';
-import { HistoryBookingComponent } from './user/Not use/history-booking/history-booking.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
 
 //admin components
 import { statusAdminComponent } from './admin/admin-status/admin-status.component';
-import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
-import { AdminHomeComponent } from './admin/admin-home/admin-home.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { ResidentListComponent } from './admin/resident-list/resident-list.component';
 import { PaymentComponent } from './admin/payment/payment.component';
@@ -23,29 +19,32 @@ import { ComplainRepairComponent } from './admin/complain-repair/complain-repair
 import { HomeComponent } from './user/home/home.component';
 import { ForgotpassComponent } from './user/forgotpass/forgotpass.component';
 
+const admin = roleGuard('admin');
 
 const routes: Routes = [
-  // user routes
-  { path: '', redirectTo: 'login', pathMatch: 'full' },  
-  { path: 'home', component:HomeComponent},
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  // สาธารณะ
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'report', component: ReportComponent },
+  { path: 'forgotpass', component: ForgotpassComponent },
   { path: 'about-us', component: AboutUsComponent },
-  {path:'purchase',component:PurchaseComponent},
-  {path: 'editprofile',component:EditProfileComponent},
-  {path: 'forgotpass',component:ForgotpassComponent},
-  // admin routes
-  
-  {path:'adminstatus',component:statusAdminComponent},
-  {path:'adminsidebar',component:AdminSidebarComponent},
-  {path:'adminhome',component:AdminHomeComponent},
-  {path:'dashboard',component:DashboardComponent},
-  {path:'residentList',component:ResidentListComponent},
-  {path:'payment',component:PaymentComponent},
-  {path:'complainRepair',component:ComplainRepairComponent},
 
-  
+  // ต้อง login (ลูกบ้าน)
+  { path: 'home', component: HomeComponent, canActivate: [loginGuard] },
+  { path: 'report', component: ReportComponent, canActivate: [loginGuard] },
+  { path: 'purchase', component: PurchaseComponent, canActivate: [loginGuard] },
+  { path: 'editprofile', component: EditProfileComponent, canActivate: [loginGuard] },
+
+  // admin เท่านั้น
+  { path: 'adminstatus', component: statusAdminComponent, canActivate: [admin] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [admin] },
+  { path: 'residentList', component: ResidentListComponent, canActivate: [admin] },
+  { path: 'payment', component: PaymentComponent, canActivate: [admin] },
+  { path: 'complainRepair', component: ComplainRepairComponent, canActivate: [admin] },
+
+  // path ที่ไม่มีอยู่จริง
+  { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({

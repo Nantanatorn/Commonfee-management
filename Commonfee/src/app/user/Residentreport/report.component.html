@@ -1,5 +1,6 @@
+<div class="report-page">
 <div class="report-form">
-  <h3 style="text-align:center ;font-weight: 600;">แจ้งคำร้องเรียน / คำร้องซ่อม</h3>
+  <h3>แจ้งคำร้องเรียน / คำร้องซ่อม</h3>
   <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
     
 
@@ -61,14 +62,14 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-light" routerLink="/home">ยกเลิก</button>&nbsp;&nbsp;
-    <button type="submit" class="btn btn-light">ยืนยัน</button>
+    <button type="button" class="btn-ghost" routerLink="/home">ยกเลิก</button>&nbsp;&nbsp;
+    <button type="submit" class="btn-main">ยืนยัน</button>
   </form>
 </div>
 
 
 
-<div class="container mt-5">
+<div class="status-panel">
   <h3>สถานะคำร้องเรียน / ซ่อม</h3> 
     <table class="status-table">
       <thead>
@@ -94,3 +95,4 @@
       </tbody>
     </table>
   </div>
+</div>
